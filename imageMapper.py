@@ -108,9 +108,10 @@ def processImageFolder(input_folder, output_folder, map_file):
     print(f"Processed {processed_images}/{total_images} images in {elapsed_time:.2f} seconds")
 
 
-# Example usage
-input_folder = '/Users/elias/Desktop/NFDI Tomographiedaten/20200818_AlSi13 XRM tomo2/Images/SEM Image'
-output_folder = '/Users/elias/Desktop/PP13_Mapping/pp13-mapper/py_script_results'
-map_file = "/Users/elias/Desktop/PP13_Mapping/pp13-mapper/schemas/sem_fib_nested_schema_map.json"
+# Execute
+if __name__ == "__main__":
+    input_folder = '/Users/elias/Desktop/NFDI Tomographiedaten/20200818_AlSi13 XRM tomo2/Images/SEM Image'
+    output_folder = '/Users/elias/Desktop/PP13_Mapping/pp13-mapper/py_script_results'
+    map_file = "/Users/elias/Desktop/PP13_Mapping/pp13-mapper/schemas/sem_fib_nested_schema_map.json"
 
-processImageFolder(input_folder, output_folder, map_file)
+    processImageFolder(input_folder, output_folder, map_file)
