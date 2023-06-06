@@ -44,7 +44,7 @@ def formatMetadata(metadata):
 def extractImageMappings(json_file):
     with open(json_file) as f:
         mappings = json.load(f)
-    image_mappings = mappings.get('image', {})
+    image_mappings = mappings.get('image_schema', {})
     return image_mappings
 
 def extractImageData(image_data, image_mappings):

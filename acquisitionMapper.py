@@ -7,7 +7,7 @@ def extract_metadata_addresses(json_file):
         data = json.load(file)
 
     # Extract the "acquisition" information
-    acquisition_data = data.get('acquisition', {})
+    acquisition_data = data.get('acquisition_main_schema', {})
 
     # Store key-value pairs starting with "EMProject"
     EM_metadata = {}
