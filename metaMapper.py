@@ -40,7 +40,7 @@ inputZip   = sys.argv[2]
 outputFile = sys.argv[3]
 
 mainDir = extract_zip_file(inputZip)
-imgFile = os.path.join(mainDir, 'Images/SEM Image 2/SEM Image 2 - SliceImage - 012.tif')
+imgFile = os.path.join(mainDir, 'Images/SEM Image 2/SEM Image 2 - SliceImage - 001.tif') # uses the first image
 imgDirectory = os.path.join(mainDir, 'Images')
 xmlFile = os.path.join(mainDir, 'EMproject.emxml')
 
@@ -196,13 +196,9 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
     return metadata
 
 def save_metadata_as_json(metadata, save_path):
-    filename = os.path.join(save_path, "combinedSO_script.json")
-    with open(filename, 'w') as file:
+    with open(save_path, 'w') as file:
         json.dump(metadata, file, indent=4)
-    print(f"Metadata saved as {filename}")
+    print(f"Metadata saved as {save_path}")
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
 save_metadata_as_json(combinedMetadata, outputFile)
-
-# Execute
-# if __name__ == "__main__":
