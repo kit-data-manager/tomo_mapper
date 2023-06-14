@@ -28,18 +28,14 @@ def extract_zip_file(zip_file_path):
     end_time = time.time()  # End time
     total_time = end_time - start_time
 
-    print(f"Total time taken to process: {total_time:.2f} seconds")
-    return main_directory
-
-# inputZip = '/Users/elias/Desktop/NFDI Tomographiedaten/20200818_AlSi13 XRM tomo2.zip'
-# output_path = '/Users/elias/Desktop/PP13_Mapping/pp13-mapper/result_jsons'
-# mapFile = '/Users/elias/Desktop/PP13_Mapping/pp13-mapper/schemas/new_sem_fib_nested_schema_map.json'
+    print(f"Total time taken to process: {total_time:.2f} seconds. Extracted files are in {temp_dir}.")
+    return main_directory, temp_dir
 
 mapFile    = sys.argv[1]
 inputZip   = sys.argv[2]
 outputFile = sys.argv[3]
 
-mainDir = extract_zip_file(inputZip)
+mainDir, tempDir = extract_zip_file(inputZip)
 imgFile = os.path.join(mainDir, 'Images/SEM Image 2/SEM Image 2 - SliceImage - 001.tif') # uses the first image
 imgDirectory = os.path.join(mainDir, 'Images')
 xmlFile = os.path.join(mainDir, 'EMproject.emxml')
@@ -200,5 +196,12 @@ def save_metadata_as_json(metadata, save_path):
         json.dump(metadata, file, indent=4)
     print(f"Metadata saved as {save_path}")
 
+# For local tests
+# def save_metadata_as_json(metadata, save_path):
+#     with open(os.path.join(save_path, 'output.json'), 'w') as file:
+#         json.dump(metadata, file, indent=4)
+#     print(f"Metadata saved as {save_path}")
+
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
 save_metadata_as_json(combinedMetadata, outputFile)
+shutil.rmtree(tempDir)
