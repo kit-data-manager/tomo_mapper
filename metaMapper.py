@@ -21,7 +21,7 @@ def extract_zip_file(zip_file_path):
         for index, file_name in enumerate(zip_ref.namelist(), start=1):
             file_path = os.path.join(temp_dir, file_name)
             zip_ref.extract(file_name, temp_dir)
-            print(f"Extracting file {index}/{total_files}: {file_name}")
+            # print(f"Extracting file {index}/{total_files}: {file_name}")
 
     main_directory = os.path.join(temp_dir, os.listdir(temp_dir)[0])
 
