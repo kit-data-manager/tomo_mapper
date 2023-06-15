@@ -15,35 +15,36 @@ def extract_zip_file(zip_file_path):
     start_time = time.time()  # Start time
     print(zip_file_path)
 
+    target_dir = None
+
     with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-        total_files = len(zip_ref.namelist())
 
         for index, file_name in enumerate(zip_ref.namelist(), start=1):
             file_path = os.path.join(temp_dir, file_name)
             zip_ref.extract(file_name, temp_dir)
-            # print(f"Extracting file {index}/{total_files}: {file_name}")
 
-    main_directory = os.path.join(temp_dir, os.listdir(temp_dir)[0])
+            # Look for file has the .emxml extension and designate the directory it's within as the target directory
+            if file_name.endswith('.emxml') and target_dir is None:
+                target_dir = os.path.dirname(file_path)
+
+    if target_dir is None:
+        print("No .emxml file found in the zip file.")
+        return None, None
 
     end_time = time.time()  # End time
     total_time = end_time - start_time
 
-    print(f"Total time taken to process: {total_time:.2f} seconds. Extracted files are in {temp_dir}., Main Directory is {main_directory}.")
-    return main_directory, temp_dir
+    print(f"Total time taken to process: {total_time:.2f} seconds. The target directory is {target_dir}.")
+    return target_dir, temp_dir
 
 mapFile    = sys.argv[1]
 inputZip   = sys.argv[2]
 outputFile = sys.argv[3]
 
 mainDir, tempDir = extract_zip_file(inputZip)
-# imgFile = os.path.join(mainDir, 'Images/SEM Image 2/SEM Image 2 - SliceImage - 001.tif') # uses the first image
-# imgDirectory = os.path.join(mainDir, 'Images')
-# xmlFile = os.path.join(mainDir, 'EMproject.emxml')
-
-# Temp dir test
-imgFile = os.path.join(tempDir, 'Images/SEM Image 2/SEM Image 2 - SliceImage - 001.tif') # uses the first image
-imgDirectory = os.path.join(tempDir, 'Images')
-xmlFile = os.path.join(tempDir, 'EMproject.emxml')
+imgFile = os.path.join(mainDir, 'Images/SEM Image 2/SEM Image 2 - SliceImage - 001.tif') # uses the first image
+imgDirectory = os.path.join(mainDir, 'Images')
+xmlFile = os.path.join(mainDir, 'EMproject.emxml')
 
 xmlMap, imgMap = extract_metadata_addresses(mapFile)
 xmlMetadata = xml_to_dict(xmlFile)
@@ -196,16 +197,16 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
             metadata['acquisition']['dataset'][i]['images'].append(image_dict)
     return metadata
 
-def save_metadata_as_json(metadata, save_path):
-    with open(save_path, 'w') as file:
-        json.dump(metadata, file, indent=4)
-    print(f"Metadata saved as {save_path}")
-
-# For local tests
 # def save_metadata_as_json(metadata, save_path):
-#     with open(os.path.join(save_path, 'output.json'), 'w') as file:
+#     with open(save_path, 'w') as file:
 #         json.dump(metadata, file, indent=4)
 #     print(f"Metadata saved as {save_path}")
+
+# For local tests
+def save_metadata_as_json(metadata, save_path):
+    with open(os.path.join(save_path, 'output.json'), 'w') as file:
+        json.dump(metadata, file, indent=4)
+    print(f"Metadata saved as {save_path}")
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
 save_metadata_as_json(combinedMetadata, outputFile)
