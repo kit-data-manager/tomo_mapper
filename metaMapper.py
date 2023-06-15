@@ -197,16 +197,16 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
             metadata['acquisition']['dataset'][i]['images'].append(image_dict)
     return metadata
 
-# def save_metadata_as_json(metadata, save_path):
-#     with open(save_path, 'w') as file:
-#         json.dump(metadata, file, indent=4)
-#     print(f"Metadata saved as {save_path}")
-
-# For local tests
 def save_metadata_as_json(metadata, save_path):
-    with open(os.path.join(save_path, 'output.json'), 'w') as file:
+    with open(save_path, 'w') as file:
         json.dump(metadata, file, indent=4)
     print(f"Metadata saved as {save_path}")
+
+# For local tests
+# def save_metadata_as_json(metadata, save_path):
+#     with open(os.path.join(save_path, 'output.json'), 'w') as file:
+#         json.dump(metadata, file, indent=4)
+#     print(f"Metadata saved as {save_path}")
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
 save_metadata_as_json(combinedMetadata, outputFile)
