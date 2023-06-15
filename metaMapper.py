@@ -28,7 +28,7 @@ def extract_zip_file(zip_file_path):
     end_time = time.time()  # End time
     total_time = end_time - start_time
 
-    print(f"Total time taken to process: {total_time:.2f} seconds. Extracted files are in {temp_dir}.")
+    print(f"Total time taken to process: {total_time:.2f} seconds. Extracted files are in {temp_dir}., Main Directory is {main_directory}.")
     return main_directory, temp_dir
 
 mapFile    = sys.argv[1]
@@ -36,9 +36,14 @@ inputZip   = sys.argv[2]
 outputFile = sys.argv[3]
 
 mainDir, tempDir = extract_zip_file(inputZip)
-imgFile = os.path.join(mainDir, 'Images/SEM Image 2/SEM Image 2 - SliceImage - 001.tif') # uses the first image
-imgDirectory = os.path.join(mainDir, 'Images')
-xmlFile = os.path.join(mainDir, 'EMproject.emxml')
+# imgFile = os.path.join(mainDir, 'Images/SEM Image 2/SEM Image 2 - SliceImage - 001.tif') # uses the first image
+# imgDirectory = os.path.join(mainDir, 'Images')
+# xmlFile = os.path.join(mainDir, 'EMproject.emxml')
+
+# Temp dir test
+imgFile = os.path.join(tempDir, 'Images/SEM Image 2/SEM Image 2 - SliceImage - 001.tif') # uses the first image
+imgDirectory = os.path.join(tempDir, 'Images')
+xmlFile = os.path.join(tempDir, 'EMproject.emxml')
 
 xmlMap, imgMap = extract_metadata_addresses(mapFile)
 xmlMetadata = xml_to_dict(xmlFile)
@@ -204,4 +209,4 @@ def save_metadata_as_json(metadata, save_path):
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
 save_metadata_as_json(combinedMetadata, outputFile)
-shutil.rmtree(tempDir)
+# shutil.rmtree(tempDir)
