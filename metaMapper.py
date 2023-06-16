@@ -8,12 +8,13 @@ import tempfile
 import shutil
 import time
 import sys
+import logging
 
 def extract_zip_file(zip_file_path):
     temp_dir = tempfile.mkdtemp()
 
     start_time = time.time()  # Start time
-    print(zip_file_path)
+    logging.info("Extracting {zip_file_path}...")
 
     target_dir = None
 
@@ -28,13 +29,13 @@ def extract_zip_file(zip_file_path):
                 target_dir = os.path.dirname(file_path)
 
     if target_dir is None:
-        print("No .emxml file found in the zip file.")
+        logging.info("No .emxml file found in the zip file.")
         return None, None
 
     end_time = time.time()  # End time
     total_time = end_time - start_time
 
-    print(f"Total time taken to process: {total_time:.2f} seconds. The target directory is {target_dir}.")
+    logging.info(f"Total time taken to process: {total_time:.2f} seconds. The target directory is {target_dir}.")
     return target_dir, temp_dir
 
 mapFile    = sys.argv[1]
@@ -87,7 +88,7 @@ def processDatasets(datasetNum, imageDirectory):
 
 datasetMetadata = []
 for i, dataset in enumerate(datasetNames[:2]):
-    print(i, dataset)
+    logging.info(i, dataset)
     datasetMetadata.append(processDatasets(i+1, imgDirectory))
 
 
@@ -137,7 +138,7 @@ def processDatasets(datasetNum, imageDirectory):
 datasetMetadata = []
 imageMetadata   = []
 for i, dataset in enumerate(datasetNames[:2]):
-    print(i, dataset)
+    logging.info(i, dataset)
     datasetMetadataDict, ImageMetadataDict =  processDatasets(i+1, imgDirectory)
     datasetMetadata.append(datasetMetadataDict)
     imageMetadata.append(ImageMetadataDict)
@@ -200,14 +201,14 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
 def save_metadata_as_json(metadata, save_path):
     with open(save_path, 'w') as file:
         json.dump(metadata, file, indent=4)
-    print(f"Metadata saved as {save_path}")
+    logging.info(f"Metadata saved as {save_path}")
 
 # For local tests
 # def save_metadata_as_json(metadata, save_path):
 #     with open(os.path.join(save_path, 'output.json'), 'w') as file:
 #         json.dump(metadata, file, indent=4)
-#     print(f"Metadata saved as {save_path}")
+#     logging.info(f"Metadata saved as {save_path}")
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
 save_metadata_as_json(combinedMetadata, outputFile)
-# shutil.rmtree(tempDir)
+shutil.rmtree(tempDir)
