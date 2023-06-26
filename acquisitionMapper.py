@@ -64,13 +64,21 @@ def extract_values(addresses, data, dataset_num = 1):
     for key, address in addresses.items():
         levels = address.split('.')
         current_data = data
+        # print(levels)
         for level in levels:
             # emxml contains multiple instances of "Dataset", so it returns a list when asked. We need to tell it
             # which dataset we actually want. 1 is SEM Image, 2 is SEM Image 2, and 3 is the one we're not
             # interested in. We subtract 1 because indexing begins at zero
             # Still needed: check this against image folder name
+            # print(f"current level: {level}")
             if level == 'Dataset':
-                current_data = current_data[level][dataset_num - 1]
+                if isinstance(current_data[level], list):
+                    try:
+                        current_data = current_data[level][dataset_num - 1]
+                    except IndexError:
+                        print(f"There is no dataset at index {dataset_num}.")
+                else:
+                    current_data = current_data[level]
             else:
                 current_data = current_data[level]
         result[key] = current_data

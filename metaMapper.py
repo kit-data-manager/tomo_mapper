@@ -12,6 +12,7 @@ import logging
 
 def extract_zip_file(zip_file_path):
     temp_dir = tempfile.mkdtemp()
+    
 
     start_time = time.time()  # Start time
     logging.info("Extracting {zip_file_path}...")
@@ -19,8 +20,11 @@ def extract_zip_file(zip_file_path):
     target_dir = None
 
     with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+        total_items = len(zip_ref.namelist())
 
         for index, file_name in enumerate(zip_ref.namelist(), start=1):
+            if index%10 == 0:
+                print(f"Extracting file {index}/{total_items}...")
             file_path = os.path.join(temp_dir, file_name)
             zip_ref.extract(file_name, temp_dir)
 
@@ -42,13 +46,23 @@ mapFile    = sys.argv[1]
 inputZip   = sys.argv[2]
 outputFile = sys.argv[3]
 
+def getExampleImage(directory):
+    for file in os.listdir(directory):
+        if file.endswith('.tif'):
+            return os.path.join(directory, file)
+
 mainDir, tempDir = extract_zip_file(inputZip)
-imgFile = os.path.join(mainDir, 'Images/SEM Image 2/SEM Image 2 - SliceImage - 001.tif') # uses the first image
+imgFile = getExampleImage(os.path.join(mainDir, 'Images/SEM Image'))
 imgDirectory = os.path.join(mainDir, 'Images')
 xmlFile = os.path.join(mainDir, 'EMproject.emxml')
 
 xmlMap, imgMap = extract_metadata_addresses(mapFile)
 xmlMetadata = xml_to_dict(xmlFile)
+
+# print('XML MAP:')
+# print(xmlMap)
+# print('xmlMetadata')
+# print(xmlMetadata)
 
 acqXmlMetadata = extract_values(xmlMap, xmlMetadata)
 
@@ -65,7 +79,11 @@ acqMetadata = {**acqXmlMetadata, **acqImgMetadata}
 # Read and format dataset metadata
 datasetXmlMap, datasetImgMap = extract_metadata_addresses_dataset(mapFile)
 datasets = xmlMetadata['EMProject']['Datasets']['Dataset']
-datasetNames = [d['Name'] for d in datasets]
+# print(f'len = {len(datasets)}, datasets: {datasets}')
+if isinstance(datasets, list):
+    datasetNames = [d['Name'] for d in datasets]
+else:
+    datasetNames = [datasets['Name']]
 def processDatasets(datasetNum, imageDirectory):
     # Extract xml data for this dataset
     mappedEMMetadata = extract_values(datasetXmlMap, xmlMetadata, datasetNum)
@@ -198,16 +216,16 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
             metadata['acquisition']['dataset'][i]['images'].append(image_dict)
     return metadata
 
-def save_metadata_as_json(metadata, save_path):
-    with open(save_path, 'w') as file:
-        json.dump(metadata, file, indent=4)
-    logging.info(f"Metadata saved as {save_path}")
-
-# For local tests
 # def save_metadata_as_json(metadata, save_path):
-#     with open(os.path.join(save_path, 'output.json'), 'w') as file:
+#     with open(save_path, 'w') as file:
 #         json.dump(metadata, file, indent=4)
 #     logging.info(f"Metadata saved as {save_path}")
+
+# For local tests
+def save_metadata_as_json(metadata, save_path):
+    with open(os.path.join(save_path, 'output.json'), 'w') as file:
+        json.dump(metadata, file, indent=4)
+    logging.info(f"Metadata saved as {save_path}")
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
 save_metadata_as_json(combinedMetadata, outputFile)
