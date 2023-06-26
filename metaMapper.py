@@ -23,8 +23,8 @@ def extract_zip_file(zip_file_path):
         total_items = len(zip_ref.namelist())
 
         for index, file_name in enumerate(zip_ref.namelist(), start=1):
-            if index%10 == 0:
-                print(f"Extracting file {index}/{total_items}...")
+            # if index%10 == 0:
+            #     print(f"Extracting file {index}/{total_items}...")
             file_path = os.path.join(temp_dir, file_name)
             zip_ref.extract(file_name, temp_dir)
 
@@ -216,16 +216,16 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
             metadata['acquisition']['dataset'][i]['images'].append(image_dict)
     return metadata
 
-# def save_metadata_as_json(metadata, save_path):
-#     with open(save_path, 'w') as file:
-#         json.dump(metadata, file, indent=4)
-#     logging.info(f"Metadata saved as {save_path}")
-
-# For local tests
 def save_metadata_as_json(metadata, save_path):
-    with open(os.path.join(save_path, 'output.json'), 'w') as file:
+    with open(save_path, 'w') as file:
         json.dump(metadata, file, indent=4)
     logging.info(f"Metadata saved as {save_path}")
+
+# # For local tests
+# def save_metadata_as_json(metadata, save_path):
+#     with open(os.path.join(save_path, 'output.json'), 'w') as file:
+#         json.dump(metadata, file, indent=4)
+#     logging.info(f"Metadata saved as {save_path}")
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
 save_metadata_as_json(combinedMetadata, outputFile)
