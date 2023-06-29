@@ -59,10 +59,6 @@ xmlFile = os.path.join(mainDir, 'EMproject.emxml')
 xmlMap, imgMap = extract_metadata_addresses(mapFile)
 xmlMetadata = xml_to_dict(xmlFile)
 
-# print('XML MAP:')
-# print(xmlMap)
-# print('xmlMetadata')
-# print(xmlMetadata)
 
 acqXmlMetadata = extract_values(xmlMap, xmlMetadata)
 
