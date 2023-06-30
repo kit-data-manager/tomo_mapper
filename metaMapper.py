@@ -13,7 +13,6 @@ import logging
 def extract_zip_file(zip_file_path):
     temp_dir = tempfile.mkdtemp()
     
-
     start_time = time.time()  # Start time
     logging.info("Extracting {zip_file_path}...")
 
@@ -107,7 +106,6 @@ for i, dataset in enumerate(datasetNames[:2]):
 
 
 # Read and format image metadata
-
 imgMappings = extractImageMappings(mapFile)
 def processImage(imgPath):
     # read image file
