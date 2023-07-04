@@ -3,7 +3,7 @@ import json
 import time
 from PIL import Image
 from PIL.ExifTags import TAGS
-
+#import hyperspy.api as hs
 
 def readFile(file_path):
     image = Image.open(file_path)
