@@ -210,17 +210,53 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
             metadata['acquisition']['dataset'][i]['images'].append(image_dict)
     return metadata
 
-def save_metadata_as_json(metadata, save_path):
-    with open(save_path, 'w') as file:
-        json.dump(metadata, file, indent=4)
-    logging.info(f"Metadata saved as {save_path}")
-
-# # For local tests
 # def save_metadata_as_json(metadata, save_path):
-#     with open(os.path.join(save_path, 'output.json'), 'w') as file:
+#     with open(save_path, 'w') as file:
 #         json.dump(metadata, file, indent=4)
 #     logging.info(f"Metadata saved as {save_path}")
 
+# # For local tests
+def save_metadata_as_json(metadata, save_path):
+    with open(os.path.join(save_path, 'output.json'), 'w') as file:
+        json.dump(metadata, file, indent=4)
+    logging.info(f"Metadata saved as {save_path}")
+
+def getValueAddresses(nestedDict, keyString):
+    keys = keyString.split('.')
+    for key in keys[:-1]:
+        nestedDict = nestedDict.get(key)
+        if nestedDict is None or not isinstance(nestedDict, dict):
+            return None
+    
+    lastKey = keys[-1]
+    if lastKey in nestedDict:
+        return keys
+    
+def createNestedLevels(nestedDict, keyString, value):
+    keys = keyString.split('.')  # Split the key string into individual keys
+    current_dict = nestedDict
+    print(type(current_dict))
+
+    # Traverse the dictionary hierarchy, creating missing dictionaries
+    for key in keys[:-1]:
+        print(key)
+        if key not in current_dict:
+            print(f'here:::: {type(current_dict)}')
+            current_dict[key] = {}
+        current_dict = current_dict[key]
+
+    # Assign the value to the innermost key
+    last_key = keys[-1]
+    current_dict[last_key] = value
+
+def cleanMetadata(metadata):
+    # Assign "acquisition_dataset value to entry definition"
+    print(type(metadata))
+    # print(metadata)
+    createNestedLevels(metadata, "acquisition.dataset.entry.definition", "acquisition_dataset")
+    return cleanedMetadata
+
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
+print(cleanMetadata(combinedMetadata))
 save_metadata_as_json(combinedMetadata, outputFile)
 shutil.rmtree(tempDir)
