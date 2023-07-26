@@ -210,6 +210,34 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
             metadata['acquisition']['dataset'][i]['images'].append(image_dict)
     return metadata
 
+def assign_nested_value(nested_dict, keys_string, value):
+    keys = keys_string.split('.')
+    current_dict = nested_dict
+
+    for key in keys[:-1]:  # We iterate until the penultimate key
+        if key.endswith('[]'):  # The key refers to a list
+            key = key.rstrip('[]')  # Remove the '[]' sign from the key
+            if key not in current_dict or not isinstance(current_dict[key], list):  # If the key doesn't exist or it's not a list, we create an empty list
+                current_dict[key] = []
+            if not current_dict[key] or not isinstance(current_dict[key][-1], dict):  # If the list is empty or the last element is not a dictionary, we append an empty dictionary
+                current_dict[key].append({})
+            current_dict = current_dict[key][-1]  # We go one level down to the last dictionary in the list
+        else:
+            if key not in current_dict:  # If the key doesn't exist, we create an empty dict
+                current_dict[key] = {}
+            current_dict = current_dict[key]  # We go one level down
+
+    if keys[-1].endswith('[]'):  # The last key refers to a list
+        keys[-1] = keys[-1].rstrip('[]')  # Remove the '[]' sign from the key
+        if keys[-1] not in current_dict or not isinstance(current_dict[keys[-1]], list):  # If the key doesn't exist or it's not a list, we create an empty list
+            current_dict[keys[-1]] = []
+        current_dict[keys[-1]].append(value)  # We append the value to the list
+    else:
+        current_dict[keys[-1]] = value  # We assign the value to the last key
+
+    return nested_dict
+
+
 # def save_metadata_as_json(metadata, save_path):
 #     with open(save_path, 'w') as file:
 #         json.dump(metadata, file, indent=4)
@@ -221,17 +249,11 @@ def save_metadata_as_json(metadata, save_path):
         json.dump(metadata, file, indent=4)
     logging.info(f"Metadata saved as {save_path}")
 
-def getValueAddresses(nestedDict, keyString):
-    keys = keyString.split('.')
-    for key in keys[:-1]:
-        nestedDict = nestedDict.get(key)
-        if nestedDict is None or not isinstance(nestedDict, dict):
-            return None
     
-    lastKey = keys[-1]
-    if lastKey in nestedDict:
-        return keys
+
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
-save_metadata_as_json(combinedMetadata, outputFile)
+cleanedMetadataDict = assign_nested_value(combinedMetadata, 'acquisition.dataset[].entry.definition', 'acquisition_dataset')
+# save_metadata_as_json(combinedMetadata, outputFile)
+save_metadata_as_json(cleanedMetadataDict, outputFile)
 shutil.rmtree(tempDir)
