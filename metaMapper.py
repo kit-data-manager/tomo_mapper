@@ -79,30 +79,35 @@ if isinstance(datasets, list):
     datasetNames = [d['Name'] for d in datasets]
 else:
     datasetNames = [datasets['Name']]
-def processDatasets(datasetNum, imageDirectory):
-    # Extract xml data for this dataset
-    mappedEMMetadata = extract_values(datasetXmlMap, xmlMetadata, datasetNum)
-    
-    # Read data from image in proper folder
-    datasetName = datasetNames[datasetNum - 1]
-    for root, dirs, files in os.walk(imageDirectory):
-        if os.path.basename(root) == datasetName:
-            for file in files:
-                if file.endswith('.tif'):
-                    imgPath = os.path.join(root, file)
-                    break
-            break
-    imageData = readFile(imgPath)
-    formattedMetadata = formatMetadata(imageData)
-    imageMetadata = extractImageData(formattedMetadata, datasetImgMap)
-    mappedImgMetadata = headerMapping(imageMetadata, datasetImgMap)
-    
-    return {**mappedEMMetadata, **mappedImgMetadata}
 
-datasetMetadata = []
-for i, dataset in enumerate(datasetNames[:2]):
-    logging.info(i, dataset)
-    datasetMetadata.append(processDatasets(i+1, imgDirectory))
+# def processDatasets(datasetNum, imageDirectory):
+#     # Extract xml data for this dataset
+#     mappedEMMetadata = extract_values(datasetXmlMap, xmlMetadata, datasetNum)
+    
+#     # Read data from image in proper folder
+#     datasetName = datasetNames[datasetNum - 1]
+#     for root, dirs, files in os.walk(imageDirectory):
+#         if os.path.basename(root) == datasetName:
+#             for file in files:
+#                 if file.endswith('.tif'):
+#                     global imgPath
+#                     imgPath = os.path.join(root, file)
+#                     print(f'Here is the image path: {imgPath}')
+#                     break
+#                 # else:
+#                 #     print('Image path not assigned.')
+#             break
+#     imageData = readFile(imgPath)
+#     formattedMetadata = formatMetadata(imageData)
+#     imageMetadata = extractImageData(formattedMetadata, datasetImgMap)
+#     mappedImgMetadata = headerMapping(imageMetadata, datasetImgMap)
+    
+#     return {**mappedEMMetadata, **mappedImgMetadata}
+
+# datasetMetadata = []
+# for i, dataset in enumerate(datasetNames[:2]):
+#     logging.info(i, dataset)
+#     datasetMetadata.append(processDatasets(i+1, imgDirectory))
 
 
 # Read and format image metadata
@@ -127,8 +132,12 @@ def processDatasets(datasetNum, imageDirectory):
         if os.path.basename(root) == datasetName:
             for file in files:
                 if file.endswith('.tif'):
+                    global imgPath
                     imgPath = os.path.join(root, file)
+                    # print(f'Image path in processDatasets = {imgPath}')
                     break
+                else:
+                    print('imgPath in processDatasets not assigned.')
             break
     imageData = readFile(imgPath)
     formattedMetadata = formatMetadata(imageData)
@@ -149,8 +158,9 @@ def processDatasets(datasetNum, imageDirectory):
 
 datasetMetadata = []
 imageMetadata   = []
-for i, dataset in enumerate(datasetNames[:2]):
+for i, dataset in enumerate(datasetNames[:-1]):
     logging.info(i, dataset)
+    print(dataset)
     datasetMetadataDict, ImageMetadataDict =  processDatasets(i+1, imgDirectory)
     datasetMetadata.append(datasetMetadataDict)
     imageMetadata.append(ImageMetadataDict)
@@ -210,16 +220,16 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
             metadata['acquisition']['dataset'][i]['images'].append(image_dict)
     return metadata
 
-def save_metadata_as_json(metadata, save_path):
-    with open(save_path, 'w') as file:
-        json.dump(metadata, file, indent=4)
-    logging.info(f"Metadata saved as {save_path}")
-
-# # For local tests
 # def save_metadata_as_json(metadata, save_path):
-#     with open(os.path.join(save_path, 'output.json'), 'w') as file:
+#     with open(save_path, 'w') as file:
 #         json.dump(metadata, file, indent=4)
 #     logging.info(f"Metadata saved as {save_path}")
+
+# # For local tests
+def save_metadata_as_json(metadata, save_path):
+    with open(os.path.join(save_path, 'output.json'), 'w') as file:
+        json.dump(metadata, file, indent=4)
+    logging.info(f"Metadata saved as {save_path}")
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
 save_metadata_as_json(combinedMetadata, outputFile)
