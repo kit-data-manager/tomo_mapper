@@ -179,10 +179,10 @@ for i, dataset in enumerate(datasetNames[:-1]):
     logging.info(i, dataset)
     datasetMetadataDict, ImageMetadataDict =  processDatasets(i+1, imgDirectory)
     print(f'This is the current dataset: {dataset}.')
-    datasetMetadataDict['acquisition.dataset[].entry.datasetType'] = dataset
+    datasetMetadataDict['acquisition.dataset[].datasetType'] = dataset
     
     # Determine number of images in each dataset
-    datasetMetadataDict['acquisition.dataset[].entry.numberOfItems'] = acqMetadata['acquisition.genericMetadata.numberOfCuts']
+    datasetMetadataDict['acquisition.dataset[].numberOfItems'] = acqMetadata['acquisition.genericMetadata.numberOfCuts']
     print(datasetMetadataDict)
     datasetMetadata.append(datasetMetadataDict)
     imageMetadata.append(ImageMetadataDict)
@@ -245,6 +245,35 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
             metadata['acquisition']['dataset'][i]['images'].append(image_dict)
     return metadata
 
+def parseNumericValues(metadata):
+    for key, value in metadata.items():
+        if isinstance(value, dict):
+            # Recursive call for nested dictionaries
+            parseNumericValues(value)
+        elif isinstance(value, list):
+            # Iterate through the list, applying parseNumericValues to each item if it's a dictionary
+            for i, item in enumerate(value):
+                if isinstance(item, dict):
+                    parseNumericValues(item)
+                else:
+                    # Attempt conversion for non-dictionary items in the list
+                    value[i] = convertToNumeric(item)
+        else:
+            # Attempt conversion for non-list, non-dictionary items
+            metadata[key] = convertToNumeric(value)
+
+def convertToNumeric(value):
+    try:
+        # Try converting to float first
+        numeric_value = float(value)
+        # If the float is actually an int, convert it to int
+        if numeric_value.is_integer():
+            return int(numeric_value)
+        else:
+            return numeric_value
+    except (ValueError, TypeError):
+        # If conversion fails, return the original value
+        return value
 
 # def save_metadata_as_json(metadata, save_path):
 #     with open(save_path, 'w') as file:
@@ -278,13 +307,14 @@ def fixBooleans(d):
     return d
 
 def cleanMetadata(nestedDict):
-    x1 = assign_nested_value(nestedDict, 'acquisition.dataset[].entry.definition', 'acquisition_dataset')
-    x2 = assign_nested_value(x1, 'acquisition.dataset[].entry.numberOfItems', '')
-    x3 = assign_nested_value(x2, 'acquisition.dataset[].entry.images[].entry.definition', 'acquisition_image')
+    x1 = assign_nested_value(nestedDict, 'acquisition.dataset[].definition', 'acquisition_dataset')
+    x2 = assign_nested_value(x1, 'acquisition.dataset[].numberOfItems', '')
+    x3 = assign_nested_value(x2, 'acquisition.dataset[].images[].definition', 'acquisition_image')
     x4 = fixBooleans(x3)
     return x4
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
+parseNumericValues(combinedMetadata)
 cleanedMetadataDict = cleanMetadata(combinedMetadata)
 save_metadata_as_json(cleanedMetadataDict, outputFile)
 shutil.rmtree(tempDir)
