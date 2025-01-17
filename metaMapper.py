@@ -245,6 +245,35 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
             metadata['acquisition']['dataset'][i]['images'].append(image_dict)
     return metadata
 
+def parseNumericValues(metadata):
+    for key, value in metadata.items():
+        if isinstance(value, dict):
+            # Recursive call for nested dictionaries
+            parseNumericValues(value)
+        elif isinstance(value, list):
+            # Iterate through the list, applying parseNumericValues to each item if it's a dictionary
+            for i, item in enumerate(value):
+                if isinstance(item, dict):
+                    parseNumericValues(item)
+                else:
+                    # Attempt conversion for non-dictionary items in the list
+                    value[i] = convertToNumeric(item)
+        else:
+            # Attempt conversion for non-list, non-dictionary items
+            metadata[key] = convertToNumeric(value)
+
+def convertToNumeric(value):
+    try:
+        # Try converting to float first
+        numeric_value = float(value)
+        # If the float is actually an int, convert it to int
+        if numeric_value.is_integer():
+            return int(numeric_value)
+        else:
+            return numeric_value
+    except (ValueError, TypeError):
+        # If conversion fails, return the original value
+        return value
 
 # def save_metadata_as_json(metadata, save_path):
 #     with open(save_path, 'w') as file:
@@ -285,6 +314,7 @@ def cleanMetadata(nestedDict):
     return x4
 
 combinedMetadata = combineMetadata(acqMetadata, datasetMetadata, imageMetadata)
+parseNumericValues(combinedMetadata)
 cleanedMetadataDict = cleanMetadata(combinedMetadata)
 save_metadata_as_json(cleanedMetadataDict, outputFile)
 shutil.rmtree(tempDir)
