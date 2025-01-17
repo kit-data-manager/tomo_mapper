@@ -179,10 +179,10 @@ for i, dataset in enumerate(datasetNames[:-1]):
     logging.info(i, dataset)
     datasetMetadataDict, ImageMetadataDict =  processDatasets(i+1, imgDirectory)
     print(f'This is the current dataset: {dataset}.')
-    datasetMetadataDict['acquisition.dataset[].entry.datasetType'] = dataset
+    datasetMetadataDict['acquisition.dataset[].datasetType'] = dataset
     
     # Determine number of images in each dataset
-    datasetMetadataDict['acquisition.dataset[].entry.numberOfItems'] = acqMetadata['acquisition.genericMetadata.numberOfCuts']
+    datasetMetadataDict['acquisition.dataset[].numberOfItems'] = acqMetadata['acquisition.genericMetadata.numberOfCuts']
     print(datasetMetadataDict)
     datasetMetadata.append(datasetMetadataDict)
     imageMetadata.append(ImageMetadataDict)
@@ -307,9 +307,9 @@ def fixBooleans(d):
     return d
 
 def cleanMetadata(nestedDict):
-    x1 = assign_nested_value(nestedDict, 'acquisition.dataset[].entry.definition', 'acquisition_dataset')
-    x2 = assign_nested_value(x1, 'acquisition.dataset[].entry.numberOfItems', '')
-    x3 = assign_nested_value(x2, 'acquisition.dataset[].entry.images[].entry.definition', 'acquisition_image')
+    x1 = assign_nested_value(nestedDict, 'acquisition.dataset[].definition', 'acquisition_dataset')
+    x2 = assign_nested_value(x1, 'acquisition.dataset[].numberOfItems', '')
+    x3 = assign_nested_value(x2, 'acquisition.dataset[].images[].definition', 'acquisition_image')
     x4 = fixBooleans(x3)
     return x4
 
