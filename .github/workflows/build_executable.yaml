@@ -19,6 +19,7 @@ jobs:
         with:
           nuitka-version: main
           script-name: metaMapper.py
+          output-file: pp13-mapper
           mode: app
 
       # Uploads artifact
