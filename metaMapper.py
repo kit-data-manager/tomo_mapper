@@ -275,16 +275,16 @@ def convertToNumeric(value):
         # If conversion fails, return the original value
         return value
 
-# def save_metadata_as_json(metadata, save_path):
-#     with open(save_path, 'w') as file:
-#         json.dump(metadata, file, indent=4)
-#     logging.info(f"Metadata saved as {save_path}")
-
-# # For local tests
 def save_metadata_as_json(metadata, save_path):
-    with open(os.path.join(save_path, 'output.json'), 'w') as file:
+    with open(save_path, 'w') as file:
         json.dump(metadata, file, indent=4)
     logging.info(f"Metadata saved as {save_path}")
+
+# # For local tests
+# def save_metadata_as_json(metadata, save_path):
+#     with open(os.path.join(save_path, 'output.json'), 'w') as file:
+#         json.dump(metadata, file, indent=4)
+#     logging.info(f"Metadata saved as {save_path}")
 
     
 def fixBooleans(d):
