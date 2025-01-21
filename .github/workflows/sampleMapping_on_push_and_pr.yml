@@ -6,7 +6,7 @@ on:
     branches: [ main ]
 env:
   SAMPLE_DATA_URL: https://matwerk.datamanager.kit.edu/api/v1/dataresources/e9611736-a4cb-4ed6-a91a-ddcce6700603/data/20230707_AlSi13_NFDI_renamed_folders.zip
-  SAMPLE_MAP_URL: https://github.com/kit-data-manager/Metadata-Schemas-for-Materials-Science/blob/dfe04f53ecc8c55eea9ee29f183bacde7cdf3653/SEM-FIB_Tomography/sem_fib_nested_schema_Thermofisher_Helios_G4_PFIB_CXe_map.json
+  SAMPLE_MAP_URL: https://raw.githubusercontent.com/kit-data-manager/Metadata-Schemas-for-Materials-Science/dfe04f53ecc8c55eea9ee29f183bacde7cdf3653/SEM-FIB_Tomography/sem_fib_nested_schema_Thermofisher_Helios_G4_PFIB_CXe_map.json
 jobs:
   mapSample:
     runs-on: ubuntu-latest
