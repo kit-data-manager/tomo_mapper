@@ -1,3 +1,4 @@
+name: map sample data
 on:
   push:
     branches: [ main, development ]
@@ -34,7 +35,7 @@ jobs:
 
     - name: Run script
       run: |
-        python metaMapper.py sample_data.zip result.json
+        python metaMapper.py map.json sample_data.zip result.json
 
     - name: Upload output as artifact
       uses: actions/upload-artifact@v4
