@@ -56,27 +56,27 @@ def getExampleImage(directory):
         if file.endswith('.tif'):
             return os.path.join(directory, file)
 
-def processImage(imgPath, imgMappings):
+def processImage(imgPath, mappingDict):
     """
     handles processing of an image based on mapping information
     :param imgPath: path to image file
-    :param imgMappings: dict of path mappings for images
+    :param mappingDict: dict of path mappings for images
     :return: TODO: ?
     """
     # read image file
     rawImgMetadata = readFile(imgPath)
     formattedMetadata = formatMetadata(rawImgMetadata)
-    imageMetadata = extractImageData(formattedMetadata, imgMappings)
-    mappedImgMetadata = headerMapping(imageMetadata, imgMappings)
+    metadata = extractImageData(formattedMetadata, mappingDict)
+    mappedImgMetadata = headerMapping(metadata, mappingDict)
 
     return mappedImgMetadata
 
-def processDatasets(datasetNum, imageDirectory, imgMappings):
+def processDatasets(datasetNum, imageDirectory, mappingDict):
     """
     handles processing of dataset
     :param datasetNum: index of dataset
     :param imageDirectory: path to image files
-    :param imgMappings: dict of path mappings for images
+    :param mappingDict: dict of path mappings for images
     :return: TODO: ?
     """
     # Extract xml data for this dataset
@@ -93,8 +93,8 @@ def processDatasets(datasetNum, imageDirectory, imgMappings):
             break
     imageData = readFile(imgPath) #TODO: what happens if imgPath is not set above? When does this happen?
     formattedMetadata = formatMetadata(imageData)
-    imageMetadata = extractImageData(formattedMetadata, datasetImgMap)
-    mappedImgMetadata = headerMapping(imageMetadata, datasetImgMap)
+    metadata = extractImageData(formattedMetadata, datasetImgMap)
+    mappedImgMetadata = headerMapping(metadata, datasetImgMap)
 
     # Repeat to produce list of image metadata dictionaries
     #TODO: this method was defined twice, once with the following lines and once without, not returning imageMetadataList. Why?
@@ -104,7 +104,7 @@ def processDatasets(datasetNum, imageDirectory, imgMappings):
             for file in files:
                 if file.endswith('.tif'):
                     imgPath = os.path.join(root, file)
-                    imageMetadataList.append(processImage(imgPath, imgMappings))
+                    imageMetadataList.append(processImage(imgPath, mappingDict))
 
     return {**mappedEMMetadata, **mappedImgMetadata}, imageMetadataList
 
