@@ -132,14 +132,14 @@ def combineMetadata(acquisition_metadata, dataset_metadata, image_metadata):
 
     # Combine dataset metadata
     metadata['acquisition']['dataset'] = []
-    for dataset in dataset_metadata:
+    for ds in dataset_metadata:
         dataset_dict = {}
-        for key, value in dataset.items():
+        for key, value in ds.items():
             nested_keys = key.split('.')
             nested_keys.remove('acquisition')
             try:
                 nested_keys.remove('dataset')
-            except:
+            except: #TODO: make exception more specific
                 nested_keys.remove('dataset[]')
             current_dict = dataset_dict
 
@@ -235,7 +235,7 @@ def fixBooleans(d):
     """
     Converts values representing boolean values to bool
     :param d: dict to traverse and convert
-    :return: dict after converstion #TODO: why is this not void if it modifies the input anyway?
+    :return: dict after conversion #TODO: why is this not void if it modifies the input anyway?
     """
     if isinstance(d, dict):
         for k, v in d.items():
