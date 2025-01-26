@@ -19,7 +19,7 @@ def extract_zip_file(zip_file_path):
     temp_dir = tempfile.mkdtemp()
 
     start_time = time.time()  # Start time
-    logging.info("Extracting {zip_file_path}...")
+    logging.info(f"Extracting {zip_file_path}...")
 
     target_dir = None
 
@@ -33,11 +33,12 @@ def extract_zip_file(zip_file_path):
             zip_ref.extract(file_name, temp_dir)
 
             # Look for file has the .emxml extension and designate the directory it's within as the target directory
-            if file_name.endswith('.emxml') and target_dir is None:
+            if file_name.endswith('.emxml') and target_dir is None: #TODO: this uses exactly the first emxml file found and explicitely ignores others. Correct behaviour?
                 target_dir = os.path.dirname(file_path)
 
     if target_dir is None:
         logging.info("No .emxml file found in the zip file.")
+        shutil.rmtree(temp_dir)
         return None, None
 
     end_time = time.time()  # End time
@@ -305,7 +306,15 @@ mapFile    = sys.argv[1]
 inputZip   = sys.argv[2]
 outputFile = sys.argv[3]
 
+#make log level configurable from ENV, defaults to info level
+logging.basicConfig(
+    level=os.environ.get('LOGLEVEL', 'INFO').upper()
+)
+
 mainDir, tempDir = extract_zip_file(inputZip)
+if not mainDir:
+    logging.error("Mandatory emxml file not found. Aborting mapping")
+    exit(1)
 imgFile = getExampleImage(os.path.join(mainDir, 'Images/SEM Image'))
 imgDirectory = os.path.join(mainDir, 'Images')
 xmlFile = os.path.join(mainDir, 'EMproject.emxml')
@@ -339,14 +348,14 @@ imgMappings = extractImageMappings(mapFile)
 
 datasetMetadata = []
 for i, dataset in enumerate(datasetNames[:2]):
-    logging.info(i, dataset)
+    #logging.info(i, dataset)
     datasetMetadataDict, _ = processDatasets(i+1, imgDirectory, imgMappings)
     datasetMetadata.append(datasetMetadataDict)
 
 datasetMetadata = []
 imageMetadata   = []
 for i, dataset in enumerate(datasetNames[:-1]):
-    logging.info(i, dataset)
+    #logging.info(i, dataset)
     datasetMetadataDict, ImageMetadataDict =  processDatasets(i+1, imgDirectory, imgMappings)
     print(f'This is the current dataset: {dataset}.')
     datasetMetadataDict['acquisition.dataset[].datasetType'] = dataset
