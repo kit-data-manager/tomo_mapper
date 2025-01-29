@@ -19,6 +19,11 @@ def readFile(file_path):
     return metadata
 
 def formatMetadata(metadata):
+    """
+    converts tif metadata to metadata dictionary
+    :param metadata: metadata multi line string in INI format
+    :return: dict with key prefix "Images.SEM Image.SliceImage" + header + section keys
+    """
     metadata_dict = {}
     current_header = None
 

@@ -1,1 +1,6 @@
 pillow
+pydantic
+xmltodict
+matplotlib
+numpy
+requests

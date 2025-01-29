@@ -1,0 +1,17 @@
+{
+    "acquisition info": {
+        "sources": [
+            "./EMProject.emxml"
+        ],
+        "parser": "EMProjectParser"
+    },
+    "image info": {
+        "sources": [
+            "./Images/**/*.tif"
+        ],
+        "autodetect_datasets": true,
+        "tag": "34683",
+        "parser": "???",
+        "image_map": "./map_TF.json"
+    }
+}

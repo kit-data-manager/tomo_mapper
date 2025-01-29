@@ -1,0 +1,18 @@
+{
+    "acquisition info": {
+        "sources": [
+            "./ATLAS3D-Run.ve-a3f"
+        ],
+        "parser": "Atlas3DParser"
+    },
+    "image info": {
+        "sources": [
+            "./SESI/*.tif",
+            "./InLens/*.tif"
+        ],
+        "autodetect_datasets": true,
+        "tag": "51023",
+        "parser": "???",
+        "image_map": "./map_Zeiss.json"
+    }
+}
