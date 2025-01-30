@@ -7,10 +7,10 @@ from src.parser.MetadataParser import MetadataParser
 
 class EMProjectParser(MetadataParser):
 
-    def parse(self, payload) -> Acquisition:
+    def parse(self, payload) -> (Acquisition, str):
         parsed = self._read_input(payload)
         acquisition = self._create_acquisition(parsed)
-        return acquisition
+        return acquisition, parsed
 
     def _create_acquisition(self, metadata_dict) -> Acquisition:
         program = {"programName": metadata_dict["EMProject"]["ApplicationName"], "progamVersion": metadata_dict["EMProject"]["ApplicationVersion"]}

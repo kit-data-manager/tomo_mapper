@@ -10,8 +10,8 @@
             "./Images/**/*.tif"
         ],
         "autodetect_datasets": true,
-        "tag": "34683",
-        "parser": "???",
-        "image_map": "./map_TF.json"
+        "tag": "34682",
+        "parser": "TiffParser",
+        "image_map": "TF,TOMO_Schema"
     }
 }

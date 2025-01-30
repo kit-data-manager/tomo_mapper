@@ -1,0 +1,144 @@
+Zeiss_TOMO,Zeiss_SEM,TF,SEM_Schema,TOMO_Schema
+,,System.Pump,,acquisition.genericMetadata.pump
+,,System.Column,,acquisition.genericMetadata.column
+,,System.Source,,acquisition.genericMetadata.source
+,,System.EucWD,,acquisition.genericMetadata.eucentricWorkingDistance.value
+,,System.ESEM,,acquisition.genericMetadata.ESEM
+,,System.SystemType,,acquisition.genericMetadata.systemType
+,,System.Stage,,acquisition.genericMetadata.stage
+,File Name_value,,entry.title,
+Fibics.Application.Date,,PrivateFei.TimeOfCreation,entry.endTime,acquisition.dataset.images.creationTime
+,Date_value,,entry.endTime.Date,
+,Time_value,,entry.endTime.Time,
+Fibics.Application.Version,Version_value,System.Software,entry.program.programVersion,acquisition.dataset.program.programName
+,User Name_value,User.User,entry.user.userName,acquisition.dataset.user.userName
+,,Beam.spot,,acquisition.dataset.instrument.spot
+,,Beam.beam,,acquisition.dataset.instrument.beamType
+,EHT_value,EBeam.HV,entry.instrument.eBeamSource.accelerationVoltage.value,acquisition.dataset.instrument.eBeam.accelerationVoltage.value
+,EHT_unit,,entry.instrument.eBeamSource.accelerationVoltage.unit,
+,Beam Current_value,EBeam.BeamCurrent.value,entry.instrument.eBeamSource.beamCurrent.value,acquisition.dataset.instrument.eBeam.beamCurrent.value
+,Beam Current_unit,,entry.instrument.eBeamSource.beamCurrent.unit,
+,Gun Vacuum_value,,entry.instrument.eBeamSource.gunVacuum.value,
+,Gun Vacuum_unit,,entry.instrument.eBeamSource.gunVacuum.unit,
+,High Current_value,,entry.instrument.eBeamSource.highCurrent,
+Fibics.Scan.ScanRot,,EBeam.scanrotation,,acquisition.dataset.instrument.eBeam.scanRotation.value
+Fibics.Scan.ScanRot.@unit,,,,acquisition.dataset.instrument.eBeam.scanRotation.unit
+,,EBeam.imagemode,,acquisition.dataset.instrument.eBeam.imageMode
+Fibics.Scan.FOV_X,,EBeam.hfw,,acquisition.dataset.instrument.eBeam.horizontalFieldWidth.value
+Fibics.Scan.FOV_X.@units,,,,acquisition.dataset.instrument.eBeam.horizontalFieldWidth.unit
+Fibics.Scan.FOV_Y,,EBeam.vfw,,acquisition.dataset.instrument.eBeam.verticalFieldWidth.value
+Fibics.Scan.FOV_Y.@units,,,,acquisition.dataset.instrument.eBeam.verticalFieldWidth.unit
+,,EBeam.tiltcorrectionison,,acquisition.dataset.instrument.eBeam.tiltCorrectionIsOn
+,,EBeam.dynamicfocusison,,acquisition.dataset.instrument.eBeam.dynamicFocusIsOn
+,,EBeam.dynamicwdison,,acquisition.dataset.instrument.eBeam.dynamicWDIsOn
+,,EBeam.lensmode,,acquisition.dataset.instrument.eBeam.lensMode
+,,EBeam.pretilt,,acquisition.dataset.instrument.eBeam.preTilt.value
+,,EBeam.magnificationcorrection,,acquisition.dataset.instrument.eBeam.magnificationCorrection
+,,Beam.scan,,acquisition.dataset.instrument.scan.scanType
+,Stage Initialised_value,,entry.instrument.stage.stageAlignmentDone,
+Fibics.ScanInfo.item,Tilt Angle_value,EBeam.TiltCorrectionAngle,entry.instrument.stage.tiltCorrectionAngle.value,acquisition.dataset.instrument.eBeam.tiltCorrectionAngle.value
+,Tilt Angle_unit,,entry.instrument.stage.tiltCorrectionAngle.unit,
+,Stage at T_value,Stage.StageT,entry.instrument.stage.stageTiltAngle.value,
+,Stage at T_unit,,entry.instrument.stage.stageTiltAngle.unit,
+,,EBeam.PreTilt.value,entry.instrument.stage.preTilt.value,acquisition.dataset.instrument.eBeam.preTilt.value
+,Tilt Corrn._value,,entry.instrument.stage.tiltCorrectionType,
+Fibics.Scan.Focus,WD_value,Stage.WorkingDistance,entry.instrument.stage.eBeamWorkingDistance.value,acquisition.dataset.images.stage.workingDistance.value
+,WD_unit,,entry.instrument.stage.eBeamWorkingDistance.unit,
+Fibics.Stage.X,Stage at X_value,Stage.StageX,entry.instrument.stage.coordinates.xValue,acquisition.dataset.images.stage.stageX.value
+Fibics.Stage.X.@units,Stage at X_unit,,entry.instrument.stage.coordinates.coordinatesUnit,
+Fibics.Stage.Y,Stage at Y_value,Stage.StageY,entry.instrument.stage.coordinates.yValue,acquisition.dataset.images.stage.stageY.value
+Fibics.Stage.Y.@units,,,,acquisition.dataset.images.stage.stageY.unit
+Fibics.Stage.Z,Stage at Z_value,Stage.StageZ,entry.instrument.stage.coordinates.zValue,acquisition.dataset.images.stage.stageZ.value
+Fibics.Stage.Z.@units,,,,acquisition.dataset.images.stage.stageZ.unit
+Fibics.Stage.Rot,,Stage.stager,,acquisition.dataset.images.stage.stageR.value
+Fibics.Stage.Rot.@units,,,,acquisition.dataset.images.stage.stageR.unit
+,,Stage.staget,,acquisition.dataset.images.stage.stageTa.value
+,,Stage.stagetb,,acquisition.dataset.images.stage.stageTb.value
+,,Stage.spectilt,,acquisition.dataset.images.stage.specTilt.value
+Fibics.Stage.M,,,,acquisition.dataset.images.stage.stageM.value
+Fibics.Stage.M.@unit,,,,acquisition.dataset.images.stage.stageM.unit
+,,Stage.activestage,,acquisition.dataset.images.stage.activeStage
+,Store resolution_value,Image.ResolutionX,entry.instrument.imaging.numberOfPixels.xPixels,acquisition.dataset.instrument.imaging.numberOfPixels.xPixels
+,,Image.ResolutionY,entry.instrument.imaging.numberOfPixels.yPixels,acquisition.dataset.instrument.imaging.numberOfPixels.yPixels
+,Image Pixel Size_value,EScan.PixelWidth,entry.instrument.imaging.pixelSize.xPixelSize.value,
+,Image Pixel Size_unit,,entry.instrument.imaging.pixelSize.xPixelSize.unit,
+,,EScan.PixelHeight,entry.instrument.imaging.pixelSize.yPixelSize.value,
+,Aperture Size_value,EBeam.ApertureDiameter,entry.instrument.imaging.apertureSetting.size.value,acquisition.dataset.instrument.eBeam.apertureSetting.size.value
+,Aperture Size_unit,,entry.instrument.imaging.apertureSetting.size.unit,
+,Dwell Time_value,EScan.Dwell,entry.instrument.imaging.dwellTime.value,
+,Dwell Time_unit,,entry.instrument.imaging.dwellTime.unit,
+,Cycle Time_value,EScan.FrameTime,entry.instrument.imaging.cycleTime.value,
+,Cycle Time_value,,entry.instrument.imaging.cycleTime.unit,
+,Dyn.Focus_value,,entry.instrument.imaging.dynamicFocus,
+,Noise Reduction_value,,entry.instrument.imaging.noiseReduction,
+Fibics.Image.Contrast,,Image.digitalcontrast,,acquisition.dataset.instrument.imaging.digitalContrast
+Fibics.Image.Brightness,,Image.digitalbrightness,,acquisition.dataset.instrument.imaging.digitalBrightness
+,,Image.digitalgamma,,acquisition.dataset.instrument.imaging.digitalGamma
+,,Image.driftcorrected,,acquisition.dataset.instrument.imaging.driftcorrected
+,,Image.zoomfactor,,acquisition.dataset.instrument.imaging.zoomfactor
+,,Image.postprocessing,,acquisition.dataset.instrument.imaging.postprocessing
+,,Image.transformation,,acquisition.dataset.instrument.imaging.transformation
+,Serial No._value,,entry.instrument.instrumentManufacturer.modelName,
+,,,,acquisition.dataset.instrument.detector.detectorType
+Fibics.Image.Detector,Detector_value,Detectors.Name,entry.instrument.detectors.detector1.detectorName,acquisition.dataset.instrument.detector.name
+,Collector Bias_value,,entry.instrument.detectors.detector1.detectorBias.value,
+,Collector Bias_unit,,entry.instrument.detectors.detector1.detectorBias.unit,
+,Mix Signal_value,,entry.instrument.detectors.signalMixingDone,
+,,ETD.contrast,,acquisition.dataset.instrument.detector.detectorSettings.contrast
+,,ETD.brightness,,acquisition.dataset.instrument.detector.detectorSettings.brightness
+,,ETD.mix,,acquisition.dataset.instrument.detector.detectorSettings.mix
+Fibics.DetectorInfo.item[0],,ETD.signal,,acquisition.dataset.instrument.detector.detectorSettings.signal
+,,ETD.grid,,acquisition.dataset.instrument.detector.detectorSettings.grid
+,,ETD.contrastdb,,acquisition.dataset.instrument.detector.detectorSettings.contrastdB
+,,ETD.brightnessdb,,acquisition.dataset.instrument.detector.detectorSettings.brightnessdB
+Fibics.DetectorInfo.item[1],,ETD.setting,,acquisition.dataset.instrument.detector.detectorSettings.setting
+,Beam deceleration Volts_value,EBeamDeceleration.StageBias,entry.instrument.eBeamDecelaration.stageBias.value,
+,Beam deceleration Volts_unit,,entry.instrument.eBeamDeceleration.stageBias.unit,
+,,EBeamDeceleration.LandingEnergy,entry.instrument.eBeamDecelaration.landingEnergy.value,
+,Sem_value,User.UserText,entry.instrument.instrumentName,
+,System Vacuum_value,Vacuum.ChPressure,entry.instrument.chamberPressure.value,acquisition.dataset.images.vacuum.chamberPressure.value
+,System Vacuum_unit,,entry.instrument.chamberPressure.unit,
+,,Vacuum.gas,,acquisition.dataset.images.vacuum.gas
+,,Vacuum.usermode,,acquisition.dataset.images.vacuum.userMode
+,,Vacuum.humidity,,acquisition.dataset.images.vacuum.humidity
+,FIB Column_value,,entry.instrument.FIB.FIBColumn,
+,FIB Probe_value,,entry.instrument.FIB.FIBProbe,
+,FIB Extractor_value,,entry.instrument.FIB.FIBExtractor.value,
+,FIB Extractor_unit,,entry.instrument.FIB.FIBExtractor.unit,
+,FIB SEM Angle_value,,entry.instrument.FIB.angleToEBeam.value,
+,FIB SEM Angle_unit,,entry.instrument.FIB.angleToEBeam.unit,
+,FIB EHT_value,,entry.instrument.FIB.iBeamSource.accelerationVoltage.value,
+,FIB EHT_unit,,entry.instrument.FIB.iBeamSource.accelerationVoltage.unit,
+,FIB Emission I_value,,entry.instrument.FIB.iBeamSource.beamCurrent.value,
+,FIB Emission I_unit,,entry.instrument.FIB.iBeamSource.beamCurrent.unit,
+,FIB Source Lifetime_value,,entry.instrument.FIB.iBeamSource.sourceLifetime.value,
+,FIB Source Lifetime_unit,,entry.instrument.FIB.iBeamSource.sourceLifetime.unit,
+,FIB Gun Pressure_value,,entry.instrument.FIB.iBeamSource.gunPressure.value,
+,FIB Gun Pressure_unit,,entry.instrument.FIB.iBeamSource.gunPressure.unit,
+,GIS Channel_value,,entry.instrument.FIB.gasInjectionSystem.GISName,
+,FIB Working Distance_value,,entry.instrument.FIB.iBeamWorkingDistance.value,
+,FIB Working Distance_unit,,entry.instrument.FIB.iBeamWorkingDistance.unit,
+,FIB Pixel Size_value,,entry.instrument.FIB.FIBSpotSize.value,
+,FIB Pixel Size_unit,,entry.instrument.FIB.FIBSpotSize.unit,
+,,HotStageMEMS.heatingcurrent,,acquisition.dataset.instrument.hotStageMEMS.heatingCurrent.value
+,,HotStageMEMS.heatingvoltage,,acquisition.dataset.instrument.hotStageMEMS.heatingVoltage.value
+,,HotStageMEMS.targettemperature,,acquisition.dataset.instrument.hotStageMEMS.targetTemperature.value
+,,HotStageMEMS.actualtemperature,,acquisition.dataset.instrument.hotStageMEMS.actualTemperature.value
+,,HotStageMEMS.heatingpower,,acquisition.dataset.instrument.hotStageMEMS.heatingPower.value
+,,HotStageMEMS.samplebias,,acquisition.dataset.instrument.hotStageMEMS.sampleBias.value
+,,HotStageMEMS.sampleresistance,,acquisition.dataset.instrument.hotStageMEMS.sampleResistance.value
+,,Specimen.temperature,,acquisition.dataset.images.temperature.value
+,,Specimen.specimencurrent,,acquisition.dataset.images.specimenCurrent.value
+,,Scan.dwelltime,,acquisition.dataset.instrument.scan.dwellTime.value
+,,Scan.internalscan.,,acquisition.dataset.instrument.scan.internalScan
+,,Scan.pixelwidth,,acquisition.dataset.instrument.scan.pixelWidth.value
+,,Scan.pixelheight,,acquisition.dataset.instrument.scan.pixelHeight.value
+,,Scan.horfieldsize,,acquisition.dataset.instrument.scan.horizontalFieldSize.value
+,,Scan.verfieldsize,,acquisition.dataset.instrument.scan.verticalFieldSize.value
+,,Scan.average,,acquisition.dataset.instrument.scan.average
+,,Scan.integrate,,acquisition.dataset.instrument.scan.integrate
+,,Scan.frametime,,acquisition.dataset.instrument.scan.frameTime.value
+,,EScan.mainslock,,acquisition.dataset.instrument.scan.eScan.mainsLock
+,,EScan.linetime,,acquisition.dataset.instrument.scan.eScan.lineTime.value
+,,EScan.lineintegration,,acquisition.dataset.instrument.scan.eScan.lineIntegration
+,,EScan.scaninterlacing,,acquisition.dataset.instrument.scan.eScan.scanInterlacing

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from pydantic import validate_arguments
+from pydantic.v1 import validate_arguments
 
 from src.model.Schema_Concept import Schema_Concept
 #TODO: use https://github.com/cwacek/python-jsonschema-objects ?

@@ -34,17 +34,17 @@ class MetadataParser(ABC):
         :param payload: input String
         :return: metadata dict
         """
-        if self.expected_input_format(self) == "xml":
+        if self.expected_input_format() == "xml":
             self.parsed_data = xmltodict.parse(payload)
             return self.parsed_data
-        if self.expected_input_format(self) == "json":
+        if self.expected_input_format() == "json":
             self.parsed_data = json.loads(payload)
             return self.parsed_data
         logging.error("Parsing of input format not implemented: {}",format(self.expected_input_format()))
         return None
 
     @abstractmethod
-    def parse(self, payload) -> Acquisition:
+    def parse(self, payload) -> (Acquisition, str):
         """
         derives a basic acquisition object from the payload
         :param payload:

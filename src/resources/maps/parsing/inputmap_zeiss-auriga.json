@@ -12,7 +12,7 @@
         ],
         "autodetect_datasets": true,
         "tag": "51023",
-        "parser": "???",
-        "image_map": "./map_Zeiss.json"
+        "parser": "TiffParser",
+        "image_map": "Zeiss_TOMO,TOMO_Schema"
     }
 }

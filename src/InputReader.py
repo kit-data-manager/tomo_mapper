@@ -1,27 +1,37 @@
 import os
 import shutil
 from glob import glob
+from typing import List, Optional
 
 from numpy.lib.function_base import extract
 from requests import HTTPError
 
+from src.model.Acquisition import Acquisition
+from src.model.TOMO_Image import TOMO_Image
 from src.parser.Atlas3dParser import Atlas3dParser
 from src.parser.EMProjectParser import EMProjectParser
 import json
 import logging
 
+from src.parser.ImageParser import ImageParser
 from src.parser.MetadataParser import MetadataParser
+from src.parser.TiffParser import TiffParser
 from src.util import load_json, is_zipfile, extract_zip_file, strip_workdir_from_path
 
 
 class InputReader:
 
-    available_parsers = {
+    available_md_parsers = {
         "EMProjectParser": EMProjectParser(),
         "Atlas3DParser": Atlas3dParser()
     }
 
+    available_img_parsers = {
+        "TiffParser": TiffParser(),
+    }
+
     acquisitionParser: MetadataParser = None
+    imageParser: ImageParser = None
     mapping_dict: dict = None
     temp_dir_path: str = None
     working_dir_path: str = None
@@ -40,6 +50,12 @@ class InputReader:
 
         if not self._check_map_validity():
             logging.error("Invalid mapping file. Aborting")
+            exit(1)
+
+        try:
+            self.imageParser = self.available_img_parsers[self.mapping_dict["image info"]["parser"]]
+        except:
+            logging.error("Error on setting image parser based on mapping file")
             exit(1)
 
         if not os.path.isfile(input_path):
@@ -68,7 +84,7 @@ class InputReader:
                 logging.error("Acquisition data source(s) found, but no parser defined. This is likely a faulty map. If this is intended, remove the source or the whole acquisition section")
                 return False
             else:
-                self.acquisitionParser = self.available_parsers.get(ac_dict["parser"]) #TODO: this is a somewhat weird side effect of checking - maybe not the ideal way of setting the parser
+                self.acquisitionParser = self.available_md_parsers.get(ac_dict["parser"]) #TODO: this is a somewhat weird side effect of checking - maybe not the ideal way of setting the parser
 
                 if not self.acquisitionParser:
                     logging.error("Parser not available: {}".format(ac_dict["parser"]))
@@ -114,12 +130,45 @@ class InputReader:
     def clean_up(self):
         shutil.rmtree(self.working_dir_path)
 
+    def retrieve_acquisition_info(self) -> List[Acquisition]:
+
+        ac_infos = []
+
+        #create Acquisition object from metadata
+        if self.acquisitionParser:
+            for s in self.mapping_dict["acquisition info"]["sources"]:
+               with open(os.path.join(self.working_dir_path, s), "r", encoding="utf-8") as fp:
+                   file_contents = fp.read()
+                   ac = self.acquisitionParser.parse(file_contents)
+                   ac_infos.append(ac)
+        return ac_infos
+
+    def retrieve_image_info(self) -> List[TOMO_Image]:
+        image_infos = []
+
+        #create TOMO_Image objects from tiff files
+        for s in self.mapping_dict["image info"]["sources"]:
+            curr_impath_list = glob(os.path.normpath(os.path.join(self.working_dir_path, s)))
+            for ip in curr_impath_list:
+                img = self.imageParser.parse(ip, self.mapping_dict["image info"]["tag"], self.mapping_dict["image info"]["image_map"].split(",")) #TODO: sanitize and prepare params before
+                image_infos.append(img)
+        return image_infos
+
+
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
-    #reader = InputReader("../maps/parsing/inputmap_thermofisher.json", "../../../datasets/DEMO_20200818_AlSi13 XRM tomo2.zip")
-    #reader = InputReader("../maps/parsing/inputmap_thermofisher.json", "../../../datasets/matwerk-data-repo/20230707_AlSi13_NFDI_old_structure.zip")
-    reader = InputReader("../maps/parsing/inputmap_zeiss-auriga.json", r"E:\downl\Zeiss-Auriga-Atlas_3DTomo.zip")
+    reader = InputReader("./resources/maps/parsing/inputmap_thermofisher.json", "../../../datasets/DEMO_20200818_AlSi13 XRM tomo2.zip")
+    #reader = InputReader("./maps/parsing/inputmap_thermofisher.json", "../../../datasets/matwerk-data-repo/20230707_AlSi13_NFDI_old_structure.zip")
+    #reader = InputReader("resources/maps/parsing/inputmap_zeiss-auriga.json", r"E:\downl\Zeiss-Auriga-Atlas_3DTomo.zip")
     tmpdir = reader.temp_dir_path
+
+    acs = reader.retrieve_acquisition_info()
+    print(len(acs))
+    print(acs[0])
+
+    imgs = reader.retrieve_image_info()
+    print(len(imgs))
+    print(imgs[0])
 
     reader.clean_up()
 
