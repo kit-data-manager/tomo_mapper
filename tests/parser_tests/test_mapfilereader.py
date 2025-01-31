@@ -1,5 +1,6 @@
 import unittest
 from glob import glob
+import os
 
 from src.MapfileReader import MapFileReader
 from src.parser.Atlas3dParser import Atlas3dParser
@@ -9,10 +10,12 @@ from src.parser.TiffParser import TiffParser
 
 class TestMapfileReader(unittest.TestCase):
 
+    testpath = os.path.split(__file__)[0]
+
     def test_pathvalidation(self):
         self.assertRaises(ValueError, MapFileReader.validate_relative_path, r"C:\absolute_windows_path\directory")
 
-        self.assertRaises(ValueError, MapFileReader.validate_relative_path, "/c/absolute_unix_path\directory")
+        self.assertRaises(ValueError, MapFileReader.validate_relative_path, "/c/absolute_unix_path/directory")
 
         self.assertRaises(ValueError, MapFileReader.validate_relative_path, "/User/someone/directory")
 
@@ -23,8 +26,10 @@ class TestMapfileReader(unittest.TestCase):
         self.assertTrue(MapFileReader.validate_relative_path("../correct/**/wildcard_path"))
 
     def test_loading_default_maps(self):
+        sourcesPath = os.path.join(self.testpath, "../../src/resources/maps/parsing/inputmap_*.json")
+        map_sources = glob(sourcesPath)
 
-        map_sources = glob("../../src/resources/maps/parsing/inputmap_*.json")
+        assert len(map_sources) > 0
 
         for ms in map_sources:
             #test only checks if loading as dict is successful
@@ -34,7 +39,8 @@ class TestMapfileReader(unittest.TestCase):
 
 
     def test_parsing_default_maps(self):
-        map_sources = glob("../../src/resources/maps/parsing/inputmap_*.json")
+        sourcesPath = os.path.join(self.testpath, "../../src/resources/maps/parsing/inputmap_*.json")
+        map_sources = glob(sourcesPath)
 
         available_ac_parsers = {
             "EMProjectParser": EMProjectParser,
@@ -44,6 +50,8 @@ class TestMapfileReader(unittest.TestCase):
         available_im_parsers = {
             "TiffParser": TiffParser,
         }
+
+        assert len(map_sources) > 0
 
         for ms in map_sources:
             # test only checks if loading as dict is successful

@@ -1,3 +1,4 @@
+import os
 import unittest
 
 from src.parser.EMProjectParser import EMProjectParser
@@ -6,7 +7,12 @@ from src.parser.EMProjectParser import EMProjectParser
 class TestEmprojectParser(unittest.TestCase):
 
     def setUp(self):
-        with open("../sampleData/EMProject.emxml", "r") as xmlPayload:
+        dir_to_testscript = os.path.split(__file__)[0]
+
+        test_path = os.path.join(dir_to_testscript, "../sampleData/EMProject.emxml")
+        print(test_path)
+        print(os.getenv('PYTEST_CURRENT_TEST'))
+        with open(test_path, "r") as xmlPayload:
             self.payload = xmlPayload.read()
 
 
