@@ -6,7 +6,7 @@ from src.parser.EMProjectParser import EMProjectParser
 class TestEmprojectParser(unittest.TestCase):
 
     def setUp(self):
-        with open("./sampleData/EMProject.emxml", "r") as xmlPayload:
+        with open("../sampleData/EMProject.emxml", "r") as xmlPayload:
             self.payload = xmlPayload.read()
 
 
