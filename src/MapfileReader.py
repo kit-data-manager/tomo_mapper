@@ -16,6 +16,11 @@ class MapFileReader:
 
     @staticmethod
     def read_mapfile(filepath) -> dict:
+        """
+        Load local or remote map file into dict
+        :param filepath: local absolute path, local relative path or remote (absolute) URI
+        :return: file content as dict
+        """
         logging.info("Reading map file content")
         try:
             return load_json(filepath)
