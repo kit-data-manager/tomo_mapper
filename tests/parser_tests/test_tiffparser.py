@@ -9,7 +9,7 @@ class TestTiffparser(unittest.TestCase):
         #TODO: You are not a real test yet
         test_tiffpath = "./sampleData/images/SEM Image - SliceImage - 001.tif"
 
-        parser = TiffParser("34682")
-        img, raw = parser.parse(test_tiffpath, ("TF", "TOMO_Schema"))
+        parser = TiffParser()
+        img, raw = parser.parse(test_tiffpath, "34682", ("TF", "TOMO_Schema"))
         print(img.as_tomo_dict())
         print(raw)
