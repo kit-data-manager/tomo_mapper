@@ -6,6 +6,7 @@ from typing import List, Optional
 from numpy.lib.function_base import extract
 from requests import HTTPError
 
+from src.MapfileReader import MapFileReader
 from src.model.Acquisition import Acquisition
 from src.model.TOMO_Image import TOMO_Image
 from src.parser.Atlas3dParser import Atlas3dParser
@@ -31,32 +32,37 @@ class InputReader:
     }
 
     acquisitionParser: MetadataParser = None
+    acquisitionSources: List[str] = []
     imageParser: ImageParser = None
+    imageSources: List[str] = []
+    metadataParser: MetadataParser = None
     mapping_dict: dict = None
     temp_dir_path: str = None
     working_dir_path: str = None
 
     def __init__(self, map_path, input_path):
-        try:
-            self.mapping_dict = load_json(map_path)
-        except HTTPError as e:
-            logging.error("Tried loading remote mapping file: {}".format(map_path))
-            logging.error(e)
-            exit(1)
-        except FileNotFoundError as e:
-            logging.error("Local map file does not exist: {}".format(map_path))
-            logging.error(e)
-            exit(1)
 
-        if not self._check_map_validity():
-            logging.error("Invalid mapping file. Aborting")
-            exit(1)
 
-        try:
-            self.imageParser = self.available_img_parsers[self.mapping_dict["image info"]["parser"]]
-        except:
-            logging.error("Error on setting image parser based on mapping file")
-            exit(1)
+        ### reading and sanity checking map file
+        self.mapping_dict = MapFileReader.read_mapfile(map_path)
+
+        ac_sources, ac_parser = MapFileReader.parse_mapinfo_for_acquisition(self.mapping_dict, self.available_md_parsers)
+        self.acquisitionParser = ac_parser
+        self.acquisitionSources = ac_sources
+
+        im_sources, im_parser = MapFileReader.parse_mapinfo_for_images(self.mapping_dict, self.available_img_parsers)
+        self.imageParser = im_parser
+        self.imageSources = im_sources
+
+        ###various further checks for map input
+
+        if len(ac_sources) > 1 or len([x for x in ac_sources if "*" in x]) > 0:
+            raise NotImplementedError("More than one metadata file for acquisition found. This feature is not yet implemented.")
+
+        if not self.acquisitionParser.retrievable_datasets() and not self.mapping_dict["image info"].get("autodetect_datasets"):
+            logging.info("Dataset info will not be parsable from acquisition metadata and autodetection is set to false")
+            if len(self.imageSources) == 1:
+                logging.warning("Exactly one dataset will be created according to map definition. If this is a mistake, check your map file")
 
         if not os.path.isfile(input_path):
             logging.error("Input file does not exist: {}. Aborting".format(input_path))
@@ -65,6 +71,12 @@ class InputReader:
         if not is_zipfile(input_path):
             logging.error("Invalid input file format: {}. Aborting".format(input_path))
             exit(1)
+
+        logging.info("Map file content sucessfully read and validated.")
+
+        ### reading input file
+        if not is_zipfile(input_path):
+            raise NotImplementedError("Input file format is not zipped. This feature is not implemented yet")
 
         self.temp_dir_path = extract_zip_file(input_path)
 
@@ -75,38 +87,6 @@ class InputReader:
         else:
             logging.error("Could not determine common root path for all sources in map file. Aborting")
             exit(1)
-
-    def _check_map_validity_acquisition(self, ac_dict):
-        if not ac_dict or not ac_dict.get("sources"):
-            logging.warning("No source for acquisition info defined, generic info for acquisition will be solely derived from image metadata")
-        else:
-            if not ac_dict.get("parser"):
-                logging.error("Acquisition data source(s) found, but no parser defined. This is likely a faulty map. If this is intended, remove the source or the whole acquisition section")
-                return False
-            else:
-                self.acquisitionParser = self.available_md_parsers.get(ac_dict["parser"]) #TODO: this is a somewhat weird side effect of checking - maybe not the ideal way of setting the parser
-
-                if not self.acquisitionParser:
-                    logging.error("Parser not available: {}".format(ac_dict["parser"]))
-                    return False
-        return True
-
-    def _check_map_validity(self):
-        md = self.mapping_dict
-
-        if not self._check_map_validity_acquisition(md.get("acquisition info")):
-            return False
-
-        #TODO: check image part
-
-        if not self.acquisitionParser.retrievable_datasets() and not md["image info"].get("autodetect_datasets"):
-            logging.info("Dataset info will not be parsable from acquisition metadata and autodetection is set to false")
-            if len(md["image info"]["sources"]) == 1:
-                logging.warning("Exactly one dataset will be created according to map definition. If this is a mistake, check your map file")
-
-        self.mapping_dict = md
-
-        return True
 
     def _detect_project_root(self) -> str:
         sources = []
@@ -136,7 +116,7 @@ class InputReader:
 
         #create Acquisition object from metadata
         if self.acquisitionParser:
-            for s in self.mapping_dict["acquisition info"]["sources"]:
+            for s in self.acquisitionSources:
                with open(os.path.join(self.working_dir_path, s), "r", encoding="utf-8") as fp:
                    file_contents = fp.read()
                    ac = self.acquisitionParser.parse(file_contents)
