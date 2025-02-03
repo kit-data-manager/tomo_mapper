@@ -27,7 +27,7 @@ class TiffParser(ImageParser):
     def parse(self, file_path) -> (TOMO_Image, str):
         input_md = self._read_input_file(file_path, self.tagID)
 
-        image_md = map_a_dict(input_md, self.mapping_tuple)
+        image_md = map_a_dict(input_md, self.mapping_tuple, "image")
 
         image_from_md = self._create_image(image_md)
         image_from_md.filePath = file_path

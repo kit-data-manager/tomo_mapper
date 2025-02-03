@@ -8,3 +8,4 @@ dataclasses-json
 pytest
 pandas
 validators
+jsonpath-ng

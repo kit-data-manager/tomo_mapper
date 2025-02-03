@@ -1,56 +1,34 @@
 # Function to get value from nested dictionary using dotted path
 import json
+from collections import defaultdict
+
 import pandas as pd
-
-from src.model.SEM_Image import SEM_FIB_Image
-from src.model.TOMO_Image import TOMO_Image
-
 from importlib import resources
-
-def get_value_from_nested_dict(nested_dict, dotted_path):
-    keys = dotted_path.split('.')
-    value = nested_dict
-    for key in keys:
-        if type(value) is dict:
-            try:
-                value = value[key]
-            except:
-                value = value[key.capitalize()]
-    return value
-
-
-# Function to create nested dictionary from dotted path
-def create_nested_dict(dotted_path, value):
-    keys = dotted_path.split('.')
-    nested_dict = value
-    for key in reversed(keys):
-        nested_dict = {key: nested_dict}
-    return nested_dict
-
-
-# Function to merge two dictionaries
-def merge_dicts(dict1, dict2):
-    for key in dict2:
-        if key in dict1:
-            if isinstance(dict1[key], dict) and isinstance(dict2[key], dict):
-                merge_dicts(dict1[key], dict2[key])
-            else:
-                dict1[key] = dict2[key]
-        else:
-            dict1[key] = dict2[key]
+from jsonpath_ng import parse
 
 # Function to create unified output dict based on the provided JSON mapping
 def create_unified_dict(mapping, input_dict):
     output_dict = {}
 
-    for input_key, output_key in mapping.items():
-        try:
-            value = get_value_from_nested_dict(input_dict, input_key)
-            nested_dict = create_nested_dict(output_key, value)
-            merge_dicts(output_dict, nested_dict)
-        except KeyError:
-            pass
+    for k, v in mapping.items():
 
+        exprIN = parse(k)
+        exprOUT = parse(v)
+
+        values = [m.value for m in exprIN.find(input_dict)]
+        if not values: continue
+
+        if not "*" in v: #as long as the output path in the map is not a list, we expect that we can map the input to one value
+            try:
+                assert len(set(values)) == 1
+            except AssertionError:
+                print(values)
+                exit(1)
+            exprOUT.update_or_create(output_dict, values[0])
+        else: #split output in accordance to list of input values
+            for i, value in enumerate(values):
+                indexed_expr = parse(v.replace('*', str(i)))
+                indexed_expr.update_or_create(output_dict, value)
     return output_dict
 
 def _read_mapTable_hardcoded(col1, col2, fname = "image_map.csv"):
@@ -69,7 +47,7 @@ def _read_mapTable_hardcoded(col1, col2, fname = "image_map.csv"):
         dropped_df = df[[col1, col2]].dropna() #ignore rows with either NaN in input or output col (may occur on mapping csv with more than 2 columns)
         return list(zip(dropped_df[col1], dropped_df[col2]))
 
-def map_a_dict(input_dict, maptable_cols):
+def map_a_dict(input_dict, maptable_cols, contentType):
     """
     use this function to convert a dict of tiff extracted metadata in original format to the output format for the schemas
     #TODO: prettify this. This is a proof-of-concept shortcut implementation.
@@ -77,9 +55,11 @@ def map_a_dict(input_dict, maptable_cols):
     :param maptable_cols: (col1, col2) tuple to describe which mapping to use (in a fixed map at the moment). Possible values "Zeiss_TOMO", "TF" for col1, "SEM_Schema", "TOMO_Schema" for col2
     :return:
     """
+    assert contentType in ["image", "acquisition"]
+
     col1, col2 = maptable_cols
 
-    map_info = _read_mapTable_hardcoded(col1, col2)
+    map_info = _read_mapTable_hardcoded(col1, col2, contentType+"_map.csv")
     mapping_dict = dict(map_info)
 
     return create_unified_dict(mapping_dict, input_dict)

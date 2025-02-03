@@ -1,4 +1,4 @@
-Zeiss_TOMO,Zeiss_SEM,TF,SEM_Schema,TOMO_Schema
+51023,?,34682,SEM_Schema,TOMO_Schema
 ,,System.Pump,,acquisition.genericMetadata.pump
 ,,System.Column,,acquisition.genericMetadata.column
 ,,System.Source,,acquisition.genericMetadata.source
@@ -130,7 +130,7 @@ Fibics.DetectorInfo.item[1],,ETD.setting,,acquisition.dataset.instrument.detecto
 ,,Specimen.temperature,,acquisition.dataset.images.temperature.value
 ,,Specimen.specimencurrent,,acquisition.dataset.images.specimenCurrent.value
 ,,Scan.dwelltime,,acquisition.dataset.instrument.scan.dwellTime.value
-,,Scan.internalscan.,,acquisition.dataset.instrument.scan.internalScan
+,,Scan.internalscan,,acquisition.dataset.instrument.scan.internalScan
 ,,Scan.pixelwidth,,acquisition.dataset.instrument.scan.pixelWidth.value
 ,,Scan.pixelheight,,acquisition.dataset.instrument.scan.pixelHeight.value
 ,,Scan.horfieldsize,,acquisition.dataset.instrument.scan.horizontalFieldSize.value

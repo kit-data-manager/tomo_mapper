@@ -8,35 +8,8 @@ from src.model.Schema_Concept import Schema_Concept
 @dataclass
 class Acquisition(Schema_Concept):
 
-    technique: str = None
-    measurementPurpose: str = None
-    measurementDescription: str = None
-    equipment: str = None
-    consumables: list = None
-    parents: list = None
-    program: dict = None
-    applicationID: dict = None
-    fileVersion: str = None
-    projectName: str = None
-    projectID: dict = None
-    userDescription: str = None
-    zCutSpacing: dict = None
-    millingLocationHeight: dict = None
-    millingLocationWidth: dict = None
-    millingLocationDepth: dict = None
-    millingLocationX: dict = None
-    millingLocationY: dict = None
-    millingMaterial: str = None
-    millingCurrent: dict = None
-    numberOfCuts: int = None
-    pump: str = None
-    column: str = None
-    source: str = None
-    eucentricWorkingDistance: dict = None
-    ESEM: bool = None
-    systemType: str = None
-    angleToEBeam: dict = None
-    stage: str = None
+    generic_metadata: dict = None
+    dataset_template: Dataset = None #use this if you create a dataset template for all datasets but cannot derive the individual datasets from metadata
     datasets: List[Dataset] = None
 
     def to_schema_dict(self):

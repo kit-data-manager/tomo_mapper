@@ -8,9 +8,6 @@ from src.model.Acquisition import Acquisition
 
 class MetadataParser(ABC):
 
-    def __init__(self):
-        self.parsed_data = None
-
     def get_parsed_data(self):
         return self.parsed_data
 
