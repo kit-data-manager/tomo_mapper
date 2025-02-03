@@ -4,6 +4,8 @@ from urllib.parse import urlparse
 
 from requests import HTTPError
 
+from src.parser.ParserFactory import ParserFactory
+from src.parser.mapping_util import _read_mapTable_hardcoded
 from src.util import load_json
 
 import validators
@@ -53,7 +55,7 @@ class MapFileReader:
         return True
 
     @staticmethod
-    def parse_mapinfo_for_acquisition(mapping_dict, available_parsers):
+    def parse_mapinfo_for_acquisition(mapping_dict):
 
         ac_dict = mapping_dict.get("acquisition info")
 
@@ -68,11 +70,8 @@ class MapFileReader:
             logging.error("Acquisition data source(s) found, but no parser defined. This is likely a faulty map. If this is intended, remove the source or the whole acquisition section")
             raise ValueError('Error reading map info for acquisition.')
 
-        parser = available_parsers.get(ac_dict["parser"])
-
-        if not parser:
-            logging.error("Parser not available: {}".format(ac_dict["parser"]))
-            raise ValueError('Error reading map info for acquisition. No matching parser available.')
+        #parser = available_parsers.get(ac_dict["parser"])
+        parser = ParserFactory.create_md_parser(ac_dict.get("parser"))
 
         for s in sources:
             MapFileReader.validate_relative_path(s)
@@ -80,7 +79,7 @@ class MapFileReader:
         return sources, parser
 
     @staticmethod
-    def parse_mapinfo_for_images(mapping_dict, available_parsers):
+    def parse_mapinfo_for_images(mapping_dict):
         #TODO: parse other information as well (tag, map)
         im_dict = mapping_dict.get("image info")
 
@@ -98,11 +97,17 @@ class MapFileReader:
             logging.error("No image parser defined in map file")
             raise ValueError('Error reading map info for images. No parser provided')
 
-        parser = available_parsers.get(im_dict["parser"])
+        tagID = im_dict.get("tag")
+        if not tagID:
+            logging.error("No image tag defined in map file")
+            raise ValueError('Error reading map info for images. No image tag provided')
 
-        if not parser:
-            logging.error("Parser not available: {}".format(im_dict["parser"]))
-            raise ValueError('Error reading map info for acquisition. No matching parser available.')
+        if not _read_mapTable_hardcoded(tagID, "TOMO_Schema"):
+            logging.error("Tag id {} not found in internal mapping file".format(tagID))
+            raise ValueError("Error reading tag info from map file. Unable to handle this tag")
+
+        #parser = available_parsers.get(im_dict["parser"])
+        parser = ParserFactory.create_img_parser(im_dict["parser"],tagID=tagID)
 
         for s in sources:
             MapFileReader.validate_relative_path(s)

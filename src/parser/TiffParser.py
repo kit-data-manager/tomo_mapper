@@ -16,14 +16,18 @@ from src.util import input_to_dict
 
 class TiffParser(ImageParser):
 
+    def __init__(self, tagID):
+        self.tagID = tagID
+        self.mapping_tuple = (tagID, "TOMO_Schema")
+
     @staticmethod
     def expected_input_format():
         return "tiff"
 
-    def parse(self, file_path, tagID, mappingTuple) -> (TOMO_Image, str):
-        input_md = self._read_input_file(file_path, tagID)
+    def parse(self, file_path) -> (TOMO_Image, str):
+        input_md = self._read_input_file(file_path, self.tagID)
 
-        image_md = map_a_dict(input_md, mappingTuple)
+        image_md = map_a_dict(input_md, self.mapping_tuple)
 
         image_from_md = self._create_image(image_md)
         image_from_md.filePath = file_path

@@ -12,7 +12,7 @@ class ImageParser(ABC):
         pass
 
     @abstractmethod
-    def parse(self, file_path, tagID, mappingTuple) -> TOMO_Image:
+    def parse(self, file_path) -> TOMO_Image:
         pass
 
     @abstractmethod

@@ -16,20 +16,22 @@ import logging
 
 from src.parser.ImageParser import ImageParser
 from src.parser.MetadataParser import MetadataParser
+from src.parser.ParserFactory import ParserFactory
 from src.parser.TiffParser import TiffParser
 from src.util import load_json, is_zipfile, extract_zip_file, strip_workdir_from_path
 
 
 class InputReader:
+    """
+    The input reader reads, checks/sanitizes and parses all parameters provided for the mapping.
 
-    available_md_parsers = {
-        "EMProjectParser": EMProjectParser(),
-        "Atlas3DParser": Atlas3dParser()
-    }
+    Implementation concept:
+    - fail early: i.e. errors in mapping file can be handled before starting to extract any zip file content.
+    - reject with error
+    - warn about unusual input
+    """
 
-    available_img_parsers = {
-        "TiffParser": TiffParser(),
-    }
+
 
     acquisitionParser: MetadataParser = None
     acquisitionSources: List[str] = []
@@ -40,17 +42,18 @@ class InputReader:
     temp_dir_path: str = None
     working_dir_path: str = None
 
-    def __init__(self, map_path, input_path):
+    parserFactory = ParserFactory()
 
+    def __init__(self, map_path, input_path):
 
         ### reading and sanity checking map file
         self.mapping_dict = MapFileReader.read_mapfile(map_path)
 
-        ac_sources, ac_parser = MapFileReader.parse_mapinfo_for_acquisition(self.mapping_dict, self.available_md_parsers)
+        ac_sources, ac_parser = MapFileReader.parse_mapinfo_for_acquisition(self.mapping_dict)
         self.acquisitionParser = ac_parser
         self.acquisitionSources = ac_sources
 
-        im_sources, im_parser = MapFileReader.parse_mapinfo_for_images(self.mapping_dict, self.available_img_parsers)
+        im_sources, im_parser = MapFileReader.parse_mapinfo_for_images(self.mapping_dict)
         self.imageParser = im_parser
         self.imageSources = im_sources
 
@@ -72,7 +75,7 @@ class InputReader:
             logging.error("Invalid input file format: {}. Aborting".format(input_path))
             exit(1)
 
-        logging.info("Map file content sucessfully read and validated.")
+        logging.info("Map file content successfully read and validated.")
 
         ### reading input file
         if not is_zipfile(input_path):
@@ -80,6 +83,7 @@ class InputReader:
 
         self.temp_dir_path = extract_zip_file(input_path)
 
+        # auto-detect root dir in zip. TODO: make more flexible and robust. Allow for non-zip input (no auto-detect then)
         root_dir = self._detect_project_root()
         if root_dir:
             self.working_dir_path = root_dir
@@ -89,6 +93,12 @@ class InputReader:
             exit(1)
 
     def _detect_project_root(self) -> str:
+        """
+        function to allow for as many nested directories in a zip file iff all described pathes in the mapping file point to the same root directory anyway.
+
+        CAREFUL: only enable this in case of a zip file input (currently the only implementation) - if a local folder is specified as input, the mapping file should point to the exact same folder (reject otherwise)
+        :return:
+        """
         sources = []
         if self.acquisitionParser:
             sources += self.mapping_dict["acquisition info"]["sources"]
@@ -130,7 +140,7 @@ class InputReader:
         for s in self.mapping_dict["image info"]["sources"]:
             curr_impath_list = glob(os.path.normpath(os.path.join(self.working_dir_path, s)))
             for ip in curr_impath_list:
-                img = self.imageParser.parse(ip, self.mapping_dict["image info"]["tag"], self.mapping_dict["image info"]["image_map"].split(",")) #TODO: sanitize and prepare params before
+                img = self.imageParser.parse(ip) #TODO: sanitize and prepare params before
                 image_infos.append(img)
         return image_infos
 
