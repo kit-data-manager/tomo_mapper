@@ -129,7 +129,7 @@ class InputReader:
             for s in self.acquisitionSources:
                with open(os.path.join(self.working_dir_path, s), "r", encoding="utf-8") as fp:
                    file_contents = fp.read()
-                   ac = self.acquisitionParser.parse(file_contents)
+                   ac, _ = self.acquisitionParser.parse(file_contents)
                    ac_infos.append(ac)
         return ac_infos
 
@@ -140,15 +140,16 @@ class InputReader:
         for s in self.mapping_dict["image info"]["sources"]:
             curr_impath_list = glob(os.path.normpath(os.path.join(self.working_dir_path, s)))
             for ip in curr_impath_list:
-                img = self.imageParser.parse(ip) #TODO: sanitize and prepare params before
-                image_infos.append(img)
+                img, _ = self.imageParser.parse(ip) #TODO: sanitize and prepare params before
+                if img:
+                    image_infos.append(img)
         return image_infos
 
 
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     reader = InputReader("./resources/maps/parsing/inputmap_thermofisher.json", "../../../datasets/DEMO_20200818_AlSi13 XRM tomo2.zip")
-    #reader = InputReader("./maps/parsing/inputmap_thermofisher.json", "../../../datasets/matwerk-data-repo/20230707_AlSi13_NFDI_old_structure.zip")
+    #reader = InputReader("./resources/maps/parsing/inputmap_thermofisher.json", "../../../datasets/matwerk-data-repo/20230707_AlSi13_NFDI_old_structure.zip")
     #reader = InputReader("resources/maps/parsing/inputmap_zeiss-auriga.json", r"E:\downl\Zeiss-Auriga-Atlas_3DTomo.zip")
     tmpdir = reader.temp_dir_path
 

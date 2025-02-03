@@ -26,6 +26,9 @@ class TiffParser(ImageParser):
 
     def parse(self, file_path) -> (TOMO_Image, str):
         input_md = self._read_input_file(file_path, self.tagID)
+        if not input_md:
+            logging.warning("No metadata extractable from {}".format(file_path))
+            return None, None
 
         image_md = map_a_dict(input_md, self.mapping_tuple, "image")
 
@@ -65,4 +68,4 @@ class TiffParser(ImageParser):
                 return dict_from_input
             logging.error("Metadata extracted but unable convert to dictionary for further processing")
         else:
-            logging.error("No matching tag found in exif data for {}".format(self.input_tag))
+            logging.error("No matching tag found in exif data for {} on {}".format(tagID, file_path))
