@@ -1,3 +1,22 @@
-# pp13-mapper
+# SEM-FIB-Tomography mapper
 
-This will function as a repository for development of the PP13 plugin of the [mapping service](https://github.com/kit-data-manager/mapping-service)
+## Usage
+
+- get the code to use it locally
+```
+git clone ...
+cd tomo_mapper
+```
+- install your favourite virtual environment and activate it (optional)
+
+```
+pip install -r requirements.txt
+python -m mapping_cli
+```
+
+## Testing
+
+```
+pytest tests
+```
+
