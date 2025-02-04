@@ -1,11 +1,10 @@
 import logging
-from collections import defaultdict
+
 from typing import Optional
 
 from PIL import Image
 from PIL.ExifTags import TAGS
 
-from src.model.SEM_Image import SEM_FIB_Image
 from src.model.TOMO_Image import TOMO_Image
 from src.parser.ImageParser import ImageParser
 from src.parser.mapping_util import map_a_dict

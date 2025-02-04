@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-from src.model.SEM_Image import SEM_FIB_Image
 from src.model.TOMO_Image import TOMO_Image
 
 
