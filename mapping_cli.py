@@ -23,7 +23,7 @@ def run_cli():
     OUTPUT_PATH = args.get('output')
 
     logging.info(f'This is a dummy implementation for a command line interface.')
-    reader = InputReader(INPUT_SOURCE, MAP_SOURCE)
+    reader = InputReader(MAP_SOURCE, INPUT_SOURCE)
     tmpdir = reader.temp_dir_path
 
     acs = reader.retrieve_acquisition_info()
