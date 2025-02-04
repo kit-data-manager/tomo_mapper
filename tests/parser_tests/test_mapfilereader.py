@@ -56,21 +56,17 @@ class TestMapfileReader(unittest.TestCase):
         for ms in map_sources:
             # test only checks if loading as dict is successful
             map_content = MapFileReader.read_mapfile(ms)
-            MapFileReader.parse_mapinfo_for_acquisition(map_content, available_ac_parsers)
-            MapFileReader.parse_mapinfo_for_images(map_content, available_im_parsers)
+            MapFileReader.parse_mapinfo_for_acquisition(map_content)
+            MapFileReader.parse_mapinfo_for_images(map_content)
 
     def test_fail_on_missing_parser(self):
 
         mapping_content = {
             "acquisition info": {
                 "sources": ["./mdfilepath"],
-                "parser": "Atlas3DParser"
+                "parser": "NotARealParser"
             }
         }
 
-        available_ac_parsers = {
-            "EMProjectParser": EMProjectParser
-        }
-
-        self.assertRaises(ValueError, MapFileReader.parse_mapinfo_for_acquisition, mapping_content, available_ac_parsers)
+        self.assertRaises(ValueError, MapFileReader.parse_mapinfo_for_acquisition, mapping_content)
 

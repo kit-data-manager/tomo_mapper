@@ -12,7 +12,7 @@ class TestTiffparser(unittest.TestCase):
 
         test_tiffpath = os.path.join(dir_to_testscript, "../sampleData/images/SEM_Image-SliceImage-001.tif")
 
-        parser = TiffParser()
-        img, raw = parser.parse(test_tiffpath, "34682", ("TF", "TOMO_Schema"))
+        parser = TiffParser("34682")
+        img, raw = parser.parse(test_tiffpath)
         print(img.as_tomo_dict())
         print(raw)
