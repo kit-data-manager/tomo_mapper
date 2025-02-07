@@ -5,7 +5,8 @@ from pydantic import BaseModel
 from src.model.SchemaConcepts.Schema_Concept import Schema_Concept
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 from src.model.SchemaConcepts.codegen.SchemaClasses import DatasetType, IdentifierModel, \
-    UserDescription, Program, InstrumentDetails
+    UserDescription, Program, InstrumentDetails, SEMFIBTomographyAcquisitionDatasetSchema
+
 
 class Dataset(Schema_Concept, BaseModel):
     """
@@ -24,4 +25,7 @@ class Dataset(Schema_Concept, BaseModel):
     tileColumn: int = None
     tileRow: int = None
     images: List[TOMO_Image] = None
+
+    def as_schema_class(self) -> SEMFIBTomographyAcquisitionDatasetSchema:
+        return SEMFIBTomographyAcquisitionDatasetSchema(**self.model_dump())
 

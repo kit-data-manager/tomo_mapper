@@ -5,7 +5,9 @@ from pydantic import BeforeValidator, BaseModel
 from typing_extensions import Annotated
 
 from src.model.SchemaConcepts.Schema_Concept import Schema_Concept, parse_datetime
-from src.model.SchemaConcepts.codegen.SchemaClasses import Identifier, Stage, Vacuum, TemperatureDetails, CurrentDetails
+from src.model.SchemaConcepts.codegen.SchemaClasses import Identifier, Stage, Vacuum, TemperatureDetails, \
+    CurrentDetails, SEMFIBTomographyAcquisitionImageSchema
+
 
 class TOMO_Image(Schema_Concept, BaseModel):
 
@@ -25,8 +27,11 @@ class TOMO_Image(Schema_Concept, BaseModel):
     def folderName(self):
         return os.path.dirname(self.filePath)
 
-    def to_schema_dict(self):
-        pass
-
     def as_tomo_dict(self):
         return {"fileName": self.fileName(), **self.asdict(), }
+
+    def as_schema_class(self) -> SEMFIBTomographyAcquisitionImageSchema:
+        return SEMFIBTomographyAcquisitionImageSchema(**self.model_dump())
+
+    def to_schema_dict(self):
+        return self.as_schema_class().model_dump()
