@@ -41,9 +41,7 @@ def _read_mapTable_hardcoded(col1, col2, fname = "image_map.csv"):
     :return: dict with key-value pairs of input and output column values
     """
 
-    fname = fname
-
-    with resources.path("src.resources.maps", fname) as dfresource:
+    with resources.as_file(resources.files("src.resources.maps") / fname) as dfresource:
         df = pd.read_csv(dfresource)
 
         dropped_df = df[[col1, col2]].dropna() #ignore rows with either NaN in input or output col (may occur on mapping csv with more than 2 columns)
