@@ -32,6 +32,3 @@ class TOMO_Image(Schema_Concept, BaseModel):
 
     def as_schema_class(self) -> SEMFIBTomographyAcquisitionImageSchema:
         return SEMFIBTomographyAcquisitionImageSchema(**self.model_dump())
-
-    def to_schema_dict(self):
-        return self.as_schema_class().model_dump()
