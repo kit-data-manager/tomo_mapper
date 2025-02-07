@@ -1,13 +1,16 @@
 import os
 import shutil
 from glob import glob
+from pprint import pprint
 from typing import List
 
 from src.MapfileReader import MapFileReader
+from src.model.ImageMD import ImageMD
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 import logging
 
+from src.model.SetupMD import SetupMD
 from src.parser.ImageParser import ImageParser
 from src.parser.MetadataParser import MetadataParser
 from src.parser.ParserFactory import ParserFactory
@@ -26,11 +29,10 @@ class InputReader:
 
 
 
-    acquisitionParser: MetadataParser = None
-    acquisitionSources: List[str] = []
+    setupParser: MetadataParser = None
+    setupmdSources: List[str] = []
     imageParser: ImageParser = None
     imageSources: List[str] = []
-    metadataParser: MetadataParser = None
     mapping_dict: dict = None
     temp_dir_path: str = None
     working_dir_path: str = None
@@ -42,9 +44,9 @@ class InputReader:
         ### reading and sanity checking map file
         self.mapping_dict = MapFileReader.read_mapfile(map_path)
 
-        ac_sources, ac_parser = MapFileReader.parse_mapinfo_for_acquisition(self.mapping_dict)
-        self.acquisitionParser = ac_parser
-        self.acquisitionSources = ac_sources
+        ac_sources, ac_parser = MapFileReader.parse_mapinfo_for_setup(self.mapping_dict)
+        self.setupParser = ac_parser
+        self.setupmdSources = ac_sources
 
         im_sources, im_parser = MapFileReader.parse_mapinfo_for_images(self.mapping_dict)
         self.imageParser = im_parser
@@ -53,9 +55,9 @@ class InputReader:
         ###various further checks for map input
 
         if len(ac_sources) > 1 or len([x for x in ac_sources if "*" in x]) > 0:
-            raise NotImplementedError("More than one metadata file for acquisition found. This feature is not yet implemented.")
+            raise NotImplementedError("More than one metadata file for setup info found. This feature is not yet implemented.")
 
-        if not self.acquisitionParser.retrievable_datasets() and not self.mapping_dict["image info"].get("autodetect_datasets"):
+        if not self.setupParser.retrievable_datasets() and not self.mapping_dict["image info"].get("autodetect_datasets"):
             logging.info("Dataset info will not be parsable from acquisition metadata and autodetection is set to false")
             if len(self.imageSources) == 1:
                 logging.warning("Exactly one dataset will be created according to map definition. If this is a mistake, check your map file")
@@ -93,8 +95,8 @@ class InputReader:
         :return:
         """
         sources = []
-        if self.acquisitionParser:
-            sources += self.mapping_dict["acquisition info"]["sources"]
+        if self.setupParser:
+            sources += self.mapping_dict["setup info"]["sources"]
         sources += self.mapping_dict["image info"]["sources"]
 
         for p, _, _ in os.walk(self.temp_dir_path):
@@ -113,20 +115,19 @@ class InputReader:
     def clean_up(self):
         shutil.rmtree(self.working_dir_path)
 
-    def retrieve_acquisition_info(self) -> List[Acquisition]:
+    def retrieve_setup_info(self) -> List[SetupMD]:
 
-        ac_infos = []
+        setup_infos = []
 
-        #create Acquisition object from metadata
-        if self.acquisitionParser:
-            for s in self.acquisitionSources:
+        if self.setupParser:
+            for s in self.setupmdSources:
                with open(os.path.join(self.working_dir_path, s), "r", encoding="utf-8") as fp:
                    file_contents = fp.read()
-                   ac, _ = self.acquisitionParser.parse(file_contents)
-                   ac_infos.append(ac)
-        return ac_infos
+                   setupMD, _ = self.setupParser.parse(file_contents)
+                   setup_infos.append(setupMD)
+        return setup_infos
 
-    def retrieve_image_info(self) -> List[TOMO_Image]:
+    def retrieve_image_info(self) -> List[ImageMD]:
         image_infos = []
 
         #create TOMO_Image objects from tiff files
@@ -146,13 +147,13 @@ if __name__ == "__main__":
     #reader = InputReader("resources/maps/parsing/inputmap_zeiss-auriga.json", r"E:\downl\Zeiss-Auriga-Atlas_3DTomo.zip")
     tmpdir = reader.temp_dir_path
 
-    acs = reader.retrieve_acquisition_info()
-    print(len(acs))
-    print(acs[0])
+    setup_infos = reader.retrieve_setup_info()
+    print(len(setup_infos))
+    pprint(setup_infos[0].acquisition_metadata.to_schema_dict())
 
     imgs = reader.retrieve_image_info()
     print(len(imgs))
-    print(imgs[0])
+    pprint(imgs[0].image_metadata.to_schema_dict())
 
     reader.clean_up()
 

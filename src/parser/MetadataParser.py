@@ -4,6 +4,7 @@ import json
 import logging
 
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
+from src.model.SetupMD import SetupMD
 
 
 class MetadataParser(ABC):
@@ -41,7 +42,7 @@ class MetadataParser(ABC):
         return None
 
     @abstractmethod
-    def parse(self, payload) -> (Acquisition, str):
+    def parse(self, payload) -> (SetupMD, str):
         """
         derives a basic acquisition object from the payload
         :param payload:

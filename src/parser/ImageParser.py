@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
-
+from src.model.ImageMD import ImageMD
 
 class ImageParser(ABC):
 
@@ -11,9 +10,9 @@ class ImageParser(ABC):
         pass
 
     @abstractmethod
-    def parse(self, file_path) -> TOMO_Image:
+    def parse(self, file_path) -> ImageMD:
         pass
 
     @abstractmethod
-    def _create_image(self, image_metadata) -> TOMO_Image:
+    def _create_image(self, image_metadata) -> ImageMD:
         pass

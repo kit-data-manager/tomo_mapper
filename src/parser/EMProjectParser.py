@@ -1,5 +1,6 @@
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
+from src.model.SetupMD import SetupMD
 from src.parser.MetadataParser import MetadataParser
 from src.parser.mapping_util import map_a_dict
 
@@ -9,7 +10,7 @@ class EMProjectParser(MetadataParser):
     def __init__(self):
         self.mapping_tuple = ("EMProject", "TOMO_Schema")
 
-    def parse(self, payload) -> (Acquisition, str):
+    def parse(self, payload) -> (SetupMD, str):
         parsed = self._read_input(payload)
 
         ac_md = map_a_dict(parsed, self.mapping_tuple, "acquisition")
@@ -22,7 +23,7 @@ class EMProjectParser(MetadataParser):
             acquisition.dataset_template = datasets[0]
         else:
             acquisition.datasets = datasets
-        return acquisition, parsed
+        return SetupMD(acquisition_metadata=acquisition), parsed
 
     def _create_acquisition(self, ac_md) -> Acquisition:
 

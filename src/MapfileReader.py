@@ -55,23 +55,22 @@ class MapFileReader:
         return True
 
     @staticmethod
-    def parse_mapinfo_for_acquisition(mapping_dict):
+    def parse_mapinfo_for_setup(mapping_dict):
 
-        ac_dict = mapping_dict.get("acquisition info")
+        setup = mapping_dict.get("setup info")
 
-        if not ac_dict or not ac_dict.get("sources"):
-            logging.warning("No source for acquisition info defined, generic info for acquisition will be solely derived from image metadata")
+        if not setup or not setup.get("sources"):
+            logging.warning("No source for setup info defined")
             return None, None
 
-        sources = ac_dict.get("sources")
+        sources = setup.get("sources")
         parser = None
 
-        if not ac_dict.get("parser"):
-            logging.error("Acquisition data source(s) found, but no parser defined. This is likely a faulty map. If this is intended, remove the source or the whole acquisition section")
-            raise ValueError('Error reading map info for acquisition.')
+        if not setup.get("parser"):
+            logging.error("Setup metadata source(s) found, but no parser defined. This is likely a faulty map. If this is intended, remove the source or the whole setup info section")
+            raise ValueError('Error reading map info for setup metadata.')
 
-        #parser = available_parsers.get(ac_dict["parser"])
-        parser = ParserFactory.create_md_parser(ac_dict.get("parser"))
+        parser = ParserFactory.create_md_parser(setup.get("parser"))
 
         for s in sources:
             MapFileReader.validate_relative_path(s)

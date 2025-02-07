@@ -24,7 +24,7 @@ class TiffParser(ImageParser):
     def expected_input_format():
         return "tiff"
 
-    def parse(self, file_path) -> (TOMO_Image, str):
+    def parse(self, file_path) -> (ImageMD, str):
         input_md = self._read_input_file(file_path, self.tagID)
         if not input_md:
             logging.warning("No metadata extractable from {}".format(file_path))
