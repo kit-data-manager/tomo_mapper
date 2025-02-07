@@ -1,16 +1,16 @@
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SetupMD import SetupMD
-from src.parser.MetadataParser import MetadataParser
+from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.mapping_util import map_a_dict
 
 
-class EMProjectParser(MetadataParser):
+class EMProjectParser(SetupMD_Parser):
 
     def __init__(self):
         self.mapping_tuple = ("EMProject", "TOMO_Schema")
 
-    def parse(self, payload) -> (SetupMD, str):
+    def parse_setup(self, payload) -> (SetupMD, str):
         parsed = self._read_input(payload)
 
         ac_md = map_a_dict(parsed, self.mapping_tuple, "acquisition")

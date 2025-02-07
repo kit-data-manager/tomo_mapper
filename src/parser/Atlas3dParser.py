@@ -1,9 +1,9 @@
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
-from src.parser.MetadataParser import MetadataParser
+from src.parser.SetupMD_Parser import SetupMD_Parser
 
-class Atlas3dParser(MetadataParser):
+class Atlas3dParser(SetupMD_Parser):
 
-    def parse(self, payload) -> Acquisition:
+    def parse_setup(self, payload) -> Acquisition:
         parsed = self._read_input(payload)
         acquisition = self._create_acquisition(parsed)
         return acquisition

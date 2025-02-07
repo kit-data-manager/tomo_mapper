@@ -12,7 +12,7 @@ import logging
 
 from src.model.SetupMD import SetupMD
 from src.parser.ImageParser import ImageParser
-from src.parser.MetadataParser import MetadataParser
+from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.ParserFactory import ParserFactory
 from src.util import is_zipfile, extract_zip_file, strip_workdir_from_path
 
@@ -29,7 +29,7 @@ class InputReader:
 
 
 
-    setupParser: MetadataParser = None
+    setupParser: SetupMD_Parser = None
     setupmdSources: List[str] = []
     imageParser: ImageParser = None
     imageSources: List[str] = []
@@ -123,7 +123,7 @@ class InputReader:
             for s in self.setupmdSources:
                with open(os.path.join(self.working_dir_path, s), "r", encoding="utf-8") as fp:
                    file_contents = fp.read()
-                   setupMD, _ = self.setupParser.parse(file_contents)
+                   setupMD, _ = self.setupParser.parse_setup(file_contents)
                    setup_infos.append(setupMD)
         return setup_infos
 

@@ -19,6 +19,6 @@ class TestEmprojectParser(unittest.TestCase):
     def test_setup(self):
         # TODO: You are not a real test yet
         parser = EMProjectParser()
-        acqu, raw = parser.parse(self.payload)
+        acqu, raw = parser.parse_setup(self.payload)
         print(acqu.__dict__)
         print(raw)
