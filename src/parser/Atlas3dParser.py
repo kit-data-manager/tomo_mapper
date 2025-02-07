@@ -1,9 +1,5 @@
-from typing import List
-
-from src.model.Acquisition import Acquisition
-from src.model.Dataset import Dataset
+from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.parser.MetadataParser import MetadataParser
-
 
 class Atlas3dParser(MetadataParser):
 

@@ -3,7 +3,7 @@ import xmltodict
 import json
 import logging
 
-from src.model.Acquisition import Acquisition
+from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 
 
 class MetadataParser(ABC):

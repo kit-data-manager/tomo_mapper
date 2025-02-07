@@ -20,5 +20,5 @@ class TestEmprojectParser(unittest.TestCase):
         # TODO: You are not a real test yet
         parser = EMProjectParser()
         acqu, raw = parser.parse(self.payload)
-        print(acqu.to_schema_dict())
+        print(acqu.__dict__)
         print(raw)

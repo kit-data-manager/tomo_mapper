@@ -1,7 +1,5 @@
-from typing import List
-
-from src.model.Acquisition import Acquisition
-from src.model.Dataset import Dataset
+from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
+from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.parser.MetadataParser import MetadataParser
 from src.parser.mapping_util import map_a_dict
 
@@ -29,7 +27,7 @@ class EMProjectParser(MetadataParser):
     def _create_acquisition(self, ac_md) -> Acquisition:
 
         ac_md_format = {
-            "generic_metadata": ac_md["genericMetadata"]
+            "genericMetadata": ac_md["genericMetadata"]
         }
 
         acquisition = Acquisition(**ac_md_format)

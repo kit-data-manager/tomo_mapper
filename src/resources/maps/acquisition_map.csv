@@ -12,6 +12,7 @@ EMProject.Datasets.Dataset[*].Rows,,dataset[*].rows
 EMProject.Datasets.Dataset[*].Columns,,dataset[*].columns
 EMProject.Datasets.Dataset[*].LiveAcquisition.TileColumn,,dataset[*].tileColumn
 EMProject.Datasets.Dataset[*].LiveAcquisition.TileRow,,dataset[*].tileRow
+EMProject.Datasets.Dataset[*].Name,,dataset[*].datasetType
 ,ATLAS3D-Job.ATLAS3D-Setup.SEM_System_State.AccV,dataset[*].instrument.eBeam.accelerationVoltage.value
 ,ATLAS3D-Job.ATLAS3D-Setup.SEM_System_State.ProbeI,dataset[*].instrument.eBeam.beamCurrent.value
 ,ATLAS3D-Job.ATLAS3D-Setup.Settings.ImagingMode,dataset[*].instrument.eBeam.imageMode

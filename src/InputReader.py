@@ -1,24 +1,17 @@
 import os
 import shutil
 from glob import glob
-from typing import List, Optional
-
-from numpy.lib.function_base import extract
-from requests import HTTPError
+from typing import List
 
 from src.MapfileReader import MapFileReader
-from src.model.Acquisition import Acquisition
-from src.model.TOMO_Image import TOMO_Image
-from src.parser.Atlas3dParser import Atlas3dParser
-from src.parser.EMProjectParser import EMProjectParser
-import json
+from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
+from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 import logging
 
 from src.parser.ImageParser import ImageParser
 from src.parser.MetadataParser import MetadataParser
 from src.parser.ParserFactory import ParserFactory
-from src.parser.TiffParser import TiffParser
-from src.util import load_json, is_zipfile, extract_zip_file, strip_workdir_from_path
+from src.util import is_zipfile, extract_zip_file, strip_workdir_from_path
 
 
 class InputReader:

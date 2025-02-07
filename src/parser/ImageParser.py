@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.model.TOMO_Image import TOMO_Image
+from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 
 
 class ImageParser(ABC):
