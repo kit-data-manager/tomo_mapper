@@ -12,6 +12,7 @@ from src.model.SchemaConcepts.codegen.SchemaClasses import Identifier, Stage, Va
 class TOMO_Image(Schema_Concept, BaseModel):
 
     filePath: str = None
+    #TODO: creation time is only validated on init, not if set later. Should likely be changed
     creationTime: Annotated[datetime, BeforeValidator(parse_datetime)] = None
     entryID: Identifier = None
     fileLink: Identifier = None

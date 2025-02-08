@@ -31,7 +31,7 @@ class Schema_Concept(ABC):
             _info: SerializationInfo,
     ):
         if isinstance(value, datetime):
-            return isoformat(value)
+            return value.strftime('%Y-%m-%dT%H:%M:%SZ')
         return nxt(value)
 
     @abstractmethod
