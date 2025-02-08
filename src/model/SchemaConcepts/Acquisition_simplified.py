@@ -9,6 +9,10 @@ from src.model.SchemaConcepts.codegen.SchemaClasses import Acquisition as Acquis
 
 
 class Acquisition(Schema_Concept, BaseModel):
+    """
+    basically interchangable with codegenerated Acqusition,
+    but replaced by a custom class for easier use
+    """
 
     genericMetadata: GenericMetadata = None
     dataset_template: Dataset = None #use this if you create a dataset template for all datasets but cannot derive the individual datasets from metadata

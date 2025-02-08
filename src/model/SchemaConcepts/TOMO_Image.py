@@ -10,6 +10,10 @@ from src.model.SchemaConcepts.codegen.SchemaClasses import Identifier, Stage, Va
 
 
 class TOMO_Image(Schema_Concept, BaseModel):
+    """
+    basically interchangable with codegenerated SEMFIBTomographyAcquisitionImageSchema,
+    but replaced by a custom class for easier use
+    """
 
     filePath: str = None
     #TODO: creation time is only validated on init, not if set later. Should likely be changed
