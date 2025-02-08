@@ -1,5 +1,6 @@
 import unittest
 import os
+from pprint import pprint
 
 from src.parser.TiffParser import TiffParser
 
@@ -14,5 +15,8 @@ class TestTiffparser(unittest.TestCase):
 
         parser = TiffParser("34682")
         img, raw = parser.parse(test_tiffpath)
-        print(img.as_tomo_dict())
-        print(raw)
+        pprint(raw)
+
+        pprint(img.acquisition_info.to_schema_dict())
+        pprint(img.dataset_metadata.to_schema_dict())
+        pprint(img.image_metadata.to_schema_dict())

@@ -19,7 +19,7 @@ class Acquisition(Schema_Concept, BaseModel):
     datasets: List[Dataset] = None
 
     def as_schema_class(self) -> AcquisitionMain:
-        dataset_schemas = [x.as_schema_class() for x in self.datasets]
+        dataset_schemas = [x.as_schema_class() for x in self.datasets] if self.datasets else []
         acquisition_schema = Acquisition_gen(genericMetadata=self.genericMetadata, dataset=dataset_schemas)
         main_schema = AcquisitionMain(acquisition=acquisition_schema)
         return main_schema
