@@ -52,5 +52,6 @@ class Schema_Concept(ABC):
         """
         return self.as_schema_class().model_dump(
             exclude_none=exclude_none,
-            mode = "json"
+            mode = "json",
+            by_alias=True
         )
