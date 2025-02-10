@@ -4,6 +4,7 @@ import os
 from pprint import pprint
 
 from src.InputReader import InputReader
+from src.OutputWriter import OutputWriter
 
 #make log level configurable from ENV, defaults to info level
 logging.basicConfig(
@@ -28,16 +29,18 @@ def run_cli():
     tmpdir = reader.temp_dir_path
 
     setup_infos = reader.retrieve_setup_info()
-    print(len(setup_infos))
-    pprint(setup_infos[0])
+    #print(len(setup_infos))
+    #pprint(setup_infos[0])
 
     run_infos = reader.retrieve_run_info()
-    print(len(run_infos))
-    pprint(run_infos[0])
+    #print(len(run_infos))
+    #pprint(run_infos[0])
 
     imgs = reader.retrieve_image_info()
-    print(len(imgs))
-    pprint(imgs[0])
+    #print(len(imgs))
+    #pprint(imgs[0])
+
+    output = OutputWriter.stitch_together(setup_infos[0], run_infos[0], imgs)
 
     reader.clean_up()
 
