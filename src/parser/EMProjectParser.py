@@ -10,7 +10,7 @@ class EMProjectParser(SetupMD_Parser):
     def __init__(self):
         self.mapping_tuple = ("EMProject", "TOMO_Schema")
 
-    def parse_setup(self, payload) -> (SetupMD, str):
+    def parse_setup(self, payload) -> tuple[SetupMD, dict]:
         parsed = self._read_input(payload)
 
         ac_md = map_a_dict(parsed, self.mapping_tuple, "acquisition")

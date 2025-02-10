@@ -17,7 +17,7 @@ class SetupMD_Parser(MetadataParser):
         pass
 
     @abstractmethod
-    def parse_setup(self, payload) -> (SetupMD, str):
+    def parse_setup(self, payload) -> tuple[SetupMD, dict]:
         """
         derives a basic acquisition object from the payload
         :param payload:
