@@ -1,8 +1,8 @@
 import logging
 
-from src.parser.Atlas3dParser import Atlas3dParser
-from src.parser.EMProjectParser import EMProjectParser
-from src.parser.TiffParser import TiffParser
+from src.parser.impl.Atlas3dParser import Atlas3dParser
+from src.parser.impl.EMProjectParser import EMProjectParser
+from src.parser.impl.TiffParser import TiffParser
 
 
 class ParserFactory:

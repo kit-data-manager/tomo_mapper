@@ -2,7 +2,7 @@ import unittest
 import os
 from pprint import pprint
 
-from src.parser.TiffParser import TiffParser
+from src.parser.impl.TiffParser import TiffParser
 
 
 class TestTiffparser(unittest.TestCase):

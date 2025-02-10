@@ -2,7 +2,7 @@ import os
 import unittest
 from pprint import pprint
 
-from src.parser.EMProjectParser import EMProjectParser
+from src.parser.impl.EMProjectParser import EMProjectParser
 
 
 class TestEmprojectParser(unittest.TestCase):
