@@ -20,7 +20,7 @@ class ImageMD(BaseModel):
         return os.path.basename(self.filePath)
 
     def folderName(self):
-        return os.path.dirname(self.filePath)
+        return os.path.basename(os.path.dirname(self.filePath))
 
     def determine_dstype(self) -> DatasetType:
         if self.dataset_metadata is not None and self.dataset_metadata.datasetType is not None:
