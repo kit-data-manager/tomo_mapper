@@ -32,7 +32,7 @@ Fibics.Scan.FOV_Y.@units,,,,acquisition.dataset.instrument.eBeam.verticalFieldWi
 ,,EBeam.dynamicfocusison,,acquisition.dataset.instrument.eBeam.dynamicFocusIsOn
 ,,EBeam.dynamicwdison,,acquisition.dataset.instrument.eBeam.dynamicWDIsOn
 ,,EBeam.lensmode,,acquisition.dataset.instrument.eBeam.lensMode
-,,EBeam.pretilt,,acquisition.dataset.instrument.eBeam.preTilt.value
+,,EBeam.PreTilt,,acquisition.dataset.instrument.eBeam.preTilt
 ,,EBeam.magnificationcorrection,,acquisition.dataset.instrument.eBeam.magnificationCorrection
 ,,Beam.scan,,acquisition.dataset.instrument.scan.scanType
 ,Stage Initialised_value,,entry.instrument.stage.stageAlignmentDone,
@@ -40,7 +40,6 @@ Fibics.ScanInfo.item,Tilt Angle_value,EBeam.TiltCorrectionAngle,entry.instrument
 ,Tilt Angle_unit,,entry.instrument.stage.tiltCorrectionAngle.unit,
 ,Stage at T_value,Stage.StageT,entry.instrument.stage.stageTiltAngle.value,
 ,Stage at T_unit,,entry.instrument.stage.stageTiltAngle.unit,
-,,EBeam.PreTilt.value,entry.instrument.stage.preTilt.value,acquisition.dataset.instrument.eBeam.preTilt.value
 ,Tilt Corrn._value,,entry.instrument.stage.tiltCorrectionType,
 Fibics.Scan.Focus,WD_value,Stage.WorkingDistance,entry.instrument.stage.eBeamWorkingDistance.value,acquisition.dataset.images.stage.workingDistance.value
 ,WD_unit,,entry.instrument.stage.eBeamWorkingDistance.unit,

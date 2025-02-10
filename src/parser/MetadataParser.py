@@ -3,26 +3,11 @@ import xmltodict
 import json
 import logging
 
-from src.model.Acquisition import Acquisition
-
-
 class MetadataParser(ABC):
-
-    def get_parsed_data(self):
-        return self.parsed_data
 
     @staticmethod
     @abstractmethod
     def expected_input_format():
-        pass
-
-    @staticmethod
-    @abstractmethod
-    def retrievable_datasets():
-        """
-        :param self:
-        :return: true if the metadata in question provides information about the datasets, false otherwise
-        """
         pass
 
     def _read_input(self, payload):
@@ -39,12 +24,3 @@ class MetadataParser(ABC):
             return self.parsed_data
         logging.error("Parsing of input format not implemented: {}",format(self.expected_input_format()))
         return None
-
-    @abstractmethod
-    def parse(self, payload) -> (Acquisition, str):
-        """
-        derives a basic acquisition object from the payload
-        :param payload:
-        :return:
-        """
-        pass

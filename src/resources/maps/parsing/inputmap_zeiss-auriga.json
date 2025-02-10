@@ -1,5 +1,11 @@
 {
-    "acquisition info": {
+    "setup info": {
+        "sources": [
+            "./ATLAS3D-Run.ve-a3f"
+        ],
+        "parser": "Atlas3DParser"
+    },
+    "run info": {
         "sources": [
             "./ATLAS3D-Run.ve-a3f"
         ],

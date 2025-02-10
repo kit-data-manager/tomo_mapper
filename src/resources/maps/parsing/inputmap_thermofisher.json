@@ -1,9 +1,15 @@
 {
-    "acquisition info": {
+    "setup info": {
         "sources": [
             "./EMProject.emxml"
         ],
         "parser": "EMProjectParser"
+    },
+     "run info": {
+        "sources": [
+            "./ProjectData.dat"
+        ],
+        "parser": "ProjectDataParser"
     },
     "image info": {
         "sources": [

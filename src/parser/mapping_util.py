@@ -1,5 +1,6 @@
 # Function to get value from nested dictionary using dotted path
 import json
+import logging
 from collections import defaultdict
 
 import pandas as pd
@@ -26,11 +27,18 @@ def create_unified_dict(mapping, input_dict):
             except AssertionError:
                 print(values)
                 exit(1)
-            exprOUT.update_or_create(output_dict, values[0])
+            if values[0]:
+                exprOUT.update_or_create(output_dict, values[0])
+            else:
+                logging.warning("Found a value equivalent to None. path: {}, value: {}".format(k, values[0]))
         else: #split output in accordance to list of input values
             for i, value in enumerate(values):
-                indexed_expr = parser.parse(v.replace('*', str(i)))
-                indexed_expr.update_or_create(output_dict, value)
+                if value:
+                    indexed_expr = parser.parse(v.replace('*', str(i)))
+                    indexed_expr.update_or_create(output_dict, value)
+                else:
+                    logging.warning(
+                        "Found a value equivalent to None. path: {}, value: {}".format(k, value))
     return output_dict
 
 def _read_mapTable_hardcoded(col1, col2, fname = "image_map.csv"):
@@ -41,9 +49,7 @@ def _read_mapTable_hardcoded(col1, col2, fname = "image_map.csv"):
     :return: dict with key-value pairs of input and output column values
     """
 
-    fname = fname
-
-    with resources.path("src.resources.maps", fname) as dfresource:
+    with resources.as_file(resources.files("src.resources.maps") / fname) as dfresource:
         df = pd.read_csv(dfresource)
 
         dropped_df = df[[col1, col2]].dropna() #ignore rows with either NaN in input or output col (may occur on mapping csv with more than 2 columns)

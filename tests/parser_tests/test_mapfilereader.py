@@ -3,9 +3,9 @@ from glob import glob
 import os
 
 from src.MapfileReader import MapFileReader
-from src.parser.Atlas3dParser import Atlas3dParser
-from src.parser.EMProjectParser import EMProjectParser
-from src.parser.TiffParser import TiffParser
+from src.parser.impl.Atlas3dParser import Atlas3dParser
+from src.parser.impl.EMProjectParser import EMProjectParser
+from src.parser.impl.TiffParser import TiffParser
 
 
 class TestMapfileReader(unittest.TestCase):
@@ -56,17 +56,17 @@ class TestMapfileReader(unittest.TestCase):
         for ms in map_sources:
             # test only checks if loading as dict is successful
             map_content = MapFileReader.read_mapfile(ms)
-            MapFileReader.parse_mapinfo_for_acquisition(map_content)
+            MapFileReader.parse_mapinfo_for_setup(map_content)
             MapFileReader.parse_mapinfo_for_images(map_content)
 
     def test_fail_on_missing_parser(self):
 
         mapping_content = {
-            "acquisition info": {
+            "setup info": {
                 "sources": ["./mdfilepath"],
                 "parser": "NotARealParser"
             }
         }
 
-        self.assertRaises(ValueError, MapFileReader.parse_mapinfo_for_acquisition, mapping_content)
+        self.assertRaises(ValueError, MapFileReader.parse_mapinfo_for_setup, mapping_content)
 

@@ -1,7 +1,8 @@
 import os
 import unittest
+from pprint import pprint
 
-from src.parser.EMProjectParser import EMProjectParser
+from src.parser.impl.EMProjectParser import EMProjectParser
 
 
 class TestEmprojectParser(unittest.TestCase):
@@ -19,6 +20,7 @@ class TestEmprojectParser(unittest.TestCase):
     def test_setup(self):
         # TODO: You are not a real test yet
         parser = EMProjectParser()
-        acqu, raw = parser.parse(self.payload)
-        print(acqu.to_schema_dict())
+        setupmd, raw = parser.parse_setup(self.payload)
+        print(setupmd.__dict__)
         print(raw)
+        pprint(setupmd.acquisition_metadata.to_schema_dict())
