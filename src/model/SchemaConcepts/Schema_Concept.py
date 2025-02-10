@@ -10,6 +10,8 @@ from pydantic_core.core_schema import SerializerFunctionWrapHandler, Serializati
 #Custom deserializer for datetime fields
 def parse_datetime(value: str):
     try:
+        if "/" in value:
+            return datetime.strptime(value, "%m/%d/%Y %H:%M:%S")
         return datetime.strptime(value, '%d.%m.%Y %H:%M:%S') #specific handling of expected date format that usual validator cannot handle
     except ValueError:
         return value #not a German date - lets hope that the normal validator can handle it

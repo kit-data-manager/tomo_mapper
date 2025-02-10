@@ -69,21 +69,31 @@ class TestTOMOImage(unittest.TestCase):
 
         #German date format
         img = TOMO_Image(creationTime="01.01.2020 00:00:00")
+        self.assertEqual(img.creationTime.year, 2020)
         img.to_schema_dict()
 
         #generously reading in date as datetime
         img = TOMO_Image(creationTime="2020-01-01")
+        self.assertEqual(img.creationTime.year, 2020)
         img.to_schema_dict()
 
         #iso date formats
         img = TOMO_Image(creationTime="2020-01-01 00:00:00")
+        self.assertEqual(img.creationTime.year, 2020)
         img.to_schema_dict()
 
         img = TOMO_Image(creationTime="2017-04-04T16:22:20.855+02:00")
+        self.assertEqual(img.creationTime.year, 2017)
         img.to_schema_dict()
 
         #setting with expected output format
         img.creationTime = "2017-04-04T16:22:20.855"
+        #TODO: careful, this is not setting a datetime but a string - behaviour should likely be changed?
+        img.to_schema_dict()
+
+        #Other date formats (e.g. from ProjectData.dat in TF data)
+        img = TOMO_Image(creationTime="07/07/2023 10:12:46")
+        self.assertEqual(img.creationTime.year, 2023)
         img.to_schema_dict()
 
         #setting with datetime object directly (for whatever reason)
