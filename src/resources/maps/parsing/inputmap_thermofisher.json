@@ -5,6 +5,12 @@
         ],
         "parser": "EMProjectParser"
     },
+     "run info": {
+        "sources": [
+            "./ProjectData.dat"
+        ],
+        "parser": "ProjectDataParser"
+    },
     "image info": {
         "sources": [
             "./Images/**/*.tif"

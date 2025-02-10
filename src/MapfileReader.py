@@ -64,13 +64,34 @@ class MapFileReader:
             return None, None
 
         sources = setup.get("sources")
-        parser = None
 
         if not setup.get("parser"):
             logging.error("Setup metadata source(s) found, but no parser defined. This is likely a faulty map. If this is intended, remove the source or the whole setup info section")
             raise ValueError('Error reading map info for setup metadata.')
 
-        parser = ParserFactory.create_md_parser(setup.get("parser"))
+        parser = ParserFactory.create_setupmd_parser(setup.get("parser"))
+
+        for s in sources:
+            MapFileReader.validate_relative_path(s)
+
+        return sources, parser
+
+    @staticmethod
+    def parse_mapinfo_for_run(mapping_dict):
+        #TODO: create less redundant method for setup and run parsing
+        run = mapping_dict.get("run info")
+
+        if not run or not run.get("sources"):
+            logging.warning("No source for run info defined")
+            return None, None
+
+        sources = run.get("sources")
+
+        if not run.get("parser"):
+            logging.error("Run metadata source(s) found, but no parser defined. This is likely a faulty map. If this is intended, remove the source or the whole info section")
+            raise ValueError('Error reading map info for run metadata.')
+
+        parser = ParserFactory.create_runmd_parser(run.get("parser"))
 
         for s in sources:
             MapFileReader.validate_relative_path(s)

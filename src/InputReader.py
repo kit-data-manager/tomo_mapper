@@ -6,8 +6,7 @@ from typing import List
 
 from src.MapfileReader import MapFileReader
 from src.model.ImageMD import ImageMD
-from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
-from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
+from src.model.RunMD import RunMD
 import logging
 
 from src.model.SetupMD import SetupMD
@@ -47,6 +46,10 @@ class InputReader:
         ac_sources, ac_parser = MapFileReader.parse_mapinfo_for_setup(self.mapping_dict)
         self.setupParser = ac_parser
         self.setupmdSources = ac_sources
+
+        run_sources, run_parser = MapFileReader.parse_mapinfo_for_run(self.mapping_dict)
+        self.runParser = run_parser
+        self.runmdSources = run_sources
 
         im_sources, im_parser = MapFileReader.parse_mapinfo_for_images(self.mapping_dict)
         self.imageParser = im_parser
@@ -127,6 +130,18 @@ class InputReader:
                    setup_infos.append(setupMD)
         return setup_infos
 
+    def retrieve_run_info(self) -> List[RunMD]:
+
+        run_infos = []
+
+        if self.runParser:
+            for s in self.runmdSources:
+               with open(os.path.join(self.working_dir_path, s), "r", encoding="utf-8") as fp:
+                   file_contents = fp.read()
+                   runMD, _ = self.runParser.parse_run(file_contents)
+                   run_infos.append(runMD)
+        return run_infos
+
     def retrieve_image_info(self) -> List[ImageMD]:
         image_infos = []
 
@@ -151,8 +166,13 @@ if __name__ == "__main__":
     print(len(setup_infos))
     pprint(setup_infos[0].acquisition_metadata.to_schema_dict())
 
+    run_infos = reader.retrieve_run_info()
+    pprint(run_infos[0].get_datasetTypes())
+
     imgs = reader.retrieve_image_info()
     print(len(imgs))
+    pprint(imgs[0].acquisition_info.to_schema_dict())
+    pprint(imgs[0].dataset_metadata.to_schema_dict())
     pprint(imgs[0].image_metadata.to_schema_dict())
 
     reader.clean_up()
