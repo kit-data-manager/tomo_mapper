@@ -1,6 +1,7 @@
 import argparse
 import logging
 import os
+from pprint import pprint
 
 from src.InputReader import InputReader
 
@@ -26,13 +27,17 @@ def run_cli():
     reader = InputReader(MAP_SOURCE, INPUT_SOURCE)
     tmpdir = reader.temp_dir_path
 
-    acs = reader.retrieve_acquisition_info()
-    print(len(acs))
-    print(acs[0])
+    setup_infos = reader.retrieve_setup_info()
+    print(len(setup_infos))
+    pprint(setup_infos[0])
+
+    run_infos = reader.retrieve_run_info()
+    print(len(run_infos))
+    pprint(run_infos[0])
 
     imgs = reader.retrieve_image_info()
     print(len(imgs))
-    print(imgs[0])
+    pprint(imgs[0])
 
     reader.clean_up()
 
