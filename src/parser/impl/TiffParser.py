@@ -32,20 +32,22 @@ class TiffParser(ImageParser):
 
         image_md = map_a_dict(input_md, self.mapping_tuple, "image")
 
-        image_from_md = self._create_image(image_md)
-        image_from_md.filePath = file_path
+        image_from_md = self._create_image(image_md, file_path)
 
         return image_from_md, image_md
 
-    def _create_image(self, image_md) -> ImageMD:
+    def _create_image(self, image_md, fp) -> ImageMD:
 
         image_md_format = {
             "acquisition_info": image_md["acquisition"],
             "dataset_metadata": image_md["acquisition"]["dataset"],
             "image_metadata": image_md["acquisition"]["dataset"]["images"],
+            "filePath": fp
         }
 
         image_md_format["dataset_metadata"].pop("images")
+        if image_md_format.get("image_metadata"):
+            image_md_format["image_metadata"]["localPath"] = fp
 
         return ImageMD(**image_md_format)
 

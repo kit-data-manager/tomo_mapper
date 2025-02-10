@@ -1,11 +1,12 @@
 import json
-import unittest
+import os
 from datetime import datetime
 
+from src.config import MappingConfig
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 
 
-class TestTOMOImage(unittest.TestCase):
+class TestTOMOImage:
     json_payload = """
                  {
                     "creationTime": "18.08.2020 13:45:16",
@@ -100,3 +101,25 @@ class TestTOMOImage(unittest.TestCase):
         dt = datetime(2020, 1, 1, 0, 0, 0)
         img.creationTime = dt
         img.to_schema_dict()
+
+    def test_path_matching(self, tmp_path):
+
+        tmp_path.touch()
+        with open(os.path.join(tmp_path, "image.tif"), "w") as f:
+            pass
+
+        with open(os.path.join(tmp_path, "image2.tif"), "w") as f:
+            pass
+
+        MappingConfig.set_working_dir(tmp_path)
+
+        p1 = os.path.join(MappingConfig.get_working_dir(), "image.tif")
+        img1 = TOMO_Image(localPath=p1)
+        img2 = TOMO_Image(localPath="./image.tif")
+        assert img1.match_by_path(img2)
+
+        img2 = TOMO_Image(localPath="./image2.tif")
+
+        assert not img1.match_by_path(img2)
+
+

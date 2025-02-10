@@ -17,7 +17,7 @@ class ProjectDataParser(RunMD_Parser):
         for imgmd in resultMD["Image"]:
             if imgmd.get("ImagePurpose") and imgmd["ImagePurpose"] in DatasetType:
                 fp = imgmd["@FilePath"]
-                img = TOMO_Image(filePath=fp)
+                img = TOMO_Image(localPath=fp)
                 runMD.add_image(img, DatasetType(imgmd["ImagePurpose"]))
 
         return RunMD(), parsed

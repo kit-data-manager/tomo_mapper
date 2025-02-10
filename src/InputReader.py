@@ -5,6 +5,7 @@ from pprint import pprint
 from typing import List
 
 from src.MapfileReader import MapFileReader
+from src.config import MappingConfig
 from src.model.ImageMD import ImageMD
 from src.model.RunMD import RunMD
 import logging
@@ -89,6 +90,8 @@ class InputReader:
         else:
             logging.error("Could not determine common root path for all sources in map file. Aborting")
             exit(1)
+
+        MappingConfig.set_working_dir(self.working_dir_path)
 
     def _detect_project_root(self) -> str:
         """
