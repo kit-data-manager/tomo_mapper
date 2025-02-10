@@ -3,7 +3,6 @@ from datetime import datetime
 from typing import Any
 
 from pydantic import ConfigDict, field_serializer
-from pydantic.v1.json import isoformat
 
 from pydantic_core.core_schema import SerializerFunctionWrapHandler, SerializationInfo
 

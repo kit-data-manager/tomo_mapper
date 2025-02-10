@@ -1,3 +1,4 @@
+import logging
 import os
 
 from pydantic import BaseModel
@@ -5,10 +6,12 @@ from pydantic import BaseModel
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
+from src.model.SchemaConcepts.codegen.SchemaClasses import DatasetType
+
 
 class ImageMD(BaseModel):
 
-    filePath: str = None
+    filePath: str
     acquisition_info: Acquisition = None
     dataset_metadata: Dataset = None
     image_metadata: TOMO_Image = None
@@ -19,5 +22,12 @@ class ImageMD(BaseModel):
     def folderName(self):
         return os.path.dirname(self.filePath)
 
-    def as_tomo_dict(self):
-        return {"fileName": self.fileName(), **self.image_metadata.__dict__, }
+    def determine_dstype(self) -> DatasetType:
+        if self.dataset_metadata is not None and self.dataset_metadata.datasetType is not None:
+            return self.dataset_metadata.datasetType
+
+        if self.folderName() is not None and self.folderName() in DatasetType:
+            return DatasetType(self.folderName())
+
+        logging.warning("Cannot determine dataset type for image metadata")
+        return None

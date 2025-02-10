@@ -19,6 +19,11 @@ class RunMD:
     def get_images_for_datasetType(self, datasetType: DatasetType) -> List[TOMO_Image]:
         return self.images_by_datasets[datasetType]
 
+    def get_datasetType_for_image(self, image: TOMO_Image) -> DatasetType:
+        for k, v in self.images_by_datasets.items():
+            for i in v:
+                if i.match_by_path(image): return k
+
     def get_datasetTypes(self) -> List[DatasetType]:
         """
         Returns list of datasetTypes that have any images assigned
