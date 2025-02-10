@@ -13,8 +13,8 @@ class TestSetupMD(unittest.TestCase):
         #no dataset types are returned since no images have been added
         self.assertFalse(smd.get_datasetTypes())
 
-        smd.add_image(TOMO_Image(), DatasetType("SEM Image"))
-        smd.add_image(TOMO_Image(), DatasetType("SEM Image"))
+        smd.add_image(TOMO_Image(localPath="p"), DatasetType("SEM Image"))
+        smd.add_image(TOMO_Image(localPath="p"), DatasetType("SEM Image"))
 
         self.assertEqual(1, len(smd.get_datasetTypes()))
 

@@ -52,15 +52,15 @@ class TestTOMOImage:
         """
 
         image_dict = json.loads(self.json_payload)
-        image_obj = TOMO_Image(**image_dict)
+        image_obj = TOMO_Image(**image_dict, localPath="p")
 
     def test_scientific_notation(self):
 
         image_dict = json.loads(self.json_payload)
-        image_obj = TOMO_Image(**image_dict)
+        image_obj = TOMO_Image(**image_dict, localPath="p")
 
-        self.assertGreater(-0.000000001, image_obj.specimenCurrent.value)
-        self.assertLess(-0.000000002, image_obj.specimenCurrent.value)
+        assert -0.000000001 > image_obj.specimenCurrent.value
+        assert -0.000000002 < image_obj.specimenCurrent.value
 
     def test_date(self):
         """
@@ -68,23 +68,25 @@ class TestTOMOImage:
         """
         #TODO: how do we even make sure we parse correctly, for example if no time zone is given?
 
+        MappingConfig.set_working_dir("w")
+
         #German date format
-        img = TOMO_Image(creationTime="01.01.2020 00:00:00")
-        self.assertEqual(img.creationTime.year, 2020)
+        img = TOMO_Image(creationTime="01.01.2020 00:00:00", localPath="p")
+        assert img.creationTime.year == 2020
         img.to_schema_dict()
 
         #generously reading in date as datetime
-        img = TOMO_Image(creationTime="2020-01-01")
-        self.assertEqual(img.creationTime.year, 2020)
+        img = TOMO_Image(creationTime="2020-01-01", localPath="p")
+        assert img.creationTime.year == 2020
         img.to_schema_dict()
 
         #iso date formats
-        img = TOMO_Image(creationTime="2020-01-01 00:00:00")
-        self.assertEqual(img.creationTime.year, 2020)
+        img = TOMO_Image(creationTime="2020-01-01 00:00:00", localPath="p")
+        assert img.creationTime.year == 2020
         img.to_schema_dict()
 
-        img = TOMO_Image(creationTime="2017-04-04T16:22:20.855+02:00")
-        self.assertEqual(img.creationTime.year, 2017)
+        img = TOMO_Image(creationTime="2017-04-04T16:22:20.855+02:00", localPath="p")
+        assert img.creationTime.year == 2017
         img.to_schema_dict()
 
         #setting with expected output format
@@ -93,8 +95,8 @@ class TestTOMOImage:
         img.to_schema_dict()
 
         #Other date formats (e.g. from ProjectData.dat in TF data)
-        img = TOMO_Image(creationTime="07/07/2023 10:12:46")
-        self.assertEqual(img.creationTime.year, 2023)
+        img = TOMO_Image(creationTime="07/07/2023 10:12:46", localPath="p")
+        assert img.creationTime.year == 2023
         img.to_schema_dict()
 
         #setting with datetime object directly (for whatever reason)
