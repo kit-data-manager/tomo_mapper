@@ -18,6 +18,3 @@ class ImageMD(BaseModel):
 
     def folderName(self):
         return os.path.dirname(self.filePath)
-
-    def as_tomo_dict(self):
-        return {"fileName": self.fileName(), **self.image_metadata.__dict__, }
