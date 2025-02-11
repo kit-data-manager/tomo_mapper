@@ -2,6 +2,7 @@ from src.model.RunMD import RunMD
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 from src.model.SchemaConcepts.codegen.SchemaClasses import DatasetType
 from src.parser.RunMD_Parser import RunMD_Parser
+from src.util import normalize_path
 
 
 class ProjectDataParser(RunMD_Parser):
@@ -16,7 +17,7 @@ class ProjectDataParser(RunMD_Parser):
 
         for imgmd in resultMD["Image"]:
             if imgmd.get("ImagePurpose") and imgmd["ImagePurpose"] in DatasetType:
-                fp = imgmd["@FilePath"]
+                fp = normalize_path(imgmd["@FilePath"])
                 img = TOMO_Image(localPath=fp)
                 runMD.add_image(img, DatasetType(imgmd["ImagePurpose"]))
 

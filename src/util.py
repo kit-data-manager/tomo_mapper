@@ -99,3 +99,7 @@ def input_to_dict(stringPayload) -> Optional[dict]:
     except Exception as e:
         logging.warning("Best effort input reading failed with unexpected error. Input malformed?")
         logging.error(e)
+
+def normalize_path(pathString):
+    if "\\" in pathString: return os.path.join(*pathString.split("\\"))
+    return pathString
