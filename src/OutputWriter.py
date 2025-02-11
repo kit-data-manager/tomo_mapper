@@ -43,10 +43,10 @@ class OutputWriter:
                 if not dt:
                     logging.warning("Dataset Type for image {} cannot be determined. Omitting from output".format(img.fileName()))
                     continue
-                if not dsDict.get(dt):
-                    dsDict[dt] = Dataset(datasetType=dt)
             else:
                 dt = runMD.get_datasetType_for_image(img.image_metadata)
+            if not dsDict.get(dt):
+                dsDict[dt] = Dataset(datasetType=dt)
             if dsDict[dt].images:
                 dsDict[dt].images.append(img.image_metadata)
             else: dsDict[dt].images = [img.image_metadata]
