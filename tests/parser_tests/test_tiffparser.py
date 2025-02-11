@@ -2,6 +2,7 @@ import unittest
 import os
 from pprint import pprint
 
+from src.config import MappingConfig
 from src.parser.impl.TiffParser import TiffParser
 
 
@@ -9,6 +10,7 @@ class TestTiffparser(unittest.TestCase):
 
     def test_tiffparser(self):
         #TODO: You are not a real test yet
+        MappingConfig.set_working_dir("/")
         dir_to_testscript = os.path.split(__file__)[0]
 
         test_tiffpath = os.path.join(dir_to_testscript, "../sampleData/images/SEM_Image-SliceImage-001.tif")
