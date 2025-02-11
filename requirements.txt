@@ -1,11 +1,10 @@
 pillow
 pydantic
 xmltodict
-matplotlib
-numpy
 requests
-dataclasses-json
-pytest
 pandas
 validators
 jsonpath-ng
+deepmerge
+pytest
+pytest-cov
