@@ -61,11 +61,6 @@ class InputReader:
         if len(ac_sources) > 1 or len([x for x in ac_sources if "*" in x]) > 0:
             raise NotImplementedError("More than one metadata file for setup info found. This feature is not yet implemented.")
 
-        if not self.setupParser.retrievable_datasets() and not self.mapping_dict["image info"].get("autodetect_datasets"):
-            logging.info("Dataset info will not be parsable from acquisition metadata and autodetection is set to false")
-            if len(self.imageSources) == 1:
-                logging.warning("Exactly one dataset will be created according to map definition. If this is a mistake, check your map file")
-
         if not os.path.isfile(input_path):
             logging.error("Input file does not exist: {}. Aborting".format(input_path))
             exit(1)

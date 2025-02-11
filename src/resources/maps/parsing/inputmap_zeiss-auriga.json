@@ -16,9 +16,7 @@
             "./SESI/*.tif",
             "./InLens/*.tif"
         ],
-        "autodetect_datasets": true,
         "tag": "51023",
-        "parser": "TiffParser",
-        "image_map": "Zeiss_TOMO,TOMO_Schema"
+        "parser": "TiffParser"
     }
 }

@@ -15,9 +15,7 @@
         "sources": [
             "./Images/**/*.tif"
         ],
-        "autodetect_datasets": true,
         "tag": "34682",
-        "parser": "TiffParser",
-        "image_map": "TF,TOMO_Schema"
+        "parser": "TiffParser"
     }
 }
