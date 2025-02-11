@@ -40,11 +40,11 @@ class OutputWriter:
 
             if not runMD:
                 dt = img.determine_dstype()
-                if not dt:
-                    logging.warning("Dataset Type for image {} cannot be determined. Omitting from output".format(img.fileName()))
-                    continue
             else:
                 dt = runMD.get_datasetType_for_image(img.image_metadata)
+            if not dt:
+                logging.warning("Dataset Type for image {} cannot be determined. Omitting from output".format(img.fileName()))
+                continue
             if not dsDict.get(dt):
                 dsDict[dt] = Dataset(datasetType=dt)
             if dsDict[dt].images:
