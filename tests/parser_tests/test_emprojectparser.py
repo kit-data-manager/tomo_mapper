@@ -17,6 +17,7 @@ class TestEmprojectParser:
 
 
     def test_setup(self):
+        self.setUp()
         # TODO: You are not a real test yet
         parser = EMProjectParser()
         setupmd, raw = parser.parse_setup(self.payload)
