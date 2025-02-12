@@ -1,11 +1,11 @@
 import json
 import logging
+from collections import defaultdict
 from pprint import pprint
 from typing import List
 
 from src.model.ImageMD import ImageMD
 from src.model.RunMD import RunMD
-from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SetupMD import SetupMD
 from deepmerge import always_merger, conservative_merger
@@ -33,6 +33,8 @@ class OutputWriter:
                 always_merger.merge(acquisitionModel, runMD.acquisition_metadata.to_schema_dict())
             dsDict = dict([(x, Dataset(datasetType=x)) for x in runMD.get_datasetTypes()])
 
+        dsinfo_from_images = defaultdict(dict)
+
         for img in imageMD:
             if not img.image_metadata:
                 logging.warning("No image metadata extracted from image {}. Omitting from output".format(img.fileName()))
@@ -53,6 +55,8 @@ class OutputWriter:
 
             if img.acquisition_info:
                 always_merger.merge(acquisitionModel, img.acquisition_info.to_schema_dict())
+            if img.dataset_metadata:
+                conservative_merger.merge(dsinfo_from_images[dt], img.dataset_metadata.to_schema_dict())
 
         for k, v in dsDict.items():
             if not v.images:
@@ -62,7 +66,14 @@ class OutputWriter:
             if predefined_ds and predefined_ds.get(k):
                 conservative_merger.merge(v_dict, predefined_ds[k].to_schema_dict())
             acquisitionModel["acquisition"]["dataset"].append(v_dict)
+            conservative_merger.merge(v_dict, dsinfo_from_images[k])
 
         print(json.dumps(acquisitionModel, indent=4))
         return acquisitionModel
+
+    @staticmethod
+    def writeOutput(outputDict, fp):
+        with open(fp, "w") as f:
+            json.dump(outputDict, f, indent=4)
+
 
