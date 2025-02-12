@@ -1,4 +1,3 @@
-import unittest
 import os
 from pprint import pprint
 
@@ -6,7 +5,7 @@ from src.config import MappingConfig
 from src.parser.impl.TiffParser import TiffParser
 
 
-class TestTiffparser(unittest.TestCase):
+class TestTiffparser:
 
     def test_tiffparser(self):
         #TODO: You are not a real test yet
