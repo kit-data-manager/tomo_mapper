@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.operating-system }}
     strategy:
       matrix:
-        operating-system: [ubuntu-latest, macOS-latest, windows-latest]
+        operating-system: [windows-latest, ubuntu-latest, macOS-latest]
         python-version: ["3.12"]
 
     steps:
