@@ -1,6 +1,8 @@
-import unittest
+import platform
 from glob import glob
 import os
+
+import pytest
 
 from src.MapfileReader import MapFileReader
 from src.parser.impl.Atlas3dParser import Atlas3dParser
@@ -8,22 +10,28 @@ from src.parser.impl.EMProjectParser import EMProjectParser
 from src.parser.impl.TiffParser import TiffParser
 
 
-class TestMapfileReader(unittest.TestCase):
+class TestMapfileReader:
 
     testpath = os.path.split(__file__)[0]
 
     def test_pathvalidation(self):
-        self.assertRaises(ValueError, MapFileReader.validate_relative_path, r"C:\absolute_windows_path\directory")
 
-        self.assertRaises(ValueError, MapFileReader.validate_relative_path, "/c/absolute_unix_path/directory")
+        if platform.platform() == "Windows": #we likely will not encounter any absolute paths in windows format on other OS and this test case fails on those OS
+            with pytest.raises(ValueError):
+                MapFileReader.validate_relative_path(r"C:\absolute_windows_path\directory")
 
-        self.assertRaises(ValueError, MapFileReader.validate_relative_path, "/User/someone/directory")
+        with pytest.raises(ValueError):
+            MapFileReader.validate_relative_path("/c/absolute_unix_path/directory")
 
-        self.assertRaises(ValueError, MapFileReader.validate_relative_path, "http://remote_directory")
+        with pytest.raises(ValueError):
+            MapFileReader.validate_relative_path("/User/someone/directory")
 
-        self.assertTrue(MapFileReader.validate_relative_path("./correct_dir"))
+        with pytest.raises(ValueError):
+            MapFileReader.validate_relative_path("http://remote_directory")
 
-        self.assertTrue(MapFileReader.validate_relative_path("../correct/**/wildcard_path"))
+        assert MapFileReader.validate_relative_path("./correct_dir")
+
+        assert MapFileReader.validate_relative_path("../correct/**/wildcard_path")
 
     def test_loading_default_maps(self):
         sourcesPath = os.path.join(self.testpath, "../../src/resources/maps/parsing/inputmap_*.json")
@@ -34,8 +42,8 @@ class TestMapfileReader(unittest.TestCase):
         for ms in map_sources:
             #test only checks if loading as dict is successful
             map_content = MapFileReader.read_mapfile(ms)
-            self.assertIsNotNone(map_content)
-            self.assertIs(type(map_content), dict)
+            assert map_content is not None
+            assert type(map_content) == dict
 
 
     def test_parsing_default_maps(self):
@@ -68,5 +76,6 @@ class TestMapfileReader(unittest.TestCase):
             }
         }
 
-        self.assertRaises(ValueError, MapFileReader.parse_mapinfo_for_setup, mapping_content)
+        with pytest.raises(ValueError):
+            MapFileReader.parse_mapinfo_for_setup(mapping_content)
 

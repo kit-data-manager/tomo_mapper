@@ -1,8 +1,6 @@
-import unittest
-
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 
-class TestDataset(unittest.TestCase):
+class TestDataset:
 
     def test_pretilt(self):
         """

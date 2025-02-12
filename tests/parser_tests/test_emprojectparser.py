@@ -1,11 +1,10 @@
 import os
-import unittest
 from pprint import pprint
 
 from src.parser.impl.EMProjectParser import EMProjectParser
 
 
-class TestEmprojectParser(unittest.TestCase):
+class TestEmprojectParser:
 
     def setUp(self):
         dir_to_testscript = os.path.split(__file__)[0]
