@@ -21,12 +21,12 @@ Fibics.Application.Version,Version_value,System.Software,entry.program.programVe
 ,Gun Vacuum_value,,entry.instrument.eBeamSource.gunVacuum.value,
 ,Gun Vacuum_unit,,entry.instrument.eBeamSource.gunVacuum.unit,
 ,High Current_value,,entry.instrument.eBeamSource.highCurrent,
-Fibics.Scan.ScanRot,,EBeam.ScanRotation,,acquisition.dataset.instrument.eBeam.scanRotation.value
-Fibics.Scan.ScanRot.@unit,,,,acquisition.dataset.instrument.eBeam.scanRotation.unit
+Fibics.Scan.ScanRot.#text,,EBeam.ScanRotation,,acquisition.dataset.instrument.eBeam.scanRotation.value
+Fibics.Scan.ScanRot.@units,,,,acquisition.dataset.instrument.eBeam.scanRotation.unit
 ,,EBeam.ImageMode,,acquisition.dataset.instrument.eBeam.imageMode
-Fibics.Scan.FOV_X,,EBeam.HFW,,acquisition.dataset.instrument.eBeam.horizontalFieldWidth.value
+Fibics.Scan.FOV_X.#text,,EBeam.HFW,,acquisition.dataset.instrument.eBeam.horizontalFieldWidth.value
 Fibics.Scan.FOV_X.@units,,,,acquisition.dataset.instrument.eBeam.horizontalFieldWidth.unit
-Fibics.Scan.FOV_Y,,EBeam.VFW,,acquisition.dataset.instrument.eBeam.verticalFieldWidth.value
+Fibics.Scan.FOV_Y.#text,,EBeam.VFW,,acquisition.dataset.instrument.eBeam.verticalFieldWidth.value
 Fibics.Scan.FOV_Y.@units,,,,acquisition.dataset.instrument.eBeam.verticalFieldWidth.unit
 ,,EBeam.TiltCorrectionIsOn,,acquisition.dataset.instrument.eBeam.tiltCorrectionIsOn
 ,,EBeam.DynamicFocusIsOn,,acquisition.dataset.instrument.eBeam.dynamicFocusIsOn
@@ -36,26 +36,26 @@ Fibics.Scan.FOV_Y.@units,,,,acquisition.dataset.instrument.eBeam.verticalFieldWi
 ,,EBeam.MagnificationCorrection,,acquisition.dataset.instrument.eBeam.magnificationCorrection
 ,,Beam.Scan,,acquisition.dataset.instrument.scan.scanType
 ,Stage Initialised_value,,entry.instrument.stage.stageAlignmentDone,
-Fibics.ScanInfo.item,Tilt Angle_value,EBeam.TiltCorrectionAngle,entry.instrument.stage.tiltCorrectionAngle.value,acquisition.dataset.instrument.eBeam.tiltCorrectionAngle.value
+Fibics.ScanInfo.item.#text,Tilt Angle_value,EBeam.TiltCorrectionAngle,entry.instrument.stage.tiltCorrectionAngle.value,acquisition.dataset.instrument.eBeam.tiltCorrectionAngle.value
 ,Tilt Angle_unit,,entry.instrument.stage.tiltCorrectionAngle.unit,
 ,Stage at T_value,Stage.StageT,entry.instrument.stage.stageTiltAngle.value,
 ,Stage at T_unit,,entry.instrument.stage.stageTiltAngle.unit,
 ,Tilt Corrn._value,,entry.instrument.stage.tiltCorrectionType,
 Fibics.Scan.Focus,WD_value,Stage.WorkingDistance,entry.instrument.stage.eBeamWorkingDistance.value,acquisition.dataset.images.stage.workingDistance.value
 ,WD_unit,,entry.instrument.stage.eBeamWorkingDistance.unit,
-Fibics.Stage.X,Stage at X_value,Stage.StageX,entry.instrument.stage.coordinates.xValue,acquisition.dataset.images.stage.stageX.value
+Fibics.Stage.X.#text,Stage at X_value,Stage.StageX,entry.instrument.stage.coordinates.xValue,acquisition.dataset.images.stage.stageX.value
 Fibics.Stage.X.@units,Stage at X_unit,,entry.instrument.stage.coordinates.coordinatesUnit,
-Fibics.Stage.Y,Stage at Y_value,Stage.StageY,entry.instrument.stage.coordinates.yValue,acquisition.dataset.images.stage.stageY.value
+Fibics.Stage.Y.#text,Stage at Y_value,Stage.StageY,entry.instrument.stage.coordinates.yValue,acquisition.dataset.images.stage.stageY.value
 Fibics.Stage.Y.@units,,,,acquisition.dataset.images.stage.stageY.unit
-Fibics.Stage.Z,Stage at Z_value,Stage.StageZ,entry.instrument.stage.coordinates.zValue,acquisition.dataset.images.stage.stageZ.value
+Fibics.Stage.Z.#text,Stage at Z_value,Stage.StageZ,entry.instrument.stage.coordinates.zValue,acquisition.dataset.images.stage.stageZ.value
 Fibics.Stage.Z.@units,,,,acquisition.dataset.images.stage.stageZ.unit
-Fibics.Stage.Rot,,Stage.StageR,,acquisition.dataset.images.stage.stageR.value
+Fibics.Stage.Rot.#text,,Stage.StageR,,acquisition.dataset.images.stage.stageR.value
 Fibics.Stage.Rot.@units,,,,acquisition.dataset.images.stage.stageR.unit
 ,,Stage.StageT,,acquisition.dataset.images.stage.stageTa.value
 ,,Stage.StageTb,,acquisition.dataset.images.stage.stageTb.value
 ,,Stage.SpecTilt,,acquisition.dataset.images.stage.specTilt.value
-Fibics.Stage.M,,,,acquisition.dataset.images.stage.stageM.value
-Fibics.Stage.M.@unit,,,,acquisition.dataset.images.stage.stageM.unit
+Fibics.Stage.M.#text,,,,acquisition.dataset.images.stage.stageM.value
+Fibics.Stage.M.@units,,,,acquisition.dataset.images.stage.stageM.unit
 ,,Stage.ActiveStage,,acquisition.dataset.images.stage.activeStage
 ,Store resolution_value,Image.ResolutionX,entry.instrument.imaging.numberOfPixels.xPixels,acquisition.dataset.instrument.imaging.numberOfPixels.xPixels
 ,,Image.ResolutionY,entry.instrument.imaging.numberOfPixels.yPixels,acquisition.dataset.instrument.imaging.numberOfPixels.yPixels

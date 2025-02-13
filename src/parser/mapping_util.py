@@ -1,6 +1,7 @@
 # Function to get value from nested dictionary using dotted path
 import json
 import logging
+import typing
 from collections import defaultdict
 
 import pandas as pd
@@ -15,6 +16,7 @@ def create_unified_dict(mapping, input_dict):
 
     for k, v in mapping.items():
 
+        k = ".".join(["'" + x + "'" for x in k.split('.')]) #make sure that unexpected tokens in input can be handled properly (such as #)
         exprIN = parser.parse(k)
         exprOUT = parser.parse(v)
 
@@ -25,9 +27,12 @@ def create_unified_dict(mapping, input_dict):
 
         if not "*" in v: #as long as the output path in the map is not a list, we expect that we can map the input to one value
             try:
-                assert len(set(values)) == 1
+                if not all([isinstance(x, typing.Hashable) for x in values]):
+                    logging.warning("Found multiple complex values in input dict, but output target is not a list. Only the first value will be used, no check for equivalence.")
+                else:
+                    assert len(set(values)) == 1
             except AssertionError:
-                print(values)
+                logging.error("Found multiple values in input dict, but output target is not a list. Aborting. Input path: {}, values: {}".format(k, values))
                 exit(1)
             if values[0]:
                 exprOUT.update_or_create(output_dict, values[0])
