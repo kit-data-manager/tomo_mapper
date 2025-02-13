@@ -19,7 +19,9 @@ def create_unified_dict(mapping, input_dict):
         exprOUT = parser.parse(v)
 
         values = [m.value for m in exprIN.find(input_dict)]
-        if not values: continue
+        if not values:
+            logging.warning("Mapping defined but no corresponding value found in input dict: {}".format(k))
+            continue
 
         if not "*" in v: #as long as the output path in the map is not a list, we expect that we can map the input to one value
             try:

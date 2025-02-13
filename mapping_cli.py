@@ -41,6 +41,7 @@ def run_cli():
     #pprint(imgs[0])
 
     output = OutputWriter.stitch_together(setup_infos[0], run_infos[0], imgs)
+    OutputWriter.writeOutput(output, OUTPUT_PATH)
 
     reader.clean_up()
 
