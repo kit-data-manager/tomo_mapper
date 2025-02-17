@@ -35,3 +35,4 @@ jobs:
           name: pp13-mapper_executable
           path: build/pp13-mapper.exe
           include-hidden-files: true
+          include-data-dir: src/resources=resources
