@@ -27,7 +27,7 @@ jobs:
           output-file: pp13-mapper
           mode: app
           enable-plugins: no-qt
-
+          include-data-dir: src/resources=resources
       # Uploads artifact
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
@@ -35,4 +35,3 @@ jobs:
           name: pp13-mapper_executable
           path: build/pp13-mapper.exe
           include-hidden-files: true
-          include-data-dir: src/resources=resources
