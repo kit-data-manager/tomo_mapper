@@ -13,7 +13,7 @@ class Dataset(Schema_Concept, BaseModel):
     but replaced by a custom class for easier use
     """
     entryID: IdentifierModel = None
-    definition: str = "acquisition_schema"
+    definition: str = "acquisition_dataset"
     user: UserDescription = None
     program: Program = None
     instrument: InstrumentDetails = None
