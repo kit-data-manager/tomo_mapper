@@ -27,7 +27,7 @@ jobs:
           output-file: pp13-mapper
           mode: app
           enable-plugins: no-qt
-          include-data-dir: src/resources=resources
+          include-package-data: true
       # Uploads artifact
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
