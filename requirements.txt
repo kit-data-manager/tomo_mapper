@@ -1,10 +1,10 @@
-pillow
-pydantic
-xmltodict
+pillow >= 10.3
+pydantic >= 2.10
+xmltodict >= 0.14
 requests
 pandas
-validators
-jsonpath-ng
-deepmerge
-pytest
-pytest-cov
+validators >= 0.34
+jsonpath-ng >= 1.7
+deepmerge >= 2.
+pytest >= 7.4
+pytest-cov >= 6.

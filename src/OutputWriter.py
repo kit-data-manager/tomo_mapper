@@ -21,9 +21,10 @@ class OutputWriter:
 
         #add the base info about the acquisition from metadata files
         if setupMD and setupMD.acquisition_metadata:
+            if setupMD.acquisition_metadata.datasets:
 
-            predefined_ds = dict([(x.datasetType, x) for x in setupMD.acquisition_metadata.datasets])
-            setupMD.acquisition_metadata.datasets = None
+                predefined_ds = dict([(x.datasetType, x) for x in setupMD.acquisition_metadata.datasets])
+                setupMD.acquisition_metadata.datasets = None
             always_merger.merge(acquisitionModel, setupMD.acquisition_metadata.to_schema_dict())
 
         dsDict = {}
@@ -68,7 +69,7 @@ class OutputWriter:
             acquisitionModel["acquisition"]["dataset"].append(v_dict)
             conservative_merger.merge(v_dict, dsinfo_from_images[k])
 
-        print(json.dumps(acquisitionModel, indent=4))
+        #print(json.dumps(acquisitionModel, indent=4))
         return acquisitionModel
 
     @staticmethod
