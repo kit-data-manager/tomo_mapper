@@ -3,7 +3,12 @@ name: build executable
 on: push
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [windows-latest, ubuntu-latest, macOS-latest]
+        python-version: ["3.12"]
     if: contains(github.event.head_commit.message, 'build installer')
 
     steps:
@@ -28,5 +33,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pp13-mapper_executable
-          path: dist/pp13-mapper.exe
+          name: pp13-mapper_${{ matrix.os }}
+          path:  ${{ matrix.os == 'windows-latest' && 'dist/pp13-mapper.exe' || 'dist/pp13-mapper' }}
