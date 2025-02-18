@@ -33,5 +33,5 @@ jobs:
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pp13-mapper_${{ matrix.os }}
-          path:  ${{ matrix.os == 'windows-latest' && 'dist/pp13-mapper.exe' || 'dist/pp13-mapper' }}
+          name: pp13-mapper_${{ matrix.operating-system }}
+          path:  ${{ matrix.operating-system == 'windows-latest' && 'dist/pp13-mapper.exe' || 'dist/pp13-mapper' }}
