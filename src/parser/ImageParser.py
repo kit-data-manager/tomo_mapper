@@ -14,5 +14,5 @@ class ImageParser(ABC):
         pass
 
     @abstractmethod
-    def _create_image(self, image_metadata) -> ImageMD:
+    def _create_image(self, image_metadata, file_path) -> ImageMD:
         pass
