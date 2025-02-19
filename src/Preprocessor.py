@@ -2,6 +2,9 @@ from jsonpath_ng.parser import JsonPathParser
 
 
 class Preprocessor:
+    """
+    Use / adapt / extend for final preprocessing steps before converting a dictionary into the according pydantic class instances
+    """
 
     parser = JsonPathParser()
 
@@ -23,7 +26,7 @@ class Preprocessor:
         """
         Inplace normalization of all values in fields "unit"
         :param input_dict: dictionary to replace units in
-        :return:
+        :return: None
         """
         unit_fields = Preprocessor.parser.parse("$..unit")
         unit_matches = [m for m in unit_fields.find(input_dict)]
