@@ -16,7 +16,7 @@ def create_unified_dict(mapping, input_dict):
 
     for k, v in mapping.items():
 
-        k = ".".join(["'" + x + "'" if not "[" in x or "`" in x else x for x in k.split('.')] ) #make sure that unexpected tokens in input can be handled properly (such as #)
+        k = ".".join(["'" + x + "'" if not ("[" in x or "`" in x) else x for x in k.split('.')] ) #make sure that unexpected tokens in input can be handled properly (such as #)
         exprIN = parser.parse(k)
         exprOUT = parser.parse(v)
 
