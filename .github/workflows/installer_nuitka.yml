@@ -1,0 +1,38 @@
+#We are likely switching to pyinstaller due to limitations in nuitka. Keeping this file for now for documentation
+name: build executable
+on: push
+jobs:
+  build:
+    runs-on: windows-latest
+    if: contains(github.event.head_commit.message, 'nuitka-action')
+
+    steps:
+      # Check-out repository
+      - uses: actions/checkout@v4
+
+      # Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+      # Install requirements for mapper
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+      # Build python script into a single execute or app folder (macOS)
+      - name: Build executable
+        uses: Nuitka/Nuitka-Action@main
+        with:
+          nuitka-version: main
+          script-name: mapping_cli.py
+          output-file: pp13-mapper
+          mode: app
+          enable-plugins: no-qt
+          include-package-data: src.resources
+      # Uploads artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pp13-mapper_executable
+          path: build/pp13-mapper.exe
+          include-hidden-files: true

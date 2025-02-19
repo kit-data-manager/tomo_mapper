@@ -1,0 +1,37 @@
+#We are likely switching to pyinstaller due to limitations in nuitka. Keeping this file for now for documentation
+name: build executable
+on: push
+jobs:
+  build:
+    runs-on: ${{ matrix.operating-system }}
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [windows-latest, ubuntu-latest, macOS-latest]
+        python-version: ["3.12"]
+    if: contains(github.event.head_commit.message, 'build installer')
+
+    steps:
+      # Check-out repository
+      - uses: actions/checkout@v4
+
+      # Setup Python
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+      # Install requirements for mapper
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.dist.txt
+          pip install pyinstaller
+      # Build python script into a single execute
+      - name: Package Application with PyInstaller
+        run: |
+          pyinstaller pp13-mapper.spec
+      # Uploads artifact
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pp13-mapper_${{ matrix.operating-system }}
+          path:  ${{ matrix.operating-system == 'windows-latest' && 'dist/pp13-mapper.exe' || 'dist/pp13-mapper' }}
