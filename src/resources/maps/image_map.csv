@@ -36,8 +36,8 @@ Fibics.Scan.FOV_Y.@units,,,,acquisition.dataset.instrument.eBeam.verticalFieldWi
 ,,EBeam.MagnificationCorrection,,acquisition.dataset.instrument.eBeam.magnificationCorrection
 ,,Beam.Scan,,acquisition.dataset.instrument.scan.scanType
 ,Stage Initialised_value,,entry.instrument.stage.stageAlignmentDone,
-Fibics.ScanInfo.item.#text,Tilt Angle_value,EBeam.TiltCorrectionAngle,entry.instrument.stage.tiltCorrectionAngle.value,acquisition.dataset.instrument.eBeam.tiltCorrectionAngle.value
-,Tilt Angle_unit,,entry.instrument.stage.tiltCorrectionAngle.unit,
+"Fibics.ScanInfo.item.#text.`sub(/= ([+-]?[0-9]*[.]?[0-9]+)°/, \\1)`",Tilt Angle_value,EBeam.TiltCorrectionAngle,entry.instrument.stage.tiltCorrectionAngle.value,acquisition.dataset.instrument.eBeam.tiltCorrectionAngle.value
+"Fibics.ScanInfo.item.#text.`sub(/= ([+-]?[0-9]*[.]?[0-9]+)(.)/, \\2)`",Tilt Angle_unit,,entry.instrument.stage.tiltCorrectionAngle.unit,
 ,Stage at T_value,Stage.StageT,entry.instrument.stage.stageTiltAngle.value,
 ,Stage at T_unit,,entry.instrument.stage.stageTiltAngle.unit,
 ,Tilt Corrn._value,,entry.instrument.stage.tiltCorrectionType,
@@ -90,7 +90,7 @@ Fibics.DetectorInfo.item[0].#text,,*.Signal,,acquisition.dataset.instrument.dete
 ,,*.Grid,,acquisition.dataset.instrument.detector.detectorSettings.grid
 ,,*.ContrastDB,,acquisition.dataset.instrument.detector.detectorSettings.contrastdB
 ,,*.BrightnessDB,,acquisition.dataset.instrument.detector.detectorSettings.brightnessdB
-Fibics.DetectorInfo.item[1].#text,,*.Setting,,acquisition.dataset.instrument.detector.detectorSettings.setting
+"Fibics.DetectorInfo.item[1].#text.`sub(/= ([+-]?[0-9]*[.]?[0-9]+) ([a-zA-Z]+)/, \\1)`",,*.Setting,,acquisition.dataset.instrument.detector.detectorSettings.setting
 ,Beam deceleration Volts_value,EBeamDeceleration.StageBias,entry.instrument.eBeamDecelaration.stageBias.value,
 ,Beam deceleration Volts_unit,,entry.instrument.eBeamDeceleration.stageBias.unit,
 ,,EBeamDeceleration.LandingEnergy,entry.instrument.eBeamDecelaration.landingEnergy.value,
