@@ -86,11 +86,11 @@ Fibics.Image.Detector,Detector_value,Detectors.Name,entry.instrument.detectors.d
 ,,*.Contrast,,acquisition.dataset.instrument.detector.detectorSettings.contrast
 ,,*.Brightness,,acquisition.dataset.instrument.detector.detectorSettings.brightness
 ,,*.Mix,,acquisition.dataset.instrument.detector.detectorSettings.mix
-Fibics.DetectorInfo.item[0],,*.Signal,,acquisition.dataset.instrument.detector.detectorSettings.signal
+Fibics.DetectorInfo.item[0].#text,,*.Signal,,acquisition.dataset.instrument.detector.detectorSettings.signal
 ,,*.Grid,,acquisition.dataset.instrument.detector.detectorSettings.grid
 ,,*.ContrastDB,,acquisition.dataset.instrument.detector.detectorSettings.contrastdB
 ,,*.BrightnessDB,,acquisition.dataset.instrument.detector.detectorSettings.brightnessdB
-Fibics.DetectorInfo.item[1],,*.Setting,,acquisition.dataset.instrument.detector.detectorSettings.setting
+Fibics.DetectorInfo.item[1].#text,,*.Setting,,acquisition.dataset.instrument.detector.detectorSettings.setting
 ,Beam deceleration Volts_value,EBeamDeceleration.StageBias,entry.instrument.eBeamDecelaration.stageBias.value,
 ,Beam deceleration Volts_unit,,entry.instrument.eBeamDeceleration.stageBias.unit,
 ,,EBeamDeceleration.LandingEnergy,entry.instrument.eBeamDecelaration.landingEnergy.value,

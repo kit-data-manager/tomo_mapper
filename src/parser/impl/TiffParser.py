@@ -1,5 +1,5 @@
 import logging
-
+import re
 from typing import Optional
 
 from PIL import Image
@@ -26,6 +26,7 @@ class TiffParser(ImageParser):
 
     def parse(self, file_path) -> tuple[ImageMD, str]:
         input_md = self._read_input_file(file_path, self.tagID)
+        input_md = self._preprocess_image_metadata(input_md)
         if not input_md:
             logging.warning("No metadata extractable from {}".format(file_path))
             return None, None
@@ -73,3 +74,65 @@ class TiffParser(ImageParser):
             logging.error("Metadata extracted but unable convert to dictionary for further processing")
         else:
             logging.error("No matching tag found in exif data for {} on {}".format(tagID, file_path))
+
+    def _preprocess_image_metadata(self, image_md_format):
+        """
+        Sanitize and xml image metadata.
+        """
+
+        # Ensure the input 'image_md_format' is always a dictionary
+        if image_md_format is None:
+            logging.warning("Received None as image metadata, initializing an empty dictionary.")
+            image_md_format = {}
+            return image_md_format
+
+        #self.save_the_file(image_md_format, "./image_md_original") #----for debugging purpose
+
+        # Ensure dataset_metadata structure exists before accessing it
+        Fibics = image_md_format.setdefault("Fibics", {})
+        ScanInfo = Fibics.setdefault("ScanInfo", {})
+        DetectorInfo = Fibics.setdefault("DetectorInfo", {})
+        Stage = Fibics.setdefault("Stage", {})
+        Scan = Fibics.setdefault("Scan", {})
+
+
+        # Process Fibics.Scan.ScanRot (Convert "deg" -> "degree")
+        ScanRot = Scan.setdefault("ScanRot", {})
+        if ScanRot.get("@units") == "deg":
+            ScanRot["@units"] = "degree"
+
+        # Process Fibics.Stage.Rot (Convert "deg" -> "degree")
+        Rot = Stage.setdefault("Rot", {})
+        if Rot.get("@units") == "deg":
+            Rot["@units"] = "degree"
+
+        # Process numeric value from Fibics.ScanInfo.item : tiltCorrectionAngle.value
+        item = ScanInfo.setdefault("item", {})
+        if isinstance(item.get("#text"), str):
+            match = re.search(r"-?\d+(\.\d+)?", item["#text"])
+            if match:
+                item["#text"] = float(match.group())
+                #item["@units"] = "degree"
+
+        # Process DetectorInfo.item[*] (Extract values for 'signal' and 'setting')
+        item = DetectorInfo.setdefault("item", [])
+        cleaned_detector_items = []
+        for item in DetectorInfo["item"]:
+            if "@name" in item and "#text" in item:
+                cleaned_item = {
+                    "@name": item["@name"],
+                    "#text": item["#text"].strip()
+                }
+                
+                cleaned_value = cleaned_item["#text"].replace("=", "").replace("kV", "").strip()
+                match = re.search(r"-?\d+(\.\d+)?", cleaned_value)
+
+                if match:
+                    cleaned_item["#text"] = float(match.group())  # Convert to float
+                cleaned_detector_items.append(cleaned_item)
+
+        # Assign cleaned detector info back to Fibics
+        DetectorInfo["item"] = cleaned_detector_items
+
+        #self.save_the_file(image_md_format, "./image_md_processed") #----for debugging purpose
+        return image_md_format
