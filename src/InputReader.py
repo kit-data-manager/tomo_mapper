@@ -27,8 +27,6 @@ class InputReader:
     - warn about unusual input
     """
 
-
-
     setupParser: SetupMD_Parser = None
     setupmdSources: List[str] = []
     imageParser: ImageParser = None
@@ -70,6 +68,7 @@ class InputReader:
             exit(1)
 
         logging.info("Map file content successfully read and validated.")
+        logging.info("The chosen parsers support the following instruments/vendors: {}".format(", ".join(self._get_supported_instruments())))
 
         ### reading input file
         if not is_zipfile(input_path):
@@ -87,6 +86,15 @@ class InputReader:
             exit(1)
 
         MappingConfig.set_working_dir(self.working_dir_path)
+
+
+    def _get_supported_instruments(self) -> List[str]:
+        supports = set()
+        if self.setupParser:
+            supports.update(self.setupParser.supported_input_sources())
+        if self.runParser:
+            supports.update(self.runParser.supported_input_sources())
+        return list(supports)
 
     def _detect_project_root(self) -> str:
         """

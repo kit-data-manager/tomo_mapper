@@ -1,3 +1,5 @@
+from typing import List
+
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SetupMD import SetupMD
@@ -6,6 +8,10 @@ from src.parser.mapping_util import map_a_dict
 
 
 class EMProjectParser(SetupMD_Parser):
+
+    @staticmethod
+    def supported_input_sources() -> List[str]:
+        return ['Thermofisher Helios']
 
     def __init__(self):
         self.mapping_tuple = ("EMProject", "TOMO_Schema")
