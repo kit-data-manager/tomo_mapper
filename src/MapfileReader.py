@@ -1,5 +1,6 @@
 import logging
 import os.path
+from json import JSONDecodeError
 from urllib.parse import urlparse
 
 from requests import HTTPError
@@ -33,6 +34,12 @@ class MapFileReader:
         except FileNotFoundError as e:
             logging.error("Local map file does not exist: {}".format(filepath))
             logging.error(e)
+            exit(1)
+        except UnicodeDecodeError as e:
+            logging.error("Unable to load map file as json. Please check file and file encoding")
+            exit(1)
+        except JSONDecodeError as e:
+            logging.error("Unable to load map file as json. Please check file structure")
             exit(1)
 
     #TODO: method might me a more generic util function. Move if needed elsewhere

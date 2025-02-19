@@ -1,0 +1,9 @@
+{
+    "image info": {
+        "sources": [
+            "./überordner/Images/**/*.tif"
+        ],
+        "tag": "34682",
+        "parser": "TiffParser"
+    }
+}

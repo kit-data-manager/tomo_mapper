@@ -26,7 +26,7 @@ def load_json(source):
         response.raise_for_status()  # Raise an error for bad status codes
         return response.json()
     else:
-        with open(source, 'r', encoding="utf-8") as file:
+        with open(source, 'r') as file:
             return json.load(file)
 
 def is_zipfile(filepath):
