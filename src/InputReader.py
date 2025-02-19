@@ -14,7 +14,7 @@ from src.model.SetupMD import SetupMD
 from src.parser.ImageParser import ImageParser
 from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.ParserFactory import ParserFactory
-from src.util import is_zipfile, extract_zip_file, strip_workdir_from_path
+from src.util import is_zipfile, extract_zip_file, strip_workdir_from_path, robust_textfile_read
 
 
 class InputReader:
@@ -130,17 +130,9 @@ class InputReader:
 
         if self.setupParser:
             for s in self.setupmdSources:
-                try:
-                    with open(os.path.join(self.working_dir_path, s), "r", encoding="utf-8") as fp:
-                        file_contents = fp.read()
-                        setupMD, _ = self.setupParser.parse_setup(file_contents)
-                        setup_infos.append(setupMD)
-                except UnicodeDecodeError:
-                    with open(os.path.join(self.working_dir_path, s), "r", encoding="latin-1") as fp:
-                        file_contents = fp.read()
-                        setupMD, _ = self.setupParser.parse_setup(file_contents)
-                        setup_infos.append(setupMD)
-
+                file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
+                setupMD, _ = self.setupParser.parse_setup(file_contents)
+                setup_infos.append(setupMD)
         return setup_infos
 
     def retrieve_run_info(self) -> List[RunMD]:
@@ -149,17 +141,9 @@ class InputReader:
 
         if self.runParser:
             for s in self.runmdSources:
-                try:
-                    with open(os.path.join(self.working_dir_path, s), "r", encoding="utf-8") as fp:
-                        file_contents = fp.read()
-                        runMD, _ = self.runParser.parse_run(file_contents)
-                        run_infos.append(runMD)
-                except UnicodeDecodeError:
-                    with open(os.path.join(self.working_dir_path, s), "r", encoding="latin-1") as fp:
-                        file_contents = fp.read()
-                        runMD, _ = self.runParser.parse_run(file_contents)
-                        run_infos.append(runMD)
-                   
+                file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
+                runMD, _ = self.runParser.parse_run(file_contents)
+                run_infos.append(runMD)
         return run_infos
 
     def retrieve_image_info(self) -> List[ImageMD]:

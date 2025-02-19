@@ -18,8 +18,12 @@ def robust_textfile_read(filepath):
         with open(filepath, 'r', encoding="utf-8") as file:
             return file.read()
     except UnicodeDecodeError:
-        with open(filepath, 'r', encoding="latin1") as file:
-            return file.read()
+        try:
+            with open(filepath, 'r', encoding="latin1") as file:
+                return file.read()
+        except UnicodeDecodeError:
+            logging.error("Unable to determine file encoding. Aborting.")
+            exit(1)
 
 def load_json(source):
     """
