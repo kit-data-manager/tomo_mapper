@@ -157,28 +157,3 @@ class InputReader:
                 if img:
                     image_infos.append(img)
         return image_infos
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    reader = InputReader("./resources/maps/parsing/inputmap_thermofisher.json", "../../../datasets/DEMO_20200818_AlSi13 XRM tomo2.zip")
-    #reader = InputReader("./resources/maps/parsing/inputmap_thermofisher.json", "../../../datasets/matwerk-data-repo/20230707_AlSi13_NFDI_old_structure.zip")
-    #reader = InputReader("resources/maps/parsing/inputmap_zeiss-auriga.json", r"E:\downl\Zeiss-Auriga-Atlas_3DTomo.zip")
-    tmpdir = reader.temp_dir_path
-
-    setup_infos = reader.retrieve_setup_info()
-    print(len(setup_infos))
-    pprint(setup_infos[0].acquisition_metadata.to_schema_dict())
-
-    run_infos = reader.retrieve_run_info()
-    pprint(run_infos[0].get_datasetTypes())
-
-    imgs = reader.retrieve_image_info()
-    print(len(imgs))
-    pprint(imgs[0].acquisition_info.to_schema_dict())
-    pprint(imgs[0].dataset_metadata.to_schema_dict())
-    pprint(imgs[0].image_metadata.to_schema_dict())
-
-    reader.clean_up()
-
-    logging.info("Temp folder deletion: {} - {}".format(tmpdir, os.path.exists(tmpdir)))
