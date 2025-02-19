@@ -5,6 +5,6 @@ requests
 pandas
 validators >= 0.34
 jsonpath-ng >= 1.7
-deepmerge >= 2.
+deepmerge >= 2.0
 pytest >= 7.4
-pytest-cov >= 6.
+pytest-cov >= 6.0
