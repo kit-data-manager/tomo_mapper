@@ -36,7 +36,7 @@ Fibics.Scan.FOV_Y.@units,,,,acquisition.dataset.instrument.eBeam.verticalFieldWi
 ,,EBeam.MagnificationCorrection,,acquisition.dataset.instrument.eBeam.magnificationCorrection
 ,,Beam.Scan,,acquisition.dataset.instrument.scan.scanType
 ,Stage Initialised_value,,entry.instrument.stage.stageAlignmentDone,
-"Fibics.ScanInfo.item.#text.`sub(/= ([+-]?[0-9]*[.]?[0-9]+)°/, \\1)`",Tilt Angle_value,EBeam.TiltCorrectionAngle,entry.instrument.stage.tiltCorrectionAngle.value,acquisition.dataset.instrument.eBeam.tiltCorrectionAngle.value
+"Fibics.ScanInfo.item.#text.`sub(/= ([+-]?[0-9]*[.]?[0-9]+)(.)/, \\1)`",Tilt Angle_value,EBeam.TiltCorrectionAngle,entry.instrument.stage.tiltCorrectionAngle.value,acquisition.dataset.instrument.eBeam.tiltCorrectionAngle.value
 "Fibics.ScanInfo.item.#text.`sub(/= ([+-]?[0-9]*[.]?[0-9]+)(.)/, \\2)`",Tilt Angle_unit,,entry.instrument.stage.tiltCorrectionAngle.unit,
 ,Stage at T_value,Stage.StageT,entry.instrument.stage.stageTiltAngle.value,
 ,Stage at T_unit,,entry.instrument.stage.stageTiltAngle.unit,
@@ -44,7 +44,7 @@ Fibics.Scan.FOV_Y.@units,,,,acquisition.dataset.instrument.eBeam.verticalFieldWi
 Fibics.Scan.Focus,WD_value,Stage.WorkingDistance,entry.instrument.stage.eBeamWorkingDistance.value,acquisition.dataset.images.stage.workingDistance.value
 ,WD_unit,,entry.instrument.stage.eBeamWorkingDistance.unit,
 Fibics.Stage.X.#text,Stage at X_value,Stage.StageX,entry.instrument.stage.coordinates.xValue,acquisition.dataset.images.stage.stageX.value
-Fibics.Stage.X.@units,Stage at X_unit,,entry.instrument.stage.coordinates.coordinatesUnit,
+Fibics.Stage.X.@units,Stage at X_unit,,entry.instrument.stage.coordinates.coordinatesUnit,acquisition.dataset.images.stage.stageX.unit
 Fibics.Stage.Y.#text,Stage at Y_value,Stage.StageY,entry.instrument.stage.coordinates.yValue,acquisition.dataset.images.stage.stageY.value
 Fibics.Stage.Y.@units,,,,acquisition.dataset.images.stage.stageY.unit
 Fibics.Stage.Z.#text,Stage at Z_value,Stage.StageZ,entry.instrument.stage.coordinates.zValue,acquisition.dataset.images.stage.stageZ.value
