@@ -21,7 +21,7 @@ class TOMO_Image(Schema_Concept, BaseModel):
     creationTime: Annotated[datetime, BeforeValidator(parse_datetime)] = None
     entryID: Identifier = None
     fileLink: Identifier = None
-    definition: str = "acquisiton_image"
+    definition: str = "acquisition_image"
     stage: Stage = None
     vacuum: Vacuum = None
     temperature: TemperatureDetails = None
