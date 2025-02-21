@@ -3,7 +3,7 @@ EMProject.ApplicationName,ATLAS3D-Job.ATLAS3D-Setup.Name,genericMetadata.program
 EMProject.ApplicationVersion,ATLAS3D-Job.@version,genericMetadata.program.programVersion
 EMProject.ApplicationId,ATLAS3D-Job.ATLAS3D-Setup.ID,genericMetadata.applicationID.identifierValue
 EMProject.FileVersion,,genericMetadata.fileVersion
-EMProject.ProjectName,,genericMetadata.projectName
+EMProject.ProjectName,ATLAS3D-Job.ATLAS3D-Setup.JobName,genericMetadata.projectName
 ,ATLAS3D-Job.ATLAS3D-Setup.JobDescription,genericMetadata.projectDescription
 ,ATLAS3D-Job.ATLAS3D-Setup.Description,genericMetadata.userDescription
 EMProject.ZCutSpacing,ATLAS3D-Job.ATLAS3D-Setup.Settings.Imaging.Interval,genericMetadata.zCutSpacing.value
