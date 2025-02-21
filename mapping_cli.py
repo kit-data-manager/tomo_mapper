@@ -40,7 +40,11 @@ def run_cli():
     #print(len(imgs))
     #pprint(imgs[0])
 
-    output = OutputWriter.stitch_together(setup_infos[0], run_infos[0], imgs)
+    #TODO: Currently we only extract and use the first md file extraction
+    si = setup_infos[0] if len(setup_infos) == 1 else None
+    ri = run_infos[0] if len(run_infos) == 1 else None
+
+    output = OutputWriter.stitch_together(si, ri, imgs)
     OutputWriter.writeOutput(output, OUTPUT_PATH)
 
     reader.clean_up()

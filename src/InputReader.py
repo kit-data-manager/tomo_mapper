@@ -130,9 +130,12 @@ class InputReader:
 
         if self.setupParser:
             for s in self.setupmdSources:
-                file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
-                setupMD, _ = self.setupParser.parse_setup(file_contents)
-                setup_infos.append(setupMD)
+                try:
+                    file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
+                    setupMD, _ = self.setupParser.parse_setup(file_contents)
+                    setup_infos.append(setupMD)
+                except FileNotFoundError:
+                    logging.error("Setup md file does not exist: {}. Please make sure the configuration in the map file matches your input data".format(s))
         return setup_infos
 
     def retrieve_run_info(self) -> List[RunMD]:
@@ -141,9 +144,12 @@ class InputReader:
 
         if self.runParser:
             for s in self.runmdSources:
-                file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
-                runMD, _ = self.runParser.parse_run(file_contents)
-                run_infos.append(runMD)
+                try:
+                    file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
+                    runMD, _ = self.runParser.parse_run(file_contents)
+                    run_infos.append(runMD)
+                except FileNotFoundError:
+                    logging.error("Run md file does not exist: {}. Please make sure the configuration in the map file matches your input data".format(s))
         return run_infos
 
     def retrieve_image_info(self) -> List[ImageMD]:
