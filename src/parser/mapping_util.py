@@ -6,9 +6,9 @@ from collections import defaultdict
 
 import pandas as pd
 from importlib import resources
-from jsonpath_ng.parser import JsonPathParser
+from jsonpath_ng.ext.parser import ExtentedJsonPathParser
 
-parser = JsonPathParser()
+parser = ExtentedJsonPathParser()
 
 # Function to create unified output dict based on the provided JSON mapping
 def create_unified_dict(mapping, input_dict):
@@ -16,7 +16,7 @@ def create_unified_dict(mapping, input_dict):
 
     for k, v in mapping.items():
 
-        k = ".".join(["'" + x + "'" if not "[" in x else x for x in k.split('.')] ) #make sure that unexpected tokens in input can be handled properly (such as #)
+        k = ".".join(["'" + x + "'" if not ("[" in x or "`" in x) else x for x in k.split('.')] ) #make sure that unexpected tokens in input can be handled properly (such as #)
         exprIN = parser.parse(k)
         exprOUT = parser.parse(v)
 

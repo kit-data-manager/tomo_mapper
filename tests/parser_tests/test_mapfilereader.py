@@ -67,6 +67,24 @@ class TestMapfileReader:
             MapFileReader.parse_mapinfo_for_setup(map_content)
             MapFileReader.parse_mapinfo_for_images(map_content)
 
+    def test_parsing_latin1_map(self):
+        sourcesPath = os.path.join(self.testpath, "../sampleData/config/inputmap_thermofisher_latin1.json")
+        map_content = MapFileReader.read_mapfile(sourcesPath)
+
+        assert type(map_content) == dict
+
+    def test_reject_binary_as_map(self):
+        sourcesPath = os.path.join(self.testpath, "../sampleData/images/dummyimage.zip")
+
+        with pytest.raises(SystemExit):
+            map_content = MapFileReader.read_mapfile(sourcesPath)
+
+    def test_reject_nonjson_as_map(self):
+        sourcesPath = os.path.join(self.testpath, "../sampleData/config/faulty.txt")
+
+        with pytest.raises(SystemExit):
+            map_content = MapFileReader.read_mapfile(sourcesPath)
+
     def test_fail_on_missing_parser(self):
 
         mapping_content = {

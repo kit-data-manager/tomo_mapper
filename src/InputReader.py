@@ -14,7 +14,7 @@ from src.model.SetupMD import SetupMD
 from src.parser.ImageParser import ImageParser
 from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.ParserFactory import ParserFactory
-from src.util import is_zipfile, extract_zip_file, strip_workdir_from_path
+from src.util import is_zipfile, extract_zip_file, strip_workdir_from_path, robust_textfile_read
 
 
 class InputReader:
@@ -26,8 +26,6 @@ class InputReader:
     - reject with error
     - warn about unusual input
     """
-
-
 
     setupParser: SetupMD_Parser = None
     setupmdSources: List[str] = []
@@ -70,6 +68,7 @@ class InputReader:
             exit(1)
 
         logging.info("Map file content successfully read and validated.")
+        logging.info("The chosen parsers support the following instruments/vendors: {}".format(", ".join(self._get_supported_instruments())))
 
         ### reading input file
         if not is_zipfile(input_path):
@@ -87,6 +86,15 @@ class InputReader:
             exit(1)
 
         MappingConfig.set_working_dir(self.working_dir_path)
+
+
+    def _get_supported_instruments(self) -> List[str]:
+        supports = set()
+        if self.setupParser:
+            supports.update(self.setupParser.supported_input_sources())
+        if self.runParser:
+            supports.update(self.runParser.supported_input_sources())
+        return list(supports)
 
     def _detect_project_root(self) -> str:
         """
@@ -122,17 +130,9 @@ class InputReader:
 
         if self.setupParser:
             for s in self.setupmdSources:
-                try:
-                    with open(os.path.join(self.working_dir_path, s), "r", encoding="utf-8") as fp:
-                        file_contents = fp.read()
-                        setupMD, _ = self.setupParser.parse_setup(file_contents)
-                        setup_infos.append(setupMD)
-                except UnicodeDecodeError:
-                    with open(os.path.join(self.working_dir_path, s), "r", encoding="latin-1") as fp:
-                        file_contents = fp.read()
-                        setupMD, _ = self.setupParser.parse_setup(file_contents)
-                        setup_infos.append(setupMD)
-
+                file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
+                setupMD, _ = self.setupParser.parse_setup(file_contents)
+                setup_infos.append(setupMD)
         return setup_infos
 
     def retrieve_run_info(self) -> List[RunMD]:
@@ -141,17 +141,9 @@ class InputReader:
 
         if self.runParser:
             for s in self.runmdSources:
-                try:
-                    with open(os.path.join(self.working_dir_path, s), "r", encoding="utf-8") as fp:
-                        file_contents = fp.read()
-                        runMD, _ = self.runParser.parse_run(file_contents)
-                        run_infos.append(runMD)
-                except UnicodeDecodeError:
-                    with open(os.path.join(self.working_dir_path, s), "r", encoding="latin-1") as fp:
-                        file_contents = fp.read()
-                        runMD, _ = self.runParser.parse_run(file_contents)
-                        run_infos.append(runMD)
-                   
+                file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
+                runMD, _ = self.runParser.parse_run(file_contents)
+                run_infos.append(runMD)
         return run_infos
 
     def retrieve_image_info(self) -> List[ImageMD]:
@@ -165,28 +157,3 @@ class InputReader:
                 if img:
                     image_infos.append(img)
         return image_infos
-
-
-if __name__ == "__main__":
-    logging.basicConfig(level=logging.INFO)
-    reader = InputReader("./resources/maps/parsing/inputmap_thermofisher.json", "../../../datasets/DEMO_20200818_AlSi13 XRM tomo2.zip")
-    #reader = InputReader("./resources/maps/parsing/inputmap_thermofisher.json", "../../../datasets/matwerk-data-repo/20230707_AlSi13_NFDI_old_structure.zip")
-    #reader = InputReader("resources/maps/parsing/inputmap_zeiss-auriga.json", r"E:\downl\Zeiss-Auriga-Atlas_3DTomo.zip")
-    tmpdir = reader.temp_dir_path
-
-    setup_infos = reader.retrieve_setup_info()
-    print(len(setup_infos))
-    pprint(setup_infos[0].acquisition_metadata.to_schema_dict())
-
-    run_infos = reader.retrieve_run_info()
-    pprint(run_infos[0].get_datasetTypes())
-
-    imgs = reader.retrieve_image_info()
-    print(len(imgs))
-    pprint(imgs[0].acquisition_info.to_schema_dict())
-    pprint(imgs[0].dataset_metadata.to_schema_dict())
-    pprint(imgs[0].image_metadata.to_schema_dict())
-
-    reader.clean_up()
-
-    logging.info("Temp folder deletion: {} - {}".format(tmpdir, os.path.exists(tmpdir)))

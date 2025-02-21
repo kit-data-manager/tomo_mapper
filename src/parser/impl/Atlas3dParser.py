@@ -1,3 +1,5 @@
+from typing import List
+
 from src.model.RunMD import RunMD
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.parser.RunMD_Parser import RunMD_Parser
@@ -12,6 +14,10 @@ import re
 
 
 class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
+
+    @staticmethod
+    def supported_input_sources() -> List[str]:
+        return ["Zeiss Auriga"]
 
     def __init__(self):
         self.mapping_tuple = ("Atlas3d", "TOMO_Schema")
@@ -68,13 +74,13 @@ class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
         #datasets = self._create_datasets(metadata_dict)
         #acquisition.datasets = datasets
         return acquisition
-    
+
     def _create_datasets(self, ac_md) -> list:
         datasets = []
         for ds in ac_md["dataset"]:
             datasets.append(self._create_dataset(ds))
         return datasets
-    
+
     def _create_dataset(self, ds_dict) -> Dataset:
         # Ensure instrument.eBeam.apertureSetting.size is properly formatted
         if "instrument" in ds_dict and "eBeam" in ds_dict["instrument"]:

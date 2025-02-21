@@ -10,9 +10,9 @@ class ImageParser(ABC):
         pass
 
     @abstractmethod
-    def parse(self, file_path) -> ImageMD:
+    def parse(self, file_path) -> tuple[ImageMD, str]:
         pass
 
     @abstractmethod
-    def _create_image(self, image_metadata) -> ImageMD:
+    def _create_image(self, image_metadata, file_path) -> ImageMD:
         pass

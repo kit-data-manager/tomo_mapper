@@ -13,6 +13,17 @@ import zipfile
 import xmltodict
 from xml.parsers.expat import ExpatError
 
+def robust_textfile_read(filepath):
+    try:
+        with open(filepath, 'r', encoding="utf-8") as file:
+            return file.read()
+    except UnicodeDecodeError:
+        try:
+            with open(filepath, 'r', encoding="latin1") as file:
+                return file.read()
+        except UnicodeDecodeError:
+            logging.error("Unable to determine file encoding. Aborting.")
+            exit(1)
 
 def load_json(source):
     """
@@ -26,8 +37,7 @@ def load_json(source):
         response.raise_for_status()  # Raise an error for bad status codes
         return response.json()
     else:
-        with open(source, 'r', encoding="utf-8") as file:
-            return json.load(file)
+        return json.loads(robust_textfile_read(source))
 
 def is_zipfile(filepath):
     return zipfile.is_zipfile(filepath)
