@@ -131,6 +131,7 @@ class InputReader:
         if self.setupParser:
             for s in self.setupmdSources:
                 try:
+                    logging.info("Extracting setup info from: {}".format(s))
                     file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
                     setupMD, _ = self.setupParser.parse_setup(file_contents)
                     setup_infos.append(setupMD)
@@ -145,6 +146,7 @@ class InputReader:
         if self.runParser:
             for s in self.runmdSources:
                 try:
+                    logging.info("Extracting run info from: {}".format(s))
                     file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
                     runMD, _ = self.runParser.parse_run(file_contents)
                     run_infos.append(runMD)
@@ -159,6 +161,7 @@ class InputReader:
         for s in self.mapping_dict["image info"]["sources"]:
             curr_impath_list = glob(os.path.normpath(os.path.join(self.working_dir_path, s)))
             for ip in curr_impath_list:
+                logging.info("Extracting image info from: {}/{}".format(os.path.basename(os.path.dirname(ip)), os.path.basename(ip)))
                 img, _ = self.imageParser.parse(ip) #TODO: sanitize and prepare params before
                 if img:
                     image_infos.append(img)
