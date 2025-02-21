@@ -1,8 +1,7 @@
 # Function to get value from nested dictionary using dotted path
-import json
 import logging
 import typing
-from collections import defaultdict
+from sys import exit
 
 import pandas as pd
 from importlib import resources

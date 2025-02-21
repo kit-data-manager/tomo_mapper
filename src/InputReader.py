@@ -1,7 +1,7 @@
 import os
 import shutil
 from glob import glob
-from pprint import pprint
+from sys import exit
 from typing import List
 
 from src.MapfileReader import MapFileReader

@@ -6,6 +6,7 @@ import time
 from json import JSONDecodeError
 from typing import Optional
 import configparser
+from sys import exit
 
 import requests
 import zipfile
