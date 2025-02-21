@@ -8,7 +8,7 @@ from src.OutputWriter import OutputWriter
 
 #make log level configurable from ENV, defaults to info level
 logging.basicConfig(
-    level=os.environ.get('LOGLEVEL', 'DEBUG').upper()
+    level=os.environ.get('LOGLEVEL', 'INFO').upper()
 )
 
 def get_args():
