@@ -7,8 +7,7 @@ from PIL.ExifTags import TAGS
 
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
-from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
-from src.parser.ImageParser import ImageParser
+from src.parser.ImageParser import ImageParser, ParserMode
 from src.parser.mapping_util import map_a_dict
 from src.util import input_to_dict
 
@@ -16,10 +15,6 @@ from src.util import input_to_dict
 #TODO: would this have any benefit from replacing with tifffile lib?
 
 class TiffParser(ImageParser):
-
-    def __init__(self, tagID):
-        self.tagID = tagID
-        self.mapping_tuple = (tagID, "TOMO_Schema")
 
     @staticmethod
     def expected_input_format():
@@ -35,11 +30,31 @@ class TiffParser(ImageParser):
 
         Preprocessor.normalize_all_units(image_md)
 
-        image_from_md = self._create_image(image_md, file_path)
+        if self.mode == ParserMode.TOMO:
+            image_from_md = self._create_tomo_image(image_md, file_path)
+        else:
+            image_from_md = ImageMD(image_metadata=image_md, filePath="")
 
         return image_from_md, image_md
 
-    def _create_image(self, image_md, fp) -> ImageMD:
+    def parse_wo_tag(self, file_path) -> tuple[ImageMD, str]:
+        input_md = self._read_input_file(file_path)
+        if not input_md:
+            logging.warning("No metadata extractable from {}".format(file_path))
+            return None, None
+
+        image_md = map_a_dict(input_md, self.mapping_tuple, "image")
+
+        Preprocessor.normalize_all_units(image_md)
+
+        if self.mode == ParserMode.TOMO:
+            image_from_md = self._create_tomo_image(image_md, file_path)
+        else:
+            image_from_md = ImageMD(image_metadata=image_md, filePath="")
+
+        return image_from_md, image_md
+
+    def _create_tomo_image(self, image_md, fp) -> ImageMD:
 
         image_md_format = {
             "acquisition_info": image_md["acquisition"],
@@ -54,7 +69,7 @@ class TiffParser(ImageParser):
 
         return ImageMD(**image_md_format)
 
-    def _read_input_file(self, file_path, tagID) -> Optional[dict]:
+    def _read_input_file(self, file_path, tagID = None) -> Optional[dict]:
         metadata = None
         image = Image.open(file_path)
         exif = image.getexif()
@@ -63,11 +78,21 @@ class TiffParser(ImageParser):
             logging.warning("No EXIF data found in image {}".format(file_path))
             return metadata
 
-        for tag_id, value in exif.items():
-            tag = TAGS.get(tag_id, tag_id)
-            if str(tag) == tagID:
-                metadata = value
+        if tagID:
+            md_list = [x[int(tagID)] for x in exif.items()]
+        else:
+            md_list = [value for key, value in exif.items()]
 
+        output_dict = {}
+        for md in md_list:
+            try:
+                output_dict.update(input_to_dict(md))
+            except Exception as e:
+                logging.debug("Unable to extract metadata for {}".format(md))
+                pass
+
+        return output_dict
+        '''
         if metadata:
             dict_from_input = input_to_dict(metadata)
             if dict_from_input:
@@ -76,3 +101,4 @@ class TiffParser(ImageParser):
             logging.error("Metadata extracted but unable convert to dictionary for further processing")
         else:
             logging.error("No matching tag found in exif data for {} on {}".format(tagID, file_path))
+        '''
