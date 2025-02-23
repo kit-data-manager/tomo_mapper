@@ -8,7 +8,7 @@ from PIL.ExifTags import TAGS
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.parser.ImageParser import ImageParser, ParserMode
-from src.parser.mapping_util import map_a_dict
+from src.parser.mapping_util import map_a_dict, get_internal_mapping
 from src.util import input_to_dict
 
 
@@ -26,7 +26,8 @@ class TiffParser(ImageParser):
             logging.warning("No metadata extractable from {}".format(file_path))
             return None, None
 
-        image_md = map_a_dict(input_md, self.mapping_tuple, "image")
+        mapping_dict = get_internal_mapping(self.mapping_tuple, "image")
+        image_md = map_a_dict(input_md, mapping_dict)
 
         Preprocessor.normalize_all_units(image_md)
 
@@ -43,7 +44,8 @@ class TiffParser(ImageParser):
             logging.warning("No metadata extractable from {}".format(file_path))
             return None, None
 
-        image_md = map_a_dict(input_md, self.mapping_tuple, "image")
+        mapping_dict = get_internal_mapping(self.mapping_tuple, "image")
+        image_md = map_a_dict(input_md, mapping_dict)
 
         Preprocessor.normalize_all_units(image_md)
 
@@ -70,16 +72,25 @@ class TiffParser(ImageParser):
         return ImageMD(**image_md_format)
 
     def _read_input_file(self, file_path, tagID = None) -> Optional[dict]:
-        metadata = None
+        """
+        Reading input may be done with a predefined tag or without. In the latter case we try to extract from all tags and use the joint dictionary for mapping.
+        :param file_path: image file path
+        :param tagID: tag to extract from, may be None
+        :return: data from extracted tag(s) as dict
+        """
         image = Image.open(file_path)
         exif = image.getexif()
         image.close()
         if exif is None:
             logging.warning("No EXIF data found in image {}".format(file_path))
-            return metadata
+            return None
 
         if tagID:
-            md_list = [x[int(tagID)] for x in exif.items()]
+            try:
+                md_list = [value for key, value in exif.items() if key == int(tagID)]
+            except IndexError:
+                logging.warning("Tag ID defined but no corresponding data extractable: tag {} in {}".format(tagID, file_path))
+                return None
         else:
             md_list = [value for key, value in exif.items()]
 

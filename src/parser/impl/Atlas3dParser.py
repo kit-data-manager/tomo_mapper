@@ -5,7 +5,7 @@ from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.parser.RunMD_Parser import RunMD_Parser
 from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.model.SetupMD import SetupMD
-from src.parser.mapping_util import map_a_dict
+from src.parser.mapping_util import map_a_dict, get_internal_mapping
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.util import normalize_path
 from src.model.SchemaConcepts.codegen.SchemaClasses import DatasetType
@@ -48,7 +48,8 @@ class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
     def parse_setup(self, payload) -> tuple[SetupMD, dict]:
         parsed = self._read_input(payload)
 
-        ac_md = map_a_dict(parsed, self.mapping_tuple, "acquisition")
+        mapping_dict = get_internal_mapping(self.mapping_tuple, "acquisition")
+        ac_md = map_a_dict(parsed, mapping_dict)
 
         acquisition = self._create_acquisition(ac_md)
 
