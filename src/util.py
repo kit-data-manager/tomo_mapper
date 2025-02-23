@@ -106,6 +106,15 @@ def input_to_dict(stringPayload) -> Optional[dict]:
                 return dict_from_ini
             except (configparser.NoSectionError, configparser.NoOptionError):
                 logging.debug("Reading input as INI not successful")
+        if "\n" in stringPayload:
+            output_dict = {}
+            data = stringPayload.replace("\r", "")
+            lines = data.split("\n")
+            for l in lines:
+                if "=" in l:
+                    k, v = l.split("=", 1)
+                    output_dict[k.strip()] = v.strip()
+            if output_dict: return output_dict
         logging.warning("Best effort input reading failed. Necessary reader not implemented?")
     except Exception as e:
         logging.warning("Best effort input reading failed with unexpected error. Input malformed?")
