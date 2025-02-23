@@ -9,12 +9,7 @@ class ParserMode(enum.Enum):
 
 class ImageParser(ABC):
 
-    def __init__(self, tagID, mode):
-        self.tagID = tagID
-        if mode == ParserMode.TOMO:
-            self.mapping_tuple = (tagID, "TOMO_Schema")
-        else:
-            self.mapping_tuple = (tagID, "SEM_Schema")
+    def __init__(self, mode):
         self.mode = mode
 
     @staticmethod
@@ -23,7 +18,7 @@ class ImageParser(ABC):
         pass
 
     @abstractmethod
-    def parse(self, file_path) -> tuple[ImageMD, str]:
+    def parse(self, file_path, mapping) -> tuple[ImageMD, str]:
         pass
 
     @abstractmethod

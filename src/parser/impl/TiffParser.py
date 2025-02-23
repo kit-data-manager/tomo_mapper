@@ -16,17 +16,26 @@ from src.util import input_to_dict
 
 class TiffParser(ImageParser):
 
+    def __init__(self, mode, tagID):
+        self.tagID = tagID
+        if mode == ParserMode.TOMO:
+            self.internal_mapping = get_internal_mapping((tagID, "TOMO_Schema"), "image")
+        super().__init__(mode)
+
     @staticmethod
     def expected_input_format():
         return "tiff"
 
-    def parse(self, file_path) -> tuple[ImageMD, str]:
+    def parse(self, file_path, mapping) -> tuple[ImageMD, str]:
         input_md = self._read_input_file(file_path, self.tagID)
         if not input_md:
             logging.warning("No metadata extractable from {}".format(file_path))
             return None, None
 
-        mapping_dict = get_internal_mapping(self.mapping_tuple, "image")
+        if not mapping and not self.internal_mapping:
+            logging.error("No mapping provided for image parsing. Aborting")
+            exit(1)
+        mapping_dict = mapping if mapping else self.internal_mapping
         image_md = map_a_dict(input_md, mapping_dict)
 
         Preprocessor.normalize_all_units(image_md)
