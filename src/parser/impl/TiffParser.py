@@ -16,10 +16,16 @@ from src.util import input_to_dict
 
 class TiffParser(ImageParser):
 
-    def __init__(self, mode, tagID):
-        self.tagID = tagID
-        if mode == ParserMode.TOMO:
-            self.internal_mapping = get_internal_mapping((tagID, "TOMO_Schema"), "image")
+    tagID = None
+    internal_mapping = None
+
+    def __init__(self, mode, tagID=None):
+        if tagID:
+            self.tagID = tagID
+            if mode == ParserMode.TOMO:
+                self.internal_mapping = get_internal_mapping((tagID, "TOMO_Schema"), "image")
+            if mode == ParserMode.SEM:
+                self.internal_mapping = get_internal_mapping((tagID, "SEM_Schema"), "image")
         super().__init__(mode)
 
     @staticmethod
@@ -36,24 +42,6 @@ class TiffParser(ImageParser):
             logging.error("No mapping provided for image parsing. Aborting")
             exit(1)
         mapping_dict = mapping if mapping else self.internal_mapping
-        image_md = map_a_dict(input_md, mapping_dict)
-
-        Preprocessor.normalize_all_units(image_md)
-
-        if self.mode == ParserMode.TOMO:
-            image_from_md = self._create_tomo_image(image_md, file_path)
-        else:
-            image_from_md = ImageMD(image_metadata=image_md, filePath="")
-
-        return image_from_md, image_md
-
-    def parse_wo_tag(self, file_path) -> tuple[ImageMD, str]:
-        input_md = self._read_input_file(file_path)
-        if not input_md:
-            logging.warning("No metadata extractable from {}".format(file_path))
-            return None, None
-
-        mapping_dict = get_internal_mapping(self.mapping_tuple, "image")
         image_md = map_a_dict(input_md, mapping_dict)
 
         Preprocessor.normalize_all_units(image_md)
