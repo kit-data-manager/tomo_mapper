@@ -1,9 +1,7 @@
 import logging
-import re
 from typing import Optional
 
 from PIL import Image
-from PIL.ExifTags import TAGS
 
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
