@@ -13,7 +13,18 @@ datamodel-codegen
    --target-python-version 3.12
    --output-model-type pydantic_v2.BaseModel
    --input <path to>\Metadata-Schemas-for-Materials-Science\SEM-FIB_Tomography\SEM_FIB_Tomography_Acquisition_Main.json
-   --input-file-type jsonschema --output .\src\model\codegen\SchemaClasses.py
+   --input-file-type jsonschema --output .\src\model\codegen\SchemaClasses_TOMO.py
+```
+
+```
+datamodel-codegen
+   --encoding utf-8
+   --target-python-version 3.12
+   --output-model-type pydantic_v2.BaseModel
+   --force-optional
+   --input <path to>\Metadata-Schemas-for-Materials-Science\SEM\SEM_schema.json
+   --input-file-type jsonschema 
+   --output .\src\model\SchemaConcepts\codegen\SchemaClasses_SEM.py 
 ```
 
 Notes on used flags
