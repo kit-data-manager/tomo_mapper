@@ -19,9 +19,11 @@ datamodel-codegen
 ```
 datamodel-codegen
    --encoding utf-8
+   --field-constraints
    --target-python-version 3.12
    --output-model-type pydantic_v2.BaseModel
    --force-optional
+   --use-annotated
    --input <path to>\Metadata-Schemas-for-Materials-Science\SEM\SEM_schema.json
    --input-file-type jsonschema 
    --output .\src\model\SchemaConcepts\codegen\SchemaClasses_SEM.py 
