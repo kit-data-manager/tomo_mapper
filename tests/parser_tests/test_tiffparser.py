@@ -1,9 +1,11 @@
+import glob
 import os
 from pprint import pprint
 
 from src.config import MappingConfig
 from src.parser.ImageParser import ParserMode
 from src.parser.impl.TiffParser import TiffParser
+from src.util import load_json
 
 
 class TestTiffparser:
@@ -15,8 +17,8 @@ class TestTiffparser:
 
         test_tiffpath = os.path.join(dir_to_testscript, "../sampleData/images/SEM_Image-SliceImage-001.tif")
 
-        parser = TiffParser("34682", ParserMode.TOMO)
-        img, raw = parser.parse(test_tiffpath)
+        parser = TiffParser(ParserMode.TOMO, "34682")
+        img, raw = parser.parse(test_tiffpath, None)
         pprint(raw)
 
         pprint(img.acquisition_info.to_schema_dict())
@@ -30,9 +32,9 @@ class TestTiffparser:
 
         test_tiffpath = os.path.join(dir_to_testscript, "../sampleData/images/SEM_Image-SliceImage-001.tif")
 
-        parser = TiffParser("34682", ParserMode.SEM)
-        img, raw = parser.parse_wo_tag(test_tiffpath)
-        pprint(raw)
+        parser = TiffParser(ParserMode.SEM, "34682")
+        img, raw = parser.parse(test_tiffpath, None)
+        #pprint(raw)
 
         pprint(img.image_metadata.to_schema_dict())
 
@@ -43,8 +45,8 @@ class TestTiffparser:
 
         test_tiffpath = os.path.join(dir_to_testscript, "../sampleData/images/SESI_slice_00000_z=0.5100um.tif")
 
-        parser = TiffParser("51023", ParserMode.TOMO)
-        img, raw = parser.parse(test_tiffpath)
+        parser = TiffParser(ParserMode.TOMO, "51023")
+        img, raw = parser.parse(test_tiffpath, None)
         pprint(raw)
 
         pprint(img.acquisition_info.to_schema_dict())
