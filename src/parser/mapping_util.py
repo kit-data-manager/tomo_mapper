@@ -1,5 +1,6 @@
 # Function to get value from nested dictionary using dotted path
 import logging
+import re
 import typing
 from sys import exit
 
@@ -9,13 +10,33 @@ from jsonpath_ng.ext.parser import ExtentedJsonPathParser
 
 parser = ExtentedJsonPathParser()
 
+def escape_pathelements(dotted_path):
+    funct = re.search("(`.+`)", dotted_path)
+    if funct:
+        dotted_path = dotted_path.replace(funct.group(0), "FUNCTIONPLACEHOLDER")
+
+    pathElements = dotted_path.split(".")
+    escaped_elements = []
+    for pe in pathElements:
+        if not pe: continue
+        if "[" in pe:
+            to_escape, to_keep = pe.split("[", 1)
+            escaped = "'" + to_escape + "'"
+            pe = escaped + "[" + to_keep
+        else:
+            pe = "'" + pe + "'"
+        if pe == "'FUNCTIONPLACEHOLDER'":
+            pe = funct.group(0)
+        escaped_elements.append(pe)
+    return ".".join(escaped_elements)
+
+
 # Function to create unified output dict based on the provided JSON mapping
 def create_unified_dict(mapping, input_dict):
     output_dict = {}
 
     for k, v in mapping.items():
-
-        k = ".".join(["'" + x + "'" if not ("[" in x or "`" in x) else x for x in k.split('.')] ) #make sure that unexpected tokens in input can be handled properly (such as #)
+        k = escape_pathelements(k)
         exprIN = parser.parse(k)
         exprOUT = parser.parse(v)
 
