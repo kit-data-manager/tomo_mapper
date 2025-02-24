@@ -45,6 +45,7 @@ class TiffParser(ImageParser):
         image_md = map_a_dict(input_md, mapping_dict)
 
         Preprocessor.normalize_all_units(image_md)
+        Preprocessor.normalize_all_datetimes(image_md)
 
         if self.mode == ParserMode.TOMO:
             image_from_md = self._create_tomo_image(image_md, file_path)
