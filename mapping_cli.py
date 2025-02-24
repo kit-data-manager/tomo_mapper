@@ -89,6 +89,7 @@ def run_sem_mapper(args):
     OUTPUT_PATH = argdict.get('output')
 
     logging.info(f'This is a dummy implementation for a command line interface.')
+    #TODO: this is a shortcut implementation without any sanity checks, needs to be fleshed out
     mapping_dict = load_json(MAP_SOURCE)
     tp = TiffParser(ParserMode.SEM)
     result, raw = tp.parse(INPUT_SOURCE, mapping_dict)
