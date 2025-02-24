@@ -4,7 +4,7 @@ from glob import glob
 from sys import exit
 from typing import List
 
-from src.MapfileReader import MapFileReader
+from src.IO.tomo.MapfileReader import MapFileReader
 from src.config import MappingConfig
 from src.model.ImageMD import ImageMD
 from src.model.RunMD import RunMD
