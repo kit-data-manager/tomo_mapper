@@ -8,7 +8,7 @@ from src.model.SetupMD import SetupMD
 from src.parser.mapping_util import map_a_dict, get_internal_mapping
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.util import normalize_path
-from src.model.SchemaConcepts.codegen.SchemaClasses import DatasetType
+from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 import re
 

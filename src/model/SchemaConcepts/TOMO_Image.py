@@ -6,7 +6,7 @@ from typing_extensions import Annotated
 
 from src.config import MappingConfig
 from src.model.SchemaConcepts.Schema_Concept import Schema_Concept, parse_datetime
-from src.model.SchemaConcepts.codegen.SchemaClasses import Identifier, Stage, Vacuum, TemperatureDetails, \
+from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import Identifier, Stage, Vacuum, TemperatureDetails, \
     CurrentDetails, SEMFIBTomographyAcquisitionImageSchema
 
 

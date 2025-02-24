@@ -8,7 +8,7 @@ from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SchemaConcepts.SEM_Image import SEM_Image
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
-from src.model.SchemaConcepts.codegen.SchemaClasses import DatasetType
+from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 
 
 class ImageMD(BaseModel):
