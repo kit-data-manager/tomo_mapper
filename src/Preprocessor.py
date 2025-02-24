@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime
 
 from jsonpath_ng.parser import JsonPathParser
@@ -17,6 +18,8 @@ class Preprocessor:
         'degr': 'degree',
         '°': 'degree',
         'μm': 'um',
+        'Secs': 's',
+        'Mins': 'min'
     }
 
     @staticmethod
@@ -45,6 +48,11 @@ class Preprocessor:
 
     @staticmethod
     def normalize_datetime(input_value) -> str:
+        if type(input_value) == dict:
+            if not input_value.get("Date") and input_value.get("Time"):
+                logging.warning("Encountered complex date field, but cannot interpret it")
+                return input_value
+            input_value = input_value.get("Date") + " " + input_value.get("Time")
         output_value = parse_datetime(input_value)
         if type(output_value) == datetime:
             return output_value.isoformat()
@@ -58,7 +66,6 @@ class Preprocessor:
             date_fields = Preprocessor.parser.parse("$.." + f)
             date_matches = [m for m in date_fields.find(input_dict)]
             for m in date_matches:
-                if type(m.value) != str: continue #TODO: should this be possible?
                 original_value = m.value
                 normalized_value = Preprocessor.normalize_datetime(original_value)
                 if normalized_value != original_value:
