@@ -6,6 +6,7 @@ import os
 from src.IO.tomo.InputReader import InputReader
 from src.IO.tomo.OutputWriter import OutputWriter
 from src.parser.ImageParser import ParserMode
+from src.parser.ParserFactory import ParserFactory
 from src.parser.impl.TiffParser import TiffParser
 from src.util import load_json
 
@@ -91,12 +92,19 @@ def run_sem_mapper(args):
     logging.info(f'This is a dummy implementation for a command line interface.')
     #TODO: this is a shortcut implementation without any sanity checks, needs to be fleshed out
     mapping_dict = load_json(MAP_SOURCE)
-    tp = TiffParser(ParserMode.SEM)
-    result, raw = tp.parse(INPUT_SOURCE, mapping_dict)
-    if result.image_metadata:
-        output_dict = result.image_metadata.to_schema_dict()
-        with open(OUTPUT_PATH, 'w', encoding="utf-8") as f:
-            json.dump(output_dict, f, indent=4, ensure_ascii=False)
+    registered_image_parsers = ParserFactory.available_img_parsers
+    for registered_parser in registered_image_parsers:
+        logging.debug("Trying to parse image with {}".format(registered_parser))
+        imgp = ParserFactory.create_img_parser(registered_parser, mode=ParserMode.SEM)
+        try:
+            result, raw = imgp.parse(INPUT_SOURCE, mapping_dict)
+            if result.image_metadata:
+                output_dict = result.image_metadata.to_schema_dict()
+                with open(OUTPUT_PATH, 'w', encoding="utf-8") as f:
+                    json.dump(output_dict, f, indent=4, ensure_ascii=False)
+                break
+        except Exception as e:
+            pass
 
 if __name__ == '__main__':
     run_cli()
