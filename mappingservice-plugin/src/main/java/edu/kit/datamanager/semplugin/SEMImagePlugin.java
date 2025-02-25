@@ -61,7 +61,7 @@ public class SEMImagePlugin implements IMappingPlugin{
             dir = FileUtil.cloneGitRepository(REPOSITORY, TAG);
             // Install Python dependencies
 
-            ProcessBuilder pb = new ProcessBuilder("python3", "-m", "pip", "install", "-r", "requirements.txt");
+            ProcessBuilder pb = new ProcessBuilder("python3", "-m", "pip", "install", "-r", dir + "/requirements.txt");
             pb.inheritIO();
             Process p = pb.start();
 
