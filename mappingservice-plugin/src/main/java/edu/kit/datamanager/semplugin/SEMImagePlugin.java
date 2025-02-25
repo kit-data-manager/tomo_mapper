@@ -11,7 +11,7 @@ import org.springframework.util.MimeTypeUtils;
 
 import java.nio.file.Path;
 
-@PropertySource("classpath:version.properties")
+@PropertySource("classpath:sempluginversion.properties")
 public class SEMImagePlugin implements IMappingPlugin{
 
     @Value( "${version}" )
