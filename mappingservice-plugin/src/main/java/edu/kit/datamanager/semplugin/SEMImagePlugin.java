@@ -44,7 +44,7 @@ public class SEMImagePlugin implements IMappingPlugin{
 
     @Override
     public MimeType[] inputTypes() {
-        return new MimeType[]{MimeTypeUtils.APPLICATION_JSON, MimeTypeUtils.APPLICATION_OCTET_STREAM};
+        return new MimeType[]{MimeTypeUtils.ALL}; //should currently be IMAGE/TIFF
     }
 
     @Override
