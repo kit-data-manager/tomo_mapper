@@ -1,7 +1,7 @@
 # SEM-FIB-Tomography Mapper
 
 ## Overview
-SEM-FIB-Tomography Mapper is a tool designed for mapping and analyzing SEM (Scanning Electron Microscope) images and tomography data. This project includes functionality for both SEM and tomography mapping, sharing a common mapping concept.
+SEM-FIB-Tomography Mapper is a tool designed for mapping and analyzing SEM (Scanning Electron Microscope) images and SEM-FIB Tomography data. This project includes functionality for both SEM and tomography mapping, sharing a common mapping concept.
 
 ## Usage
 
@@ -32,7 +32,8 @@ To run the mapper, use the `mapping_cli` module:
 python -m mapping_cli
 ```
 
-1. Tomography Mapping
+**1. Tomography Mapping**
+
 Use the `tomo` subcommand for tomography mapping. The mapper expects a map file, a zip file, and a JSON output path:
 ```
 python -m mapping_cli tomo -m <map_file> -i <zip_file> -o <json_output_path>
@@ -40,7 +41,8 @@ python -m mapping_cli tomo -m <map_file> -i <zip_file> -o <json_output_path>
 
 Fur further information about the necessary map file, see [Parsing README](./src/resources/maps/parsing/README.md)
 
-2. SEM Mapping
+**2. SEM Mapping**
+
 Use the `sem` subcommand for SEM mapping. The mapper expects a map file, an image or image metadata file, and a JSON output path:
 ```
 python -m mapping_cli sem -m <map_file> -i <zip_file> -o <json_output_path>
