@@ -44,9 +44,8 @@ public class SEMImagePlugin implements IMappingPlugin{
                     if (version.startsWith("v")) {
                         TAG = version;
                     } else {
-                        TAG = String.join("v", version);
+                        TAG = "v" + version;
                     }
-
                 }
             } else {
                 System.err.println("Properties file not found!");
@@ -93,7 +92,7 @@ public class SEMImagePlugin implements IMappingPlugin{
         LOGGER.info("Checking and installing dependencies for the tool: ");
         //TODO: test for minimal python version?
         try {
-
+            LOGGER.info("Cloning git repository {}, Tag {}", REPOSITORY, TAG);
             dir = FileUtil.cloneGitRepository(REPOSITORY, TAG);
             // Install Python dependencies
 
