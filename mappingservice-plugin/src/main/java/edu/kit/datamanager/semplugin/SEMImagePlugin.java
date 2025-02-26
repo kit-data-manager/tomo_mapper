@@ -9,19 +9,54 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.nio.file.Path;
+import java.util.Enumeration;
+import java.util.Properties;
 
-@PropertySource("classpath:sempluginversion.properties")
 public class SEMImagePlugin implements IMappingPlugin{
 
-    @Value( "${version}" )
     private static String version;
 
     private final Logger LOGGER = LoggerFactory.getLogger(SEMImagePlugin.class);
-    private static final String REPOSITORY = "https://github.com/kit-data-manager/tomo_mapper";
-    //private static final String TAG = String.join("v", version);
-    private static final String TAG = "wip_semmapping";
-    private static Path dir;
+    private final String REPOSITORY = "https://github.com/kit-data-manager/tomo_mapper";
+    //private final String TAG = String.join("v", version);
+    private String TAG;
+    //private final String TAG = "wip_semmapping";
+    private Path dir;
+
+
+    public SEMImagePlugin() {
+        try {
+            // Get the context class loader
+            ClassLoader classLoader = this.getClass().getClassLoader();
+            // TODO: do we need to make sure that the resource path is somehow related to the current plugin to avoid loading the wrong property file in case of identical property names?
+            URL resource = classLoader.getResource("sempluginversion.properties");
+            LOGGER.info("Resource file: {}", resource);
+            if (resource != null) {
+                // Load the properties file
+                try (InputStream input = resource.openStream()) {
+                    Properties properties = new Properties();
+                    properties.load(input);
+                    version = properties.getProperty("version");
+                    if (version.startsWith("v")) {
+                        TAG = version;
+                    } else {
+                        TAG = String.join("v", version);
+                    }
+
+                }
+            } else {
+                System.err.println("Properties file not found!");
+                version = "unavailable";
+                TAG = "unavailable";
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public String name() {
@@ -45,7 +80,7 @@ public class SEMImagePlugin implements IMappingPlugin{
 
     @Override
     public MimeType[] inputTypes() {
-        return new MimeType[]{MimeTypeUtils.ALL}; //should currently be IMAGE/TIFF
+        return new MimeType[]{MimeTypeUtils.parseMimeType("image/tiff")}; //should currently be IMAGE/TIFF
     }
 
     @Override
