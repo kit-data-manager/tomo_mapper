@@ -83,9 +83,9 @@ The following list provides the minimal range of formats, that have been tested 
 
 - XML format
   - ATLAS3D-Job (Zeiss)
-  - XML ATLAS3D-Setup (Zeiss)
-  - XML EMProject (Thermofisher)
-  - XML ProjectData (Thermofisher)
+  - ATLAS3D-Setup (Zeiss)
+  - EMProject (Thermofisher)
+  - ProjectData (Thermofisher)
 
 ### Planned, currently not supported
 - Tescan png hdr files
