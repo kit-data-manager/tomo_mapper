@@ -76,7 +76,7 @@ class TestTiffparser:
         if len(zeiss_glob) == 0:
             pytest.skip("Test files not included, skipping test")
 
-        mapping_dict = input_to_dict(tiffparser_sem_34118)
+        mapping_dict = input_to_dict(tiffparser_sem_34118.read_text())
 
         for zg in zeiss_glob:
             img, raw = parser.parse(zg, mapping_dict)
@@ -94,7 +94,7 @@ class TestTiffparser:
         if len(tf_glob) == 0:
             pytest.skip("Test files not included, skipping test")
 
-        mapping_dict = input_to_dict(tiffparser_sem_34682)
+        mapping_dict = input_to_dict(tiffparser_sem_34682.read_text())
 
         for zg in tf_glob:
             img, raw = parser.parse(zg, mapping_dict)
