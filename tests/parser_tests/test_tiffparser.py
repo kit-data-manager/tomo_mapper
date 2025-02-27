@@ -7,7 +7,8 @@ import pytest
 from src.config import MappingConfig
 from src.parser.ImageParser import ParserMode
 from src.parser.impl.TiffParser import TiffParser
-from src.util import load_json
+from src.resources.maps.mapping import tiffparser_sem_34118, tiffparser_sem_34682
+from src.util import load_json, input_to_dict
 
 
 class TestTiffparser:
@@ -75,7 +76,7 @@ class TestTiffparser:
         if len(zeiss_glob) == 0:
             pytest.skip("Test files not included, skipping test")
 
-        mapping_dict = load_json(os.path.normpath(os.path.join(dir_to_testscript, "../sampleData/config/SEM_zeiss.json")))
+        mapping_dict = input_to_dict(tiffparser_sem_34118)
 
         for zg in zeiss_glob:
             img, raw = parser.parse(zg, mapping_dict)
@@ -93,7 +94,7 @@ class TestTiffparser:
         if len(tf_glob) == 0:
             pytest.skip("Test files not included, skipping test")
 
-        mapping_dict = load_json(os.path.normpath(os.path.join(dir_to_testscript, "../sampleData/config/SEM_thermofisher.json")))
+        mapping_dict = input_to_dict(tiffparser_sem_34682)
 
         for zg in tf_glob:
             img, raw = parser.parse(zg, mapping_dict)
