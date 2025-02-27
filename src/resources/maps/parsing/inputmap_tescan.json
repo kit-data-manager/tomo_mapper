@@ -1,0 +1,20 @@
+{
+    "setup info": {
+        "sources": [
+            "./CaSO4_as-is_Tomo1.xml"
+        ],
+        "parser": "TomographyProjectParser"
+    },
+     "run info": {
+        "sources": [
+            "./CaSO4_as-is_Tomo1.xml"
+        ],
+        "parser": "TomographyProjectParser"
+    },
+    "image info": {
+        "sources": [
+            "./**/*.hdr"
+        ],
+        "parser": "HdrParser"
+    }
+}
