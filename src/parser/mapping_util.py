@@ -63,6 +63,9 @@ def create_unified_dict(mapping, input_dict):
                 else:
                     logging.warning(
                         "Found a value equivalent to None. path: {}, value: {}".format(k, value))
+    if not output_dict:
+        logging.error("No output was produced by applying map to input. Was the correct mapping used?")
+        #TODO: raise an error here that needs to be caught and handled on use.
     return output_dict
 
 def map_a_dict(input_dict, mapping_dict):
