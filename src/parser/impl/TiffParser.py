@@ -99,13 +99,3 @@ class TiffParser(ImageParser):
                 pass
 
         return output_dict
-        '''
-        if metadata:
-            dict_from_input = input_to_dict(metadata)
-            if dict_from_input:
-                logging.debug("Input metadata parsed from {}".format(file_path))
-                return dict_from_input
-            logging.error("Metadata extracted but unable convert to dictionary for further processing")
-        else:
-            logging.error("No matching tag found in exif data for {} on {}".format(tagID, file_path))
-        '''
