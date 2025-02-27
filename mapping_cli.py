@@ -3,7 +3,8 @@ import json
 import logging
 import os
 
-from src.IO.tomo.InputReader import InputReader
+from src.IO.sem.InputReader import InputReader as InputReader_SEM
+from src.IO.tomo.InputReader import InputReader as InputReader_TOMO
 from src.IO.tomo.OutputWriter import OutputWriter
 from src.parser.ImageParser import ParserMode
 from src.parser.ParserFactory import ParserFactory
@@ -57,7 +58,7 @@ def run_tomo_mapper(args):
     OUTPUT_PATH = argdict.get('output')
 
     logging.info(f'This is a dummy implementation for a command line interface.')
-    reader = InputReader(MAP_SOURCE, INPUT_SOURCE)
+    reader = InputReader_TOMO(MAP_SOURCE, INPUT_SOURCE)
     tmpdir = reader.temp_dir_path
 
     setup_infos = reader.retrieve_setup_info()
@@ -89,22 +90,15 @@ def run_sem_mapper(args):
     MAP_SOURCE = argdict.get('map')
     OUTPUT_PATH = argdict.get('output')
 
-    logging.info(f'This is a dummy implementation for a command line interface.')
-    #TODO: this is a shortcut implementation without any sanity checks, needs to be fleshed out
-    mapping_dict = load_json(MAP_SOURCE)
-    registered_image_parsers = ParserFactory.available_img_parsers
-    for registered_parser in registered_image_parsers:
-        logging.debug("Trying to parse image with {}".format(registered_parser))
-        imgp = ParserFactory.create_img_parser(registered_parser, mode=ParserMode.SEM)
-        try:
-            result, raw = imgp.parse(INPUT_SOURCE, mapping_dict)
-            if result.image_metadata:
-                output_dict = result.image_metadata.to_schema_dict()
-                with open(OUTPUT_PATH, 'w', encoding="utf-8") as f:
-                    json.dump(output_dict, f, indent=4, ensure_ascii=False)
-                break
-        except Exception as e:
-            pass
+    reader = InputReader_SEM(MAP_SOURCE, INPUT_SOURCE)
+
+    img_info = reader.retrieve_image_info(INPUT_SOURCE)
+    if not img_info:
+        logging.error('Could not retrieve image information due to unknown error. Aborting.')
+        exit(1)
+    with open(OUTPUT_PATH, 'w', encoding="utf-8") as f:
+        json.dump(img_info, f, indent=4, ensure_ascii=False)
+
 
 if __name__ == '__main__':
     run_cli()
