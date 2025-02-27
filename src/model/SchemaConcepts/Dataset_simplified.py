@@ -4,7 +4,7 @@ from pydantic import BaseModel, computed_field
 
 from src.model.SchemaConcepts.Schema_Concept import Schema_Concept
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
-from src.model.SchemaConcepts.codegen.SchemaClasses import DatasetType, IdentifierModel, \
+from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType, IdentifierModel, \
     UserDescription, Program, InstrumentDetails, SEMFIBTomographyAcquisitionDatasetSchema
 
 class Dataset(Schema_Concept, BaseModel):

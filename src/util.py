@@ -77,7 +77,7 @@ def strip_workdir_from_path(workdirpath, fullpath):
     logging.debug("Unable to remove working directory from given path. Returning unchanged path")
     return fullpath
 
-def input_to_dict(stringPayload) -> Optional[dict]:
+def input_to_dict(stringPayload, stick_to_wellformed=False) -> Optional[dict]:
     """
     best effort parsing of usual input formats. extend if needed
     :param stringPayload: string to parse
@@ -106,6 +106,19 @@ def input_to_dict(stringPayload) -> Optional[dict]:
                 return dict_from_ini
             except (configparser.NoSectionError, configparser.NoOptionError):
                 logging.debug("Reading input as INI not successful")
+        if not stick_to_wellformed and "\n" in stringPayload: #We try our best, but if this is not wanted, please stick to wellformed formats instead
+            output_dict = {}
+            data = stringPayload.replace("\r", "")
+            lines = data.split("\n")
+            for l in lines:
+                if "=" in l:
+                    k, v = l.split("=", 1)
+                    output_dict[k.strip().replace(".", "")] = v.strip()
+                else:
+                    if ":" in l:
+                        k, v = l.split(":", 1)
+                        output_dict[k.strip().replace(".", "")] = v.strip()
+            if output_dict: return output_dict
         logging.warning("Best effort input reading failed. Necessary reader not implemented?")
     except Exception as e:
         logging.warning("Best effort input reading failed with unexpected error. Input malformed?")

@@ -2,7 +2,7 @@ from typing import List
 
 from src.model.RunMD import RunMD
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
-from src.model.SchemaConcepts.codegen.SchemaClasses import DatasetType
+from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 from src.parser.RunMD_Parser import RunMD_Parser
 from src.util import normalize_path
 
