@@ -1,5 +1,6 @@
 import logging
 from typing import Optional
+from importlib import resources
 
 from PIL import Image
 
@@ -7,12 +8,24 @@ from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.parser.ImageParser import ImageParser, ParserMode
 from src.parser.mapping_util import map_a_dict, get_internal_mapping
+from src.resources.maps.mapping import tiffparser_tomo_51023, tiffparser_tomo_34682, tiffparser_sem_34682, \
+    tiffparser_sem_34118
 from src.util import input_to_dict
 
 
 #TODO: would this have any benefit from replacing with tifffile lib?
 
 class TiffParser(ImageParser):
+
+    available_tomo_mappings = {
+        "34682": tiffparser_tomo_34682,
+        "51023": tiffparser_tomo_51023
+    }
+
+    available_sem_mappings = {
+        "34682": tiffparser_sem_34682,
+        "34118": tiffparser_sem_34118
+    }
 
     tagID = None
     internal_mapping = None
@@ -21,9 +34,16 @@ class TiffParser(ImageParser):
         if tagID:
             self.tagID = tagID
             if mode == ParserMode.TOMO:
-                self.internal_mapping = get_internal_mapping((tagID, "TOMO_Schema"), "image")
+                if self.tagID not in self.available_tomo_mappings:
+                    logging.error("Internal mapping for tag '{}' is not available".format(self.tagID))
+                    exit(1)
+                m = self.available_tomo_mappings[self.tagID]
             if mode == ParserMode.SEM:
-                self.internal_mapping = get_internal_mapping((tagID, "SEM_Schema"), "image")
+                try:
+                    m = self.available_sem_mappings[self.tagID]
+                except KeyError:
+                    pass
+            self.internal_mapping = input_to_dict(m.read_text())
         super().__init__(mode)
 
     @staticmethod
