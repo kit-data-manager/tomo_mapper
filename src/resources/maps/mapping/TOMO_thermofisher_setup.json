@@ -1,0 +1,14 @@
+{
+    "EMProject.ApplicationName": "genericMetadata.program.programName",
+    "EMProject.ApplicationVersion": "genericMetadata.program.programVersion",
+    "EMProject.ApplicationId": "genericMetadata.applicationID.identifierValue",
+    "EMProject.FileVersion": "genericMetadata.fileVersion",
+    "EMProject.ProjectName": "genericMetadata.projectName",
+    "EMProject.ZCutSpacing": "genericMetadata.zCutSpacing.value",
+    "EMProject.Datasets.Dataset[*].NumberOfCuts": "genericMetadata.numberOfCuts",
+    "EMProject.Datasets.Dataset[*].Rows": "dataset[*].rows",
+    "EMProject.Datasets.Dataset[*].Columns": "dataset[*].columns",
+    "EMProject.Datasets.Dataset[*].LiveAcquisition.TileColumn": "dataset[*].tileColumn",
+    "EMProject.Datasets.Dataset[*].LiveAcquisition.TileRow": "dataset[*].tileRow",
+    "EMProject.Datasets.Dataset[*].Name": "dataset[*].datasetType"
+}

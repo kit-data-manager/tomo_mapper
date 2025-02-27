@@ -4,7 +4,9 @@ from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SetupMD import SetupMD
 from src.parser.SetupMD_Parser import SetupMD_Parser
-from src.parser.mapping_util import map_a_dict, get_internal_mapping
+from src.parser.mapping_util import map_a_dict
+from src.resources.maps.mapping import setup_tf
+from src.util import input_to_dict
 
 
 class EMProjectParser(SetupMD_Parser):
@@ -14,12 +16,12 @@ class EMProjectParser(SetupMD_Parser):
         return ['Thermofisher Helios']
 
     def __init__(self):
-        self.mapping_tuple = ("EMProject", "TOMO_Schema")
+        self.internal_mapping = input_to_dict(setup_tf.read_text())
 
     def parse_setup(self, payload) -> tuple[SetupMD, dict]:
         parsed = self._read_input(payload)
 
-        mapping_dict = get_internal_mapping(self.mapping_tuple, "acquisition")
+        mapping_dict = self.internal_mapping
         ac_md = map_a_dict(parsed, mapping_dict)
         acquisition = self._create_acquisition(ac_md)
         datasets = self._create_datasets(ac_md)

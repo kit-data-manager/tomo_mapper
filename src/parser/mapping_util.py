@@ -3,9 +3,6 @@ import logging
 import re
 import typing
 from sys import exit
-
-import pandas as pd
-from importlib import resources
 from jsonpath_ng.ext.parser import ExtentedJsonPathParser
 
 parser = ExtentedJsonPathParser()
@@ -67,29 +64,6 @@ def create_unified_dict(mapping, input_dict):
                     logging.warning(
                         "Found a value equivalent to None. path: {}, value: {}".format(k, value))
     return output_dict
-
-def _read_mapTable_hardcoded(col1, col2, fname = "image_map.csv"):
-    """
-    #TODO: prettify this. This is a proof-of-concept shortcut implementation.
-    :param col1: name of input column in csv
-    :param col2: name of output column in csv
-    :return: dict with key-value pairs of input and output column values
-    """
-
-    with resources.as_file(resources.files("src.resources.maps") / fname) as dfresource:
-        df = pd.read_csv(dfresource)
-
-        dropped_df = df[[col1, col2]].dropna() #ignore rows with either NaN in input or output col (may occur on mapping csv with more than 2 columns)
-        return list(zip(dropped_df[col1], dropped_df[col2]))
-
-def get_internal_mapping(maptable_cols, contentType):
-    assert contentType in ["image", "acquisition"]
-
-    col1, col2 = maptable_cols
-
-    map_info = _read_mapTable_hardcoded(col1, col2, contentType+"_map.csv")
-    mapping_dict = dict(map_info)
-    return mapping_dict
 
 def map_a_dict(input_dict, mapping_dict):
     return create_unified_dict(mapping_dict, input_dict)
