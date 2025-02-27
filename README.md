@@ -1,7 +1,13 @@
+<!--![Tests](https://github.com/kit-data-manager/tomo_mapper/actions/workflows/python-app.yml/badge.svg)-->
+![Tests](https://img.shields.io/github/actions/workflow/status/kit-data-manager/tomo_mapper/python-app.yml?label=Tests)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 # SEM-FIB-Tomography Mapper
 
 ## Overview
-SEM-FIB-Tomography Mapper is a tool designed for mapping and analyzing SEM (Scanning Electron Microscope) images and SEM-FIB Tomography data. This project includes functionality for both SEM and tomography mapping, sharing a common mapping concept.
+SEM-FIB-Tomography Mapper is a tool designed for mapping SEM (Scanning Electron Microscope) images and SEM-FIB Tomography metadata to a uniform, schema-compliant json format. This project includes functionality for both SEM and tomography mapping, sharing a common mapping concept.
+
+[TDB short schema description / explanation]
 
 ## Usage
 
