@@ -98,6 +98,8 @@ def run_sem_mapper(args):
         imgp = ParserFactory.create_img_parser(registered_parser, mode=ParserMode.SEM)
         try:
             result, raw = imgp.parse(INPUT_SOURCE, mapping_dict)
+            print("There is no output available:", result.image_metadata)
+            logging.warning("There is no output available")
             if result.image_metadata:
                 output_dict = result.image_metadata.to_schema_dict()
                 with open(OUTPUT_PATH, 'w', encoding="utf-8") as f:
