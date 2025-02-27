@@ -1,5 +1,5 @@
 pillow >= 10.3
-pydantic >= 2.10
+pydantic[email] >= 2.10
 xmltodict >= 0.14
 requests
 pandas

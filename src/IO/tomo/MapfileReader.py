@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 from requests import HTTPError
 
+from src.parser.ImageParser import ParserMode
 from src.parser.ParserFactory import ParserFactory
 from src.parser.mapping_util import _read_mapTable_hardcoded
 from src.util import load_json
@@ -135,7 +136,7 @@ class MapFileReader:
             raise ValueError("Error reading tag info from map file. Unable to handle this tag")
 
         #parser = available_parsers.get(im_dict["parser"])
-        parser = ParserFactory.create_img_parser(im_dict["parser"],tagID=tagID)
+        parser = ParserFactory.create_img_parser(im_dict["parser"],tagID=tagID, mode=ParserMode.TOMO)
 
         for s in sources:
             MapFileReader.validate_relative_path(s)

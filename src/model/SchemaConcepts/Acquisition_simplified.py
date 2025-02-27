@@ -4,8 +4,8 @@ from pydantic import BaseModel
 
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SchemaConcepts.Schema_Concept import Schema_Concept
-from src.model.SchemaConcepts.codegen.SchemaClasses import GenericMetadata, AcquisitionMain
-from src.model.SchemaConcepts.codegen.SchemaClasses import Acquisition as Acquisition_gen
+from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import GenericMetadata, AcquisitionMain
+from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import Acquisition as Acquisition_gen
 
 
 class Acquisition(Schema_Concept, BaseModel):

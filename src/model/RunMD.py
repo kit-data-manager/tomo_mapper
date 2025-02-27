@@ -3,7 +3,7 @@ from typing import List
 
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
-from src.model.SchemaConcepts.codegen.SchemaClasses import DatasetType
+from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 
 
 class RunMD:

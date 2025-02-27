@@ -1,5 +1,6 @@
 # Function to get value from nested dictionary using dotted path
 import logging
+import re
 import typing
 from sys import exit
 
@@ -9,13 +10,33 @@ from jsonpath_ng.ext.parser import ExtentedJsonPathParser
 
 parser = ExtentedJsonPathParser()
 
+def escape_pathelements(dotted_path):
+    funct = re.search("(`.+`)", dotted_path)
+    if funct:
+        dotted_path = dotted_path.replace(funct.group(0), "FUNCTIONPLACEHOLDER")
+
+    pathElements = dotted_path.split(".")
+    escaped_elements = []
+    for pe in pathElements:
+        if not pe: continue
+        if "[" in pe:
+            to_escape, to_keep = pe.split("[", 1)
+            escaped = "'" + to_escape + "'"
+            pe = escaped + "[" + to_keep
+        else:
+            pe = "'" + pe + "'"
+        if pe == "'FUNCTIONPLACEHOLDER'":
+            pe = funct.group(0)
+        escaped_elements.append(pe)
+    return ".".join(escaped_elements)
+
+
 # Function to create unified output dict based on the provided JSON mapping
 def create_unified_dict(mapping, input_dict):
     output_dict = {}
 
     for k, v in mapping.items():
-
-        k = ".".join(["'" + x + "'" if not ("[" in x or "`" in x) else x for x in k.split('.')] ) #make sure that unexpected tokens in input can be handled properly (such as #)
+        k = escape_pathelements(k)
         exprIN = parser.parse(k)
         exprOUT = parser.parse(v)
 
@@ -61,19 +82,14 @@ def _read_mapTable_hardcoded(col1, col2, fname = "image_map.csv"):
         dropped_df = df[[col1, col2]].dropna() #ignore rows with either NaN in input or output col (may occur on mapping csv with more than 2 columns)
         return list(zip(dropped_df[col1], dropped_df[col2]))
 
-def map_a_dict(input_dict, maptable_cols, contentType):
-    """
-    use this function to convert a dict of tiff extracted metadata in original format to the output format for the schemas
-    #TODO: prettify this. This is a proof-of-concept shortcut implementation.
-    :param input_dict:
-    :param maptable_cols: (col1, col2) tuple to describe which mapping to use (in a fixed map at the moment). Possible values "Zeiss_TOMO", "TF" for col1, "SEM_Schema", "TOMO_Schema" for col2
-    :return:
-    """
+def get_internal_mapping(maptable_cols, contentType):
     assert contentType in ["image", "acquisition"]
 
     col1, col2 = maptable_cols
 
     map_info = _read_mapTable_hardcoded(col1, col2, contentType+"_map.csv")
     mapping_dict = dict(map_info)
+    return mapping_dict
 
+def map_a_dict(input_dict, mapping_dict):
     return create_unified_dict(mapping_dict, input_dict)

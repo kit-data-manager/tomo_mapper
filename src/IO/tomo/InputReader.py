@@ -4,7 +4,7 @@ from glob import glob
 from sys import exit
 from typing import List
 
-from src.MapfileReader import MapFileReader
+from src.IO.tomo.MapfileReader import MapFileReader
 from src.config import MappingConfig
 from src.model.ImageMD import ImageMD
 from src.model.RunMD import RunMD
@@ -162,7 +162,7 @@ class InputReader:
             curr_impath_list = glob(os.path.normpath(os.path.join(self.working_dir_path, s)))
             for ip in curr_impath_list:
                 logging.info("Extracting image info from: {}/{}".format(os.path.basename(os.path.dirname(ip)), os.path.basename(ip)))
-                img, _ = self.imageParser.parse(ip) #TODO: sanitize and prepare params before
+                img, _ = self.imageParser.parse(ip, mapping=None) #TODO: sanitize and prepare params before
                 if img:
                     image_infos.append(img)
         return image_infos

@@ -4,7 +4,7 @@ import os
 
 import pytest
 
-from src.MapfileReader import MapFileReader
+from src.IO.tomo.MapfileReader import MapFileReader
 from src.parser.impl.Atlas3dParser import Atlas3dParser
 from src.parser.impl.EMProjectParser import EMProjectParser
 from src.parser.impl.TiffParser import TiffParser

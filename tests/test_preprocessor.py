@@ -20,7 +20,7 @@ class TestPreprocessor:
             }
         }
 
-        units_module = importlib.import_module('src.model.SchemaConcepts.codegen.SchemaClasses')
+        units_module = importlib.import_module('src.model.SchemaConcepts.codegen.SchemaClasses_TOMO')
 
         # Collect all unit values that are allowed
         all_units = set()

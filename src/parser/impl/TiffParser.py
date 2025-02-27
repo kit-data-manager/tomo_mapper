@@ -1,15 +1,12 @@
 import logging
-import re
 from typing import Optional
 
 from PIL import Image
-from PIL.ExifTags import TAGS
 
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
-from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
-from src.parser.ImageParser import ImageParser
-from src.parser.mapping_util import map_a_dict
+from src.parser.ImageParser import ImageParser, ParserMode
+from src.parser.mapping_util import map_a_dict, get_internal_mapping
 from src.util import input_to_dict
 
 
@@ -17,29 +14,45 @@ from src.util import input_to_dict
 
 class TiffParser(ImageParser):
 
-    def __init__(self, tagID):
-        self.tagID = tagID
-        self.mapping_tuple = (tagID, "TOMO_Schema")
+    tagID = None
+    internal_mapping = None
+
+    def __init__(self, mode, tagID=None):
+        if tagID:
+            self.tagID = tagID
+            if mode == ParserMode.TOMO:
+                self.internal_mapping = get_internal_mapping((tagID, "TOMO_Schema"), "image")
+            if mode == ParserMode.SEM:
+                self.internal_mapping = get_internal_mapping((tagID, "SEM_Schema"), "image")
+        super().__init__(mode)
 
     @staticmethod
     def expected_input_format():
         return "tiff"
 
-    def parse(self, file_path) -> tuple[ImageMD, str]:
+    def parse(self, file_path, mapping) -> tuple[ImageMD, str]:
         input_md = self._read_input_file(file_path, self.tagID)
         if not input_md:
             logging.warning("No metadata extractable from {}".format(file_path))
             return None, None
 
-        image_md = map_a_dict(input_md, self.mapping_tuple, "image")
+        if not mapping and not self.internal_mapping:
+            logging.error("No mapping provided for image parsing. Aborting")
+            exit(1)
+        mapping_dict = mapping if mapping else self.internal_mapping
+        image_md = map_a_dict(input_md, mapping_dict)
 
         Preprocessor.normalize_all_units(image_md)
+        Preprocessor.normalize_all_datetimes(image_md)
 
-        image_from_md = self._create_image(image_md, file_path)
+        if self.mode == ParserMode.TOMO:
+            image_from_md = self._create_tomo_image(image_md, file_path)
+        else:
+            image_from_md = ImageMD(image_metadata=image_md, filePath="")
 
         return image_from_md, image_md
 
-    def _create_image(self, image_md, fp) -> ImageMD:
+    def _create_tomo_image(self, image_md, fp) -> ImageMD:
 
         image_md_format = {
             "acquisition_info": image_md["acquisition"],
@@ -54,20 +67,39 @@ class TiffParser(ImageParser):
 
         return ImageMD(**image_md_format)
 
-    def _read_input_file(self, file_path, tagID) -> Optional[dict]:
-        metadata = None
+    def _read_input_file(self, file_path, tagID = None) -> Optional[dict]:
+        """
+        Reading input may be done with a predefined tag or without. In the latter case we try to extract from all tags and use the joint dictionary for mapping.
+        :param file_path: image file path
+        :param tagID: tag to extract from, may be None
+        :return: data from extracted tag(s) as dict
+        """
         image = Image.open(file_path)
         exif = image.getexif()
         image.close()
         if exif is None:
             logging.warning("No EXIF data found in image {}".format(file_path))
-            return metadata
+            return None
 
-        for tag_id, value in exif.items():
-            tag = TAGS.get(tag_id, tag_id)
-            if str(tag) == tagID:
-                metadata = value
+        if tagID:
+            try:
+                md_list = [value for key, value in exif.items() if key == int(tagID)]
+            except IndexError:
+                logging.warning("Tag ID defined but no corresponding data extractable: tag {} in {}".format(tagID, file_path))
+                return None
+        else:
+            md_list = [value for key, value in exif.items()]
 
+        output_dict = {}
+        for md in md_list:
+            try:
+                output_dict.update(input_to_dict(md))
+            except Exception as e:
+                logging.debug("Unable to extract metadata for {}".format(md))
+                pass
+
+        return output_dict
+        '''
         if metadata:
             dict_from_input = input_to_dict(metadata)
             if dict_from_input:
@@ -76,3 +108,4 @@ class TiffParser(ImageParser):
             logging.error("Metadata extracted but unable convert to dictionary for further processing")
         else:
             logging.error("No matching tag found in exif data for {} on {}".format(tagID, file_path))
+        '''
