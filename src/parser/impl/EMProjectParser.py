@@ -4,7 +4,7 @@ from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SetupMD import SetupMD
 from src.parser.SetupMD_Parser import SetupMD_Parser
-from src.parser.mapping_util import map_a_dict, get_internal_mapping
+from src.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import setup_tf
 from src.util import input_to_dict
 

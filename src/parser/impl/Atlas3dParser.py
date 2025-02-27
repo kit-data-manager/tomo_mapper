@@ -5,7 +5,7 @@ from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.parser.RunMD_Parser import RunMD_Parser
 from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.model.SetupMD import SetupMD
-from src.parser.mapping_util import map_a_dict, get_internal_mapping
+from src.parser.mapping_util import map_a_dict
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.resources.maps.mapping import setup_zeiss
 from src.util import normalize_path, input_to_dict

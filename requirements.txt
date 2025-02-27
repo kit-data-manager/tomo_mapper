@@ -2,7 +2,6 @@ pillow >= 10.3
 pydantic[email] >= 2.10
 xmltodict >= 0.14
 requests
-pandas
 validators >= 0.34
 jsonpath-ng >= 1.7
 deepmerge >= 2.0

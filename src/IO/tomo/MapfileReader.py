@@ -8,7 +8,6 @@ from requests import HTTPError
 
 from src.parser.ImageParser import ParserMode
 from src.parser.ParserFactory import ParserFactory
-from src.parser.mapping_util import _read_mapTable_hardcoded
 from src.util import load_json
 
 import validators
@@ -126,17 +125,12 @@ class MapFileReader:
             logging.error("No image parser defined in map file")
             raise ValueError('Error reading map info for images. No parser provided')
 
-        tagID = im_dict.get("tag")
-        if not tagID:
-            logging.error("No image tag defined in map file")
-            raise ValueError('Error reading map info for images. No image tag provided')
-
-        if not _read_mapTable_hardcoded(tagID, "TOMO_Schema"):
-            logging.error("Tag id {} not found in internal mapping file".format(tagID))
-            raise ValueError("Error reading tag info from map file. Unable to handle this tag")
-
         #parser = available_parsers.get(im_dict["parser"])
-        parser = ParserFactory.create_img_parser(im_dict["parser"],tagID=tagID, mode=ParserMode.TOMO)
+        parserArgs = dict()
+        parserArgs["mode"] = ParserMode.TOMO
+        if im_dict.get("tag"):
+            parserArgs["tagID"] = im_dict.get("tag")
+        parser = ParserFactory.create_img_parser(im_dict["parser"], **parserArgs)
 
         for s in sources:
             MapFileReader.validate_relative_path(s)
