@@ -1,5 +1,4 @@
 {
-    "NaN": "acquisition.dataset.instrument.scan.eScan.scanInterlacing",
     "Fibics.Application.Date": "acquisition.dataset.images.creationTime",
     "Fibics.Application.Version": "acquisition.dataset.program.programName",
     "Fibics.Scan.ScanRot.#text": "acquisition.dataset.instrument.eBeam.scanRotation.value",
