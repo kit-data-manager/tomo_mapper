@@ -7,7 +7,7 @@ from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.parser.ImageParser import ImageParser, ParserMode
 from src.parser.mapping_util import map_a_dict
-from src.resources.maps.mapping import textparser_sem_tescan
+from src.resources.maps.mapping import textparser_sem_tescan, textparser_tomo_tescan
 from src.util import input_to_dict
 import configparser
 
@@ -21,6 +21,8 @@ class HdrParser(ImageParser):
 
     def __init__(self, mode):
         if mode == ParserMode.TOMO:
+            self.internal_mapping = input_to_dict(textparser_tomo_tescan.read_text())
+        if mode == ParserMode.SEM:
             self.internal_mapping = input_to_dict(textparser_sem_tescan.read_text())
         super().__init__(mode)
 

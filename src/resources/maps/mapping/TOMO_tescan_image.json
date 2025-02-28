@@ -1,0 +1,23 @@
+{
+    "MAIN.Device": "acquisition.genericMetadata.systemType",
+    "MAIN.SoftwareVersion": "acquisition.dataset.program.programName",
+    "MAIN.UserName": "acquisition.dataset.user.userName",
+    "SEM.SpotSize": "acquisition.dataset.instrument.spot",
+    "SEM.AcceleratorVoltage": "acquisition.dataset.instrument.eBeam.accelerationVoltage.value",
+    "SEM.PredictedBeamCurrent": "acquisition.dataset.instrument.eBeam.beamCurrent.value",
+    "SEM.ScanRotation": "acquisition.dataset.instrument.eBeam.scanRotation.value",
+    "SEM.ScanMode": "acquisition.dataset.instrument.eBeam.imageMode",
+    "MAIN.MagnificationReference": "acquisition.dataset.instrument.eBeam.magnificationCorrection",
+    "SEM.TiltCorrection": "acquisition.dataset.instrument.eBeam.tiltCorrectionAngle.value",
+    "SEM.WD": "acquisition.dataset.images.stage.workingDistance.value",
+    "SEM.StageX": "acquisition.dataset.images.stage.stageX.value",
+    "SEM.StageY": "acquisition.dataset.images.stage.stageY.value",
+    "SEM.StageZ": "acquisition.dataset.images.stage.stageZ.value",
+    "SEM.StageRotation": "acquisition.dataset.images.stage.stageR.value",
+    "SEM.StageTilt": "acquisition.dataset.images.stage.specTilt.value",
+    "SEM.Detector": "acquisition.dataset.instrument.detector.name",
+    "SEM.ChamberPressure": "acquisition.dataset.images.vacuum.chamberPressure.value",
+    "SEM.InjectedGas": "acquisition.dataset.images.vacuum.gas",
+    "SEM.SpecimenCurrent": "acquisition.dataset.images.specimenCurrent.value",
+    "SEM.DwellTime": "acquisition.dataset.instrument.scan.dwellTime.value"
+}
