@@ -4,6 +4,7 @@ import os
 
 import pytest
 
+from src.IO.MappingAbortionError import MappingAbortionError
 from src.IO.tomo.MapfileReader import MapFileReader
 from src.parser.impl.Atlas3dParser import Atlas3dParser
 from src.parser.impl.EMProjectParser import EMProjectParser
@@ -76,13 +77,13 @@ class TestMapfileReader:
     def test_reject_binary_as_map(self):
         sourcesPath = os.path.join(self.testpath, "../sampleData/images/dummyimage.zip")
 
-        with pytest.raises(SystemExit):
+        with pytest.raises(MappingAbortionError):
             map_content = MapFileReader.read_mapfile(sourcesPath)
 
     def test_reject_nonjson_as_map(self):
         sourcesPath = os.path.join(self.testpath, "../sampleData/config/faulty.txt")
 
-        with pytest.raises(SystemExit):
+        with pytest.raises(MappingAbortionError):
             map_content = MapFileReader.read_mapfile(sourcesPath)
 
     def test_fail_on_missing_parser(self):

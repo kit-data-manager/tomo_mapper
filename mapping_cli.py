@@ -3,12 +3,10 @@ import json
 import logging
 import os
 
-from src.IO.tomo.InputReader import InputReader
+from src.IO.MappingAbortionError import MappingAbortionError
+from src.IO.sem.InputReader import InputReader as InputReader_SEM
+from src.IO.tomo.InputReader import InputReader as InputReader_TOMO
 from src.IO.tomo.OutputWriter import OutputWriter
-from src.parser.ImageParser import ParserMode
-from src.parser.ParserFactory import ParserFactory
-from src.parser.impl.TiffParser import TiffParser
-from src.util import load_json
 
 #make log level configurable from ENV, defaults to info level
 logging.basicConfig(
@@ -56,32 +54,35 @@ def run_tomo_mapper(args):
     MAP_SOURCE = argdict.get('map')
     OUTPUT_PATH = argdict.get('output')
 
-    logging.info(f'This is a dummy implementation for a command line interface.')
-    reader = InputReader(MAP_SOURCE, INPUT_SOURCE)
-    tmpdir = reader.temp_dir_path
+    reader = None
+    try:
+        reader = InputReader_TOMO(MAP_SOURCE, INPUT_SOURCE)
+        tmpdir = reader.temp_dir_path
+    except MappingAbortionError as e:
+        if reader:
+            reader.clean_up()
+        exit(e)
 
-    setup_infos = reader.retrieve_setup_info()
-    #print(len(setup_infos))
-    #pprint(setup_infos[0])
+    try:
+        setup_infos = reader.retrieve_setup_info()
 
-    run_infos = reader.retrieve_run_info()
-    #print(len(run_infos))
-    #pprint(run_infos[0])
+        run_infos = reader.retrieve_run_info()
 
-    imgs = reader.retrieve_image_info()
-    #print(len(imgs))
-    #pprint(imgs[0])
+        imgs = reader.retrieve_image_info()
 
-    #TODO: Currently we only extract and use the first md file extraction
-    si = setup_infos[0] if len(setup_infos) == 1 else None
-    ri = run_infos[0] if len(run_infos) == 1 else None
+        #TODO: Currently we only extract and use the first md file extraction
+        si = setup_infos[0] if len(setup_infos) == 1 else None
+        ri = run_infos[0] if len(run_infos) == 1 else None
 
-    output = OutputWriter.stitch_together(si, ri, imgs)
-    OutputWriter.writeOutput(output, OUTPUT_PATH)
+        output = OutputWriter.stitch_together(si, ri, imgs)
+        OutputWriter.writeOutput(output, OUTPUT_PATH)
+    except MappingAbortionError as e:
+        reader.clean_up()
+        exit(e)
 
+    logging.info("Tomography mapping completed.")
     reader.clean_up()
-
-    logging.info("Temp folder deletion: {} - {}".format(tmpdir, os.path.exists(tmpdir)))
+    logging.debug("Temp folder deletion: {} - {}".format(tmpdir, os.path.exists(tmpdir)))
 
 def run_sem_mapper(args):
     argdict = vars(args)
@@ -89,24 +90,18 @@ def run_sem_mapper(args):
     MAP_SOURCE = argdict.get('map')
     OUTPUT_PATH = argdict.get('output')
 
-    logging.info(f'This is a dummy implementation for a command line interface.')
-    #TODO: this is a shortcut implementation without any sanity checks, needs to be fleshed out
-    mapping_dict = load_json(MAP_SOURCE)
-    registered_image_parsers = ParserFactory.available_img_parsers
-    for registered_parser in registered_image_parsers:
-        logging.debug("Trying to parse image with {}".format(registered_parser))
-        imgp = ParserFactory.create_img_parser(registered_parser, mode=ParserMode.SEM)
-        try:
-            result, raw = imgp.parse(INPUT_SOURCE, mapping_dict)
-            print("There is no output available:", result.image_metadata)
-            logging.warning("There is no output available")
-            if result.image_metadata:
-                output_dict = result.image_metadata.to_schema_dict()
-                with open(OUTPUT_PATH, 'w', encoding="utf-8") as f:
-                    json.dump(output_dict, f, indent=4, ensure_ascii=False)
-                break
-        except Exception as e:
-            pass
+    try:
+        reader = InputReader_SEM(MAP_SOURCE, INPUT_SOURCE)
+
+        img_info = reader.retrieve_image_info(INPUT_SOURCE)
+        if not img_info:
+            logging.error('Could not retrieve image information due to unknown error. Aborting.')
+            exit(1)
+        with open(OUTPUT_PATH, 'w', encoding="utf-8") as f:
+            json.dump(img_info, f, indent=4, ensure_ascii=False)
+    except MappingAbortionError as e:
+        exit(e)
+
 
 if __name__ == '__main__':
     run_cli()

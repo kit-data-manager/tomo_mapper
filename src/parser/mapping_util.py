@@ -2,11 +2,8 @@
 import logging
 import re
 import typing
-from sys import exit
-
-import pandas as pd
-from importlib import resources
 from jsonpath_ng.ext.parser import ExtentedJsonPathParser
+from src.IO.MappingAbortionError import MappingAbortionError
 
 parser = ExtentedJsonPathParser()
 
@@ -53,7 +50,7 @@ def create_unified_dict(mapping, input_dict):
                     assert len(set(values)) == 1
             except AssertionError:
                 logging.error("Found multiple values in input dict, but output target is not a list. Aborting. Input path: {}, values: {}".format(k, values))
-                exit(1)
+                raise MappingAbortionError("Mapping input to output format failed. Mapping not applicable.")
             if values[0]:
                 exprOUT.update_or_create(output_dict, values[0])
             else:
@@ -66,30 +63,10 @@ def create_unified_dict(mapping, input_dict):
                 else:
                     logging.warning(
                         "Found a value equivalent to None. path: {}, value: {}".format(k, value))
+    if not output_dict:
+        logging.error("No output was produced by applying map to input. Was the correct mapping used?")
+        raise MappingAbortionError("Mapping input to output format failed. Mapping not applicable.")
     return output_dict
-
-def _read_mapTable_hardcoded(col1, col2, fname = "image_map.csv"):
-    """
-    #TODO: prettify this. This is a proof-of-concept shortcut implementation.
-    :param col1: name of input column in csv
-    :param col2: name of output column in csv
-    :return: dict with key-value pairs of input and output column values
-    """
-
-    with resources.as_file(resources.files("src.resources.maps") / fname) as dfresource:
-        df = pd.read_csv(dfresource)
-
-        dropped_df = df[[col1, col2]].dropna() #ignore rows with either NaN in input or output col (may occur on mapping csv with more than 2 columns)
-        return list(zip(dropped_df[col1], dropped_df[col2]))
-
-def get_internal_mapping(maptable_cols, contentType):
-    assert contentType in ["image", "acquisition"]
-
-    col1, col2 = maptable_cols
-
-    map_info = _read_mapTable_hardcoded(col1, col2, contentType+"_map.csv")
-    mapping_dict = dict(map_info)
-    return mapping_dict
 
 def map_a_dict(input_dict, mapping_dict):
     return create_unified_dict(mapping_dict, input_dict)

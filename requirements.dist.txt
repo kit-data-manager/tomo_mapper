@@ -2,7 +2,7 @@ pillow
 pydantic
 xmltodict
 requests
-pandas
 validators
 jsonpath-ng
 deepmerge
+magika

@@ -1,14 +1,13 @@
 import logging
 import os.path
-from sys import exit
 from json import JSONDecodeError
 from urllib.parse import urlparse
 
 from requests import HTTPError
 
+from src.IO.MappingAbortionError import MappingAbortionError
 from src.parser.ImageParser import ParserMode
 from src.parser.ParserFactory import ParserFactory
-from src.parser.mapping_util import _read_mapTable_hardcoded
 from src.util import load_json
 
 import validators
@@ -32,17 +31,17 @@ class MapFileReader:
         except HTTPError as e:
             logging.error("Tried loading remote mapping file: {}".format(filepath))
             logging.error(e)
-            exit(1)
+            raise MappingAbortionError("Map file loading failed.")
         except FileNotFoundError as e:
             logging.error("Local map file does not exist: {}".format(filepath))
             logging.error(e)
-            exit(1)
+            raise MappingAbortionError("Map file loading failed.")
         except UnicodeDecodeError as e:
             logging.error("Unable to load map file as json. Please check file and file encoding")
-            exit(1)
+            raise MappingAbortionError("Map file loading failed.")
         except JSONDecodeError as e:
             logging.error("Unable to load map file as json. Please check file structure")
-            exit(1)
+            raise MappingAbortionError("Map file loading failed.")
 
     #TODO: method might me a more generic util function. Move if needed elsewhere
     @staticmethod
@@ -126,17 +125,12 @@ class MapFileReader:
             logging.error("No image parser defined in map file")
             raise ValueError('Error reading map info for images. No parser provided')
 
-        tagID = im_dict.get("tag")
-        if not tagID:
-            logging.error("No image tag defined in map file")
-            raise ValueError('Error reading map info for images. No image tag provided')
-
-        if not _read_mapTable_hardcoded(tagID, "TOMO_Schema"):
-            logging.error("Tag id {} not found in internal mapping file".format(tagID))
-            raise ValueError("Error reading tag info from map file. Unable to handle this tag")
-
         #parser = available_parsers.get(im_dict["parser"])
-        parser = ParserFactory.create_img_parser(im_dict["parser"],tagID=tagID, mode=ParserMode.TOMO)
+        parserArgs = dict()
+        parserArgs["mode"] = ParserMode.TOMO
+        if im_dict.get("tag"):
+            parserArgs["tagID"] = im_dict.get("tag")
+        parser = ParserFactory.create_img_parser(im_dict["parser"], **parserArgs)
 
         for s in sources:
             MapFileReader.validate_relative_path(s)
