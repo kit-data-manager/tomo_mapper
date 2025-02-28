@@ -6,7 +6,8 @@ from PIL import Image
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.parser.ImageParser import ImageParser, ParserMode
-from src.parser.mapping_util import map_a_dict, get_internal_mapping
+from src.parser.mapping_util import map_a_dict
+from src.resources.maps.mapping import textparser_sem_tescan
 from src.util import input_to_dict
 import configparser
 
@@ -20,14 +21,12 @@ class HdrParser(ImageParser):
 
     def __init__(self, mode):
         if mode == ParserMode.TOMO:
-            self.internal_mapping = get_internal_mapping(("TESCAN", "TOMO_Schema"), "image")
-        if mode == ParserMode.SEM:
-            self.internal_mapping = get_internal_mapping(("TESCAN", "SEM_Schema"), "image")
+            self.internal_mapping = input_to_dict(textparser_sem_tescan.read_text())
         super().__init__(mode)
 
     @staticmethod
     def expected_input_format():
-        return "hdr"
+        return "text/plain"
 
     def parse(self, file_path, mapping) -> tuple[ImageMD, str]:
         input_md = self._read_input_file(file_path)
@@ -89,13 +88,3 @@ class HdrParser(ImageParser):
         output_dict.update(input_to_dict(md))
 
         return output_dict
-        '''
-        if metadata:
-            dict_from_input = input_to_dict(metadata)
-            if dict_from_input:
-                logging.debug("Input metadata parsed from {}".format(file_path))
-                return dict_from_input
-            logging.error("Metadata extracted but unable convert to dictionary for further processing")
-        else:
-            logging.error("No matching tag found in exif data for {} on {}".format(tagID, file_path))
-        '''
