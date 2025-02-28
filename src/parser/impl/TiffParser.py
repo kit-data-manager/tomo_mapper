@@ -4,6 +4,7 @@ from importlib import resources
 
 from PIL import Image
 
+from src.IO.MappingAbortionError import MappingAbortionError
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.parser.ImageParser import ImageParser, ParserMode
@@ -27,6 +28,7 @@ class TiffParser(ImageParser):
         "34118": tiffparser_sem_34118
     }
 
+    expected_input = "image/tiff"
     tagID = None
     internal_mapping = None
 
@@ -36,7 +38,7 @@ class TiffParser(ImageParser):
             if mode == ParserMode.TOMO:
                 if self.tagID not in self.available_tomo_mappings:
                     logging.error("Internal mapping for tag '{}' is not available".format(self.tagID))
-                    exit(1)
+                    raise MappingAbortionError("Setting up image parser failed.")
                 m = self.available_tomo_mappings[self.tagID]
             if mode == ParserMode.SEM:
                 try:
@@ -48,7 +50,7 @@ class TiffParser(ImageParser):
 
     @staticmethod
     def expected_input_format() -> str:
-        return "image/tiff"
+        return TiffParser.expected_input
 
     def parse(self, file_path, mapping) -> tuple[ImageMD, str]:
         input_md = self._read_input_file(file_path, self.tagID)
@@ -58,7 +60,7 @@ class TiffParser(ImageParser):
 
         if not mapping and not self.internal_mapping:
             logging.error("No mapping provided for image parsing. Aborting")
-            exit(1)
+            raise MappingAbortionError("Image parsing failed.")
         mapping_dict = mapping if mapping else self.internal_mapping
         image_md = map_a_dict(input_md, mapping_dict)
 
@@ -113,9 +115,12 @@ class TiffParser(ImageParser):
         output_dict = {}
         for md in md_list:
             try:
+                additional_input = input_to_dict(md)
+                if not additional_input:
+                    logging.debug("Unable to extract metadata as dictionary for {}".format(md))
                 output_dict.update(input_to_dict(md))
             except Exception as e:
-                logging.debug("Unable to extract metadata for {}".format(md))
+                logging.debug("Unable to extract metadata as dictionary for {}".format(md))
                 pass
 
         return output_dict

@@ -2,8 +2,8 @@
 import logging
 import re
 import typing
-from sys import exit
 from jsonpath_ng.ext.parser import ExtentedJsonPathParser
+from src.IO.MappingAbortionError import MappingAbortionError
 
 parser = ExtentedJsonPathParser()
 
@@ -50,7 +50,7 @@ def create_unified_dict(mapping, input_dict):
                     assert len(set(values)) == 1
             except AssertionError:
                 logging.error("Found multiple values in input dict, but output target is not a list. Aborting. Input path: {}, values: {}".format(k, values))
-                exit(1)
+                raise MappingAbortionError("Mapping input to output format failed. Mapping not applicable.")
             if values[0]:
                 exprOUT.update_or_create(output_dict, values[0])
             else:
@@ -65,7 +65,7 @@ def create_unified_dict(mapping, input_dict):
                         "Found a value equivalent to None. path: {}, value: {}".format(k, value))
     if not output_dict:
         logging.error("No output was produced by applying map to input. Was the correct mapping used?")
-        #TODO: raise an error here that needs to be caught and handled on use.
+        raise MappingAbortionError("Mapping input to output format failed. Mapping not applicable.")
     return output_dict
 
 def map_a_dict(input_dict, mapping_dict):

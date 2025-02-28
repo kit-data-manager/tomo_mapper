@@ -1,9 +1,9 @@
 import os
 import shutil
 from glob import glob
-from sys import exit
 from typing import List
 
+from src.IO.MappingAbortionError import MappingAbortionError
 from src.IO.tomo.MapfileReader import MapFileReader
 from src.config import MappingConfig
 from src.model.ImageMD import ImageMD
@@ -61,11 +61,11 @@ class InputReader:
 
         if not os.path.isfile(input_path):
             logging.error("Input file does not exist: {}. Aborting".format(input_path))
-            exit(1)
+            raise MappingAbortionError("Input file loading failed.")
 
         if not is_zipfile(input_path):
             logging.error("Invalid input file format: {}. Aborting".format(input_path))
-            exit(1)
+            raise MappingAbortionError("Input file loading failed.")
 
         logging.info("Map file content successfully read and validated.")
         logging.info("The chosen parsers support the following instruments/vendors: {}".format(", ".join(self._get_supported_instruments())))
@@ -83,7 +83,7 @@ class InputReader:
             logging.info("Root path for data detected: {}".format(strip_workdir_from_path(self.temp_dir_path, root_dir)))
         else:
             logging.error("Could not determine common root path for all sources in map file. Aborting")
-            exit(1)
+            raise MappingAbortionError("Input file loading failed. Mapping info not applicable to input.")
 
         MappingConfig.set_working_dir(self.working_dir_path)
 
@@ -122,7 +122,8 @@ class InputReader:
                 return p
 
     def clean_up(self):
-        shutil.rmtree(self.working_dir_path)
+        if self.working_dir_path:
+            shutil.rmtree(self.working_dir_path)
 
     def retrieve_setup_info(self) -> List[SetupMD]:
 
