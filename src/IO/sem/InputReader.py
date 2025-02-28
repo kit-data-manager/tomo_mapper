@@ -43,7 +43,7 @@ class InputReader:
         if not mt or mt == "application/unknown": #fallback, especially if file extension is not available
             #Text files are tricky with magica, so try to read as such first
             mt = get_filetype_with_magica(input_path)
-            if mt is not "text/plain" and "image/" not in mt:
+            if mt != "text/plain" and "image/" not in mt:
                 try:
                     robust_textfile_read(input_path)
                     mt = "text/plain"
