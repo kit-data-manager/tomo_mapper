@@ -13,7 +13,7 @@
     },
     "image info": {
         "sources": [
-            "./Images/**/*.hdr"
+            "./Images/**/*.tif"
         ],
         "tag": "34682",
         "parser": "TiffParser"
