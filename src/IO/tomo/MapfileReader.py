@@ -1,11 +1,11 @@
 import logging
 import os.path
-from sys import exit
 from json import JSONDecodeError
 from urllib.parse import urlparse
 
 from requests import HTTPError
 
+from src.IO.MappingAbortionError import MappingAbortionError
 from src.parser.ImageParser import ParserMode
 from src.parser.ParserFactory import ParserFactory
 from src.util import load_json
@@ -31,17 +31,17 @@ class MapFileReader:
         except HTTPError as e:
             logging.error("Tried loading remote mapping file: {}".format(filepath))
             logging.error(e)
-            exit(1)
+            raise MappingAbortionError("Map file loading failed.")
         except FileNotFoundError as e:
             logging.error("Local map file does not exist: {}".format(filepath))
             logging.error(e)
-            exit(1)
+            raise MappingAbortionError("Map file loading failed.")
         except UnicodeDecodeError as e:
             logging.error("Unable to load map file as json. Please check file and file encoding")
-            exit(1)
+            raise MappingAbortionError("Map file loading failed.")
         except JSONDecodeError as e:
             logging.error("Unable to load map file as json. Please check file structure")
-            exit(1)
+            raise MappingAbortionError("Map file loading failed.")
 
     #TODO: method might me a more generic util function. Move if needed elsewhere
     @staticmethod

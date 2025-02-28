@@ -9,13 +9,14 @@ import time
 from json import JSONDecodeError
 from typing import Optional
 import configparser
-from sys import exit
 
 import requests
 import zipfile
 
 import xmltodict
 from xml.parsers.expat import ExpatError
+
+from src.IO.MappingAbortionError import MappingAbortionError
 
 def robust_textfile_read(filepath):
     try:
@@ -27,7 +28,8 @@ def robust_textfile_read(filepath):
                 return file.read()
         except UnicodeDecodeError:
             logging.error("Unable to determine file encoding. Aborting.")
-            exit(1)
+            #TODO: since it is not clear who calls this function for what, it may make more sense to raise a unified error to handle instead of error for exit
+            raise MappingAbortionError("File loading failed due to encoding.")
 
 def load_json(source) -> Optional[dict]:
     """
@@ -86,6 +88,8 @@ def input_to_dict(stringPayload, stick_to_wellformed=False) -> Optional[dict]:
     :param stringPayload: string to parse
     :return: dict on success, None otherwise
     """
+    if type(stringPayload) is not str:
+        return None
     try:
         if stringPayload.startswith("<"):
             try:  # XML
