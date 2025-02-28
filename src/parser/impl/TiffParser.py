@@ -47,8 +47,8 @@ class TiffParser(ImageParser):
         super().__init__(mode)
 
     @staticmethod
-    def expected_input_format():
-        return "tiff"
+    def expected_input_format() -> str:
+        return "image/tiff"
 
     def parse(self, file_path, mapping) -> tuple[ImageMD, str]:
         input_md = self._read_input_file(file_path, self.tagID)

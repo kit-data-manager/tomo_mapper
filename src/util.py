@@ -1,5 +1,8 @@
 import json
 import logging
+from pathlib import Path
+
+from magika import Magika
 import os
 import tempfile
 import time
@@ -26,7 +29,7 @@ def robust_textfile_read(filepath):
             logging.error("Unable to determine file encoding. Aborting.")
             exit(1)
 
-def load_json(source):
+def load_json(source) -> Optional[dict]:
     """
     Load JSON data from a local file path or a web URL.
 
@@ -127,3 +130,8 @@ def input_to_dict(stringPayload, stick_to_wellformed=False) -> Optional[dict]:
 def normalize_path(pathString):
     if "\\" in pathString: return os.path.join(*pathString.split("\\"))
     return pathString
+
+def get_filetype_with_magica(filepath):
+    m = Magika()
+    res = m.identify_path(Path(filepath))
+    return res.output.mime_type
