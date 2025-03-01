@@ -34,7 +34,7 @@ jobs:
       run: |
         ./mappingservice-plugin/gradlew jar -p ./mappingservice-plugin/
         JAR_VERSION=$(./mappingservice-plugin/gradlew printVersion -q -p ./mappingservice-plugin/)
-        mv ./mappingservice-plugin/build/libs/SEMImagePlugin-$JAR_VERSION.jar ./mappingservice-plugin/build/libs/SEMplugin.jar
+        mv ./mappingservice-plugin/build/libs/SEMImagePlugin-$JAR_VERSION-plain.jar ./mappingservice-plugin/build/libs/SEMplugin.jar
       env:
         CI_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
