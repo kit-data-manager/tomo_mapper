@@ -31,23 +31,36 @@ jobs:
         java-version: ${{ matrix.versions.jdk }}
 
     - name: Build with Gradle
-      run: ./mappingservice-plugin/gradlew jar -p ./mappingservice-plugin/
+      run: |
+        ./mappingservice-plugin/gradlew jar -p ./mappingservice-plugin/
+        JAR_VERSION=$(./mappingservice-plugin/gradlew printVersion -q -p ./mappingservice-plugin/)
+        mv ./mappingservice-plugin/build/libs/SEMImagePlugin-JAR_VERSION.jar ./mappingservice-plugin/build/libs/SEMplugin.jar
       env:
         CI_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
-    - name: Determine JAR Name
-      id: jar_name
-      run: |
-        JAR_NAME=$(./mappingservice-plugin/gradlew printVersion -q -p ./mappingservice-plugin/)
-        echo "JAR_NAME=$JAR_NAME" >> $GITHUB_ENV
+    - name: Upload job artifact
+      uses: actions/upload-artifact@v4
+      with:
+          name: jar-jdk{{ matrix.versions.jdk }}
+          path: ./mappingservice-plugin/build/libs/SEMplugin.jar
 
   test:
     runs-on: ${{ matrix.operating-system }}
+    environment:
+      name: ${{ github.ref_name }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        # Use both LTS releases and latest one for tests
+        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 23, mapping-service: latest } ]
     needs: build
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+    - name: Download built jar
+      uses: actions/download-artifact@v4
+      with:
+          name: jar-jdk{{ matrix.versions.jdk }}
+          path: ./plugins
 
     - name: Download Hurl
       run: |
@@ -56,7 +69,7 @@ jobs:
 
     - name: Run Docker Container
       run: |
-         docker run -d -p 8095:8095 -v ./mappingservice-plugin/build/lib/SEMImagePlugin-${{ env.JAR_NAME }}.jar:/spring/mapping-service/plugins/SEMplugin.jar --name mapping4docker ghcr.io/kit-data-manager/mapping-service:${{ matrix.versions.mapping-service }} -e PIP_BREAK_SYSTEM_PACKAGES=1
+         docker run -d -p 8095:8095 -v ./plugins/SEMplugin.jar:/spring/mapping-service/plugins/SEMplugin.jar --name mapping4docker ghcr.io/kit-data-manager/mapping-service:${{ matrix.versions.mapping-service }} -e PIP_BREAK_SYSTEM_PACKAGES=1
 
     - name: Run Tests with Hurl
       run: |
