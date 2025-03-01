@@ -65,7 +65,7 @@ jobs:
 
     - name: Run Docker Container # and wait for mapping service to be healthy before proceeding to tests
       run: |
-          docker run -d -p 8095:8095 -v ./plugins/SEMplugin.jar:/spring/mapping-service/plugins/SEMplugin.jar --name mapping4docker ghcr.io/kit-data-manager/mapping-service:${{ matrix.versions.mapping-service }} -e PIP_BREAK_SYSTEM_PACKAGES=1
+          docker run -d -p 8095:8095 -e PIP_BREAK_SYSTEM_PACKAGES=1 -v ./plugins/SEMplugin.jar:/spring/mapping-service/plugins/SEMplugin.jar --name mapping4docker ghcr.io/kit-data-manager/mapping-service:${{ matrix.versions.mapping-service }}
           echo "Check PIP_BREAK_SYSTEM_PACKAGES variable in container"
           docker exec mapping4docker printenv | grep PIP_BREAK_SYSTEM_PACKAGES
           echo "Wait for mapping service to be healthy before proceeding to tests"
