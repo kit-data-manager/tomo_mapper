@@ -66,12 +66,20 @@ jobs:
 
     - name: Run Docker Container # and wait for mapping service to be healthy before proceeding to tests
       run: |
-         docker run -d -p 8095:8095 -v ./plugins/SEMplugin.jar:/spring/mapping-service/plugins/SEMplugin.jar --name mapping4docker ghcr.io/kit-data-manager/mapping-service:${{ matrix.versions.mapping-service }} -e PIP_BREAK_SYSTEM_PACKAGES=1
-         # Wait for mapping service to be healthy before proceeding to tests
-         until curl -s http://localhost:8095/actuator/health | grep "\"status\":\"UP\""; do
-           echo "Waiting for the service to be ready..."
-           sleep 5
-         done
+          docker run -d -p 8095:8095 -v ./plugins/SEMplugin.jar:/spring/mapping-service/plugins/SEMplugin.jar --name mapping4docker ghcr.io/kit-data-manager/mapping-service:${{ matrix.versions.mapping-service }} -e PIP_BREAK_SYSTEM_PACKAGES=1
+          echo "Wait for mapping service to be healthy before proceeding to tests"
+          while true; do
+            if ! docker ps | grep -q mapping4docker; then
+              echo "Docker container stopped unexpectedly. Aborting."
+              exit 1
+            fi
+            if curl -s http://localhost:8095/actuator/health | grep -q "\"status\":\"UP\""; then
+              echo "Service is up and running."
+              break
+            fi
+            echo "Waiting for the service to be ready..."
+            sleep 5
+          done
     - name: Run Tests with Hurl
       run: |
          curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/6.0.0/hurl_6.0.0_amd64.deb
