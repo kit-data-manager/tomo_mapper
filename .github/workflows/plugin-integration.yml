@@ -56,6 +56,8 @@ jobs:
     needs: build
     if: always()
     steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
     - name: Download built jar
       uses: actions/download-artifact@v4
       with:
