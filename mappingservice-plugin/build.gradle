@@ -35,17 +35,12 @@ dependencies {
     implementation files("src/main/lib/mapping-service-plain.jar")
 }
 
-//Reading in version info from general version.txt in project root
-def rootDir = new File(projectDir, '../')
-def versionFile = new File(rootDir, 'version.txt')
-def version = versionFile.text.trim()
-
 if (System.getenv('CI_BRANCH_NAME')) {
-    version = System.getenv('CI_BRANCH_NAME')
-}
-
-allprojects {
-    project.version = version
+    project.version = System.getenv('CI_BRANCH_NAME')
+} else {
+    def rDir = new File(projectDir, '../')
+    def versionFile = new File(rDir, 'version.txt')
+    project.version = versionFile.text.trim()
 }
 
 tasks.register('printVersion') {
