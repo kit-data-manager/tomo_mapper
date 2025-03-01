@@ -51,7 +51,7 @@ tasks.register('printVersion') {
 def versionTask = tasks.register("generateVersionProps", WriteProperties) { t ->
     def generatedResourcesDir = project.layout.buildDirectory.dir(["resources", "main"].join(File.separator))
     def outputFile = generatedResourcesDir.map {it -> it.file("sempluginversion.properties") }
-
+    project.logger.info("version: " + project.version)
     t.outputFile(outputFile)
     t.property("version", project.version)
 }
