@@ -31,7 +31,7 @@ jobs:
         java-version: ${{ matrix.versions.jdk }}
 
     - name: Build with Gradle
-      run: ./mappingservice-plugin/gradlew build -p ./mappingservice-plugin/
+      run: ./mappingservice-plugin/gradlew jar -p ./mappingservice-plugin/
       env:
         CI_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
