@@ -69,3 +69,7 @@ jar {
     dependsOn(generateVersionProps)
     archiveFileName
 }
+
+bootJar {
+    enabled = false
+}
