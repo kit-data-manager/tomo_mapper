@@ -33,6 +33,7 @@ jobs:
     - name: Build with Gradle
       run: |
         JAR_VERSION=$(./mappingservice-plugin/gradlew printVersion -q -p ./mappingservice-plugin/)
+        JAR_VERSION=${JAR_VERSION##*$'\n'}
         ./mappingservice-plugin/gradlew clean jar -p ./mappingservice-plugin/
         ls -ll ./mappingservice-plugin/build/libs/
         echo "JAR_VERSION=${JAR_VERSION}"
