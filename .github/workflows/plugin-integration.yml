@@ -38,7 +38,7 @@ jobs:
     - name: Determine JAR Name
       id: jar_name
       run: |
-        JAR_NAME=$(./mappingservice-plugin/gradlew printVersion -q)
+        JAR_NAME=$(./mappingservice-plugin/gradlew printVersion -q -p ./mappingservice-plugin/)
         echo "JAR_NAME=$JAR_NAME" >> $GITHUB_ENV
 
   test:
