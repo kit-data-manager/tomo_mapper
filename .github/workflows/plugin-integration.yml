@@ -33,7 +33,7 @@ jobs:
     - name: Build with Gradle
       run: ./mappingservice-plugin/gradlew build
       env:
-        CI_BRANCH_NAME: ${{ step.extract_branch.outputs.branch }}
+        CI_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
     - name: Determine JAR Name
       id: jar_name
