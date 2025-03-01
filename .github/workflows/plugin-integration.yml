@@ -52,6 +52,7 @@ jobs:
     environment:
       name: ${{ github.ref_name }}
     strategy:
+      fail-fast: false #We want to test independent of each other - success on a stable version is more important than on the latest version
       matrix:
         operating-system: [ubuntu-latest]
         # Use both LTS releases and latest one for tests
@@ -96,4 +97,4 @@ jobs:
       env:
         CI_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
     - name: Stop Docker Container
-      run: docker stop my-running-app
+      run: docker stop mapping4docker
