@@ -60,6 +60,10 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
     - name: Download built jar
       uses: actions/download-artifact@v4
       with:
@@ -87,7 +91,9 @@ jobs:
       run: |
          curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/6.0.0/hurl_6.0.0_amd64.deb
          sudo dpkg -i hurl_6.0.0_amd64.deb
+         echo '{"mappingId":"0000","mappingType":"GenericSEMtoJSON_'${CI_BRANCH_NAME}'","title":"CImapping", "description":""}' > ./mappingservice-plugin/integrationtests/ma.json
          hurl --variable host=http://localhost:8095 --test ./mappingservice-plugin/integrationtests/basic.hurl --verbose --file-root .
-
+      env:
+        CI_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
     - name: Stop Docker Container
       run: docker stop my-running-app
