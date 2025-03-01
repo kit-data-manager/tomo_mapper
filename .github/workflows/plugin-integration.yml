@@ -1,0 +1,68 @@
+name: Build and use plugin
+
+on:
+  push:
+    branches:
+      - '*'
+jobs:
+  build:
+    runs-on: ${{ matrix.operating-system }}
+    environment:
+      name: ${{ github.ref_name }}
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest]
+        # Use both LTS releases and latest one for tests
+        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 23, mapping-service: latest } ]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Extract branch name
+      shell: bash
+      run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
+      id: extract_branch
+
+    - name: Set up JDK
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: ${{ matrix.versions.jdk }}
+
+    - name: Build with Gradle
+      run: ./mappingservice-plugin/gradlew build
+      env:
+        CI_BRANCH_NAME: ${{ step.extract_branch.outputs.branch }}
+
+    - name: Determine JAR Name
+      id: jar_name
+      run: |
+        JAR_NAME=$(./mappingservice-plugin/gradlew printVersion -q)
+        echo "JAR_NAME=$JAR_NAME" >> $GITHUB_ENV
+
+  test:
+    runs-on: ${{ matrix.operating-system }}
+    needs: build
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Download Hurl
+      run: |
+        curl -LO https://github.com/Orange-OpenSource/hurl/releases/download/v1.0.0/hurl-1.0.0-linux-x86_64.tar.gz
+        tar -xzf hurl-1.0.0-linux-x86_64.tar.gz
+
+    - name: Run Docker Container
+      run: |
+         docker run -d -p 8095:8095 -v ./mappingservice-plugin/build/lib/SEMImagePlugin-${{ env.JAR_NAME }}.jar:/spring/mapping-service/plugins/SEMplugin.jar --name mapping4docker ghcr.io/kit-data-manager/mapping-service:${{ matrix.versions.mapping-service }} -e PIP_BREAK_SYSTEM_PACKAGES=1
+
+    - name: Run Tests with Hurl
+      run: |
+         curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/4.0.0/hurl_6.0.0_amd64.deb
+         sudo dpkg -i hurl_6.0.0_amd64.deb
+         --variable host=http://localhost:8095 --test ./mappingservice-plugin/integrationtests/basic.hurl --verbose --file-root .
+
+    - name: Stop Docker Container
+      run: docker stop my-running-app

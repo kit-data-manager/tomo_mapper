@@ -5,7 +5,7 @@ requests
 validators >= 0.34
 jsonpath-ng >= 1.7
 deepmerge >= 2.0
+magika >= 0.5.1
 pytest >= 7.4
 pytest-cov >= 6.0
 pytest-mock >= 3.14.0
-magika >= 0.5.1

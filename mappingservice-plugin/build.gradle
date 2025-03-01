@@ -40,6 +40,10 @@ def rootDir = new File(projectDir, '../')
 def versionFile = new File(rootDir, 'version.txt')
 def version = versionFile.text.trim()
 
+if (System.getenv('CI_BRANCH_NAME')) {
+    version = System.getenv('CI_BRANCH_NAME')
+}
+
 allprojects {
     project.version = version
 }
