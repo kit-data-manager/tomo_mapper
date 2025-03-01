@@ -73,7 +73,7 @@ jobs:
 
     - name: Run Tests with Hurl
       run: |
-         curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/4.0.0/hurl_6.0.0_amd64.deb
+         curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/6.0.0/hurl_6.0.0_amd64.deb
          sudo dpkg -i hurl_6.0.0_amd64.deb
          --variable host=http://localhost:8095 --test ./mappingservice-plugin/integrationtests/basic.hurl --verbose --file-root .
 
