@@ -78,6 +78,7 @@ jobs:
               break
             fi
             echo "Waiting for the service to be ready..."
+            docker logs --tail 20 mapping4docker
             sleep 5
           done
     - name: Run Tests with Hurl
