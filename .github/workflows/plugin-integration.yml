@@ -73,7 +73,7 @@ jobs:
               echo "Docker container stopped unexpectedly. Aborting."
               exit 1
             fi
-            if curl -s http://localhost:8095/actuator/health | grep -q "\"status\":\"UP\""; then
+            if curl -s http://localhost:8095/actuator/health | grep -q UP; then
               echo "Service is up and running."
               break
             fi
