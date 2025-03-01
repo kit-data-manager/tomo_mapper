@@ -33,6 +33,7 @@ jobs:
     - name: Build with Gradle
       run: |
         JAR_VERSION=$(./mappingservice-plugin/gradlew printVersion -q -p ./mappingservice-plugin/)
+        echo $JAR_VERSION
         ./mappingservice-plugin/gradlew clean jar -p ./mappingservice-plugin/
         mv ./mappingservice-plugin/build/libs/SEMImagePlugin-$JAR_VERSION-plain.jar ./mappingservice-plugin/build/libs/SEMplugin.jar
       env:
