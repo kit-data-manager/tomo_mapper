@@ -41,7 +41,7 @@ jobs:
     - name: Upload job artifact
       uses: actions/upload-artifact@v4
       with:
-          name: jar-jdk{{ matrix.versions.jdk }}
+          name: jar-jdk${{ matrix.versions.jdk }}
           path: ./mappingservice-plugin/build/libs/SEMplugin.jar
 
   test:
@@ -54,12 +54,12 @@ jobs:
         # Use both LTS releases and latest one for tests
         versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 23, mapping-service: latest } ]
     needs: build
-
+    if: always()
     steps:
     - name: Download built jar
       uses: actions/download-artifact@v4
       with:
-          name: jar-jdk{{ matrix.versions.jdk }}
+          name: jar-jdk${{ matrix.versions.jdk }}
           path: ./plugins
 
     - name: Download Hurl
