@@ -93,7 +93,7 @@ jobs:
          curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/6.0.0/hurl_6.0.0_amd64.deb
          sudo dpkg -i hurl_6.0.0_amd64.deb
          sudo apt install -y dos2unix
-         unix2dos ./mappingservice-plugin/integrationtests/basic.hurl ./mappingservice-plugin/integrationtests/basic_crlf.hurl
+         unix2dos -n ./mappingservice-plugin/integrationtests/basic.hurl ./mappingservice-plugin/integrationtests/basic_crlf.hurl
          hurl --variable host=http://localhost:8095 --test ./mappingservice-plugin/integrationtests/basic_crlf.hurl --verbose --file-root .
       env:
         CI_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
