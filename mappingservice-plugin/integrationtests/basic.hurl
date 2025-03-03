@@ -1,9 +1,5 @@
 #Mapping service is reachable before starting with plugin
 GET {{host}}
-[Options] #set all variables you need for further use in this hurl script
-variable: id1=0
-variable: id2=1
-variable: id3=2
 HTTP 200
 
 GET {{host}}/api/v1/mappingAdministration/types
@@ -15,7 +11,9 @@ mappingType: jsonpath "$[0].id"
 
 #Register with a very small portion of real mapping file info as dummy mapping file
 POST {{host}}/api/v1/mappingAdministration/
-Content-Type: multipart/form-data; boundary="boundary"
+Content-Type: multipart/form-data; boundary=boundary
+[Options] #set all variables you need for further use in this hurl script
+variable: id1=0
 ```
 --boundary
 Content-Disposition: form-data; name="record"; filename="blob"
