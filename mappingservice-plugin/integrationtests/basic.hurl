@@ -29,6 +29,7 @@ Content-Type: application/json
 {"PrivateFei.TimeOfCreation":"entry.endTime"}
 --boundary--
 ```
+HTTP 201
 
 #Execute Mapping with Thermofisher sample
 POST {{host}}/api/v1/mappingExecution/{{id1}}
