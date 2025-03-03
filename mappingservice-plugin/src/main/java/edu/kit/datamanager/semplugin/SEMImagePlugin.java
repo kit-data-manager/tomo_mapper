@@ -4,8 +4,6 @@ import edu.kit.datamanager.mappingservice.plugins.*;
 import edu.kit.datamanager.mappingservice.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.MimeType;
 import org.springframework.util.MimeTypeUtils;
 
@@ -13,7 +11,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.nio.file.Path;
-import java.util.Enumeration;
 import java.util.Properties;
 
 public class SEMImagePlugin implements IMappingPlugin{
@@ -22,9 +19,7 @@ public class SEMImagePlugin implements IMappingPlugin{
 
     private final Logger LOGGER = LoggerFactory.getLogger(SEMImagePlugin.class);
     private final String REPOSITORY = "https://github.com/kit-data-manager/tomo_mapper";
-    //private final String TAG = String.join("v", version);
     private String TAG;
-    //private final String TAG = "wip_semmapping";
     private Path dir;
 
 
@@ -41,11 +36,7 @@ public class SEMImagePlugin implements IMappingPlugin{
                     Properties properties = new Properties();
                     properties.load(input);
                     version = properties.getProperty("version");
-                    if (version.startsWith("v")) {
-                        TAG = version;
-                    } else {
-                        TAG = "v" + version;
-                    }
+                    TAG = version;
                 }
             } else {
                 System.err.println("Properties file not found!");
@@ -96,7 +87,7 @@ public class SEMImagePlugin implements IMappingPlugin{
             dir = FileUtil.cloneGitRepository(REPOSITORY, TAG);
             // Install Python dependencies
 
-            ProcessBuilder pb = new ProcessBuilder("python3", "-m", "pip", "install", "-r", dir + "/requirements.txt");
+            ProcessBuilder pb = new ProcessBuilder("python3", "-m", "pip", "install", "-r", dir + "/requirements.dist.txt");
             pb.inheritIO();
             Process p = pb.start();
 

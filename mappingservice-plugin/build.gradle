@@ -35,13 +35,12 @@ dependencies {
     implementation files("src/main/lib/mapping-service-plain.jar")
 }
 
-//Reading in version info from general version.txt in project root
-def rootDir = new File(projectDir, '../')
-def versionFile = new File(rootDir, 'version.txt')
-def version = versionFile.text.trim()
-
-allprojects {
-    project.version = version
+if (System.getenv('CI_BRANCH_NAME')) {
+    project.version = System.getenv('CI_BRANCH_NAME')
+} else {
+    def rDir = new File(projectDir, '../')
+    def versionFile = new File(rDir, 'version.txt')
+    project.version = versionFile.text.trim()
 }
 
 tasks.register('printVersion') {
@@ -52,16 +51,15 @@ tasks.register('printVersion') {
 def versionTask = tasks.register("generateVersionProps", WriteProperties) { t ->
     def generatedResourcesDir = project.layout.buildDirectory.dir(["resources", "main"].join(File.separator))
     def outputFile = generatedResourcesDir.map {it -> it.file("sempluginversion.properties") }
-
     t.outputFile(outputFile)
     t.property("version", project.version)
-}
-
-processResources {
-    from versionTask
 }
 
 jar {
     dependsOn(generateVersionProps)
     archiveFileName
+}
+
+bootJar {
+    enabled = false
 }
