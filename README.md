@@ -96,3 +96,8 @@ The following list provides the minimal range of formats, that have been tested 
 ### Planned, currently not supported
 - Tescan png hdr files
 - JEOL bmp hdr files
+
+## Acknowlegdements
+
+This work is supported by the consortium NFDI-MatWerk, funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) under the National Research Data Infrastructure – NFDI 38/1 – project number 460247524.
+
