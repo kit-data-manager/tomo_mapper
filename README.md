@@ -49,7 +49,7 @@ Use the `sem` subcommand for SEM mapping. The mapper expects a map file, an imag
 python -m mapping_cli sem -m <map_file> -i <zip_file> -o <json_output_path>
 ```
 
-For further information about the necessary map file, see [Mapping README](./src/resources/maps/mapping/README.md)
+For further information about the necessary map file, see [Mapping README](./src/resources/maps/mapping)
 
 **2. Tomography Mapping**
 
@@ -58,9 +58,9 @@ Use the `tomo` subcommand for tomography mapping. The mapper expects a map file,
 python -m mapping_cli tomo -m <map_file> -i <zip_file> -o <json_output_path>
 ```
 
-For further information about the necessary map file, see [Parsing README](./src/resources/maps/parsing/README.md)
+For further information about the necessary map file, see [Parsing README](./src/resources/maps/parsing)
 
-For further information about mappings used internally, see [Mapping README](./src/resources/maps/mapping/README.md)
+For further information about mappings used internally, see [Mapping README](./src/resources/maps/mapping)
 
 ### 2. Command Line Interface Executable
 
