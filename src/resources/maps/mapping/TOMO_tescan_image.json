@@ -7,7 +7,6 @@
     "SEM.PredictedBeamCurrent": "acquisition.dataset.instrument.eBeam.beamCurrent.value",
     "SEM.ScanRotation": "acquisition.dataset.instrument.eBeam.scanRotation.value",
     "SEM.ScanMode": "acquisition.dataset.instrument.eBeam.imageMode",
-    "MAIN.MagnificationReference": "acquisition.dataset.instrument.eBeam.magnificationCorrection",
     "SEM.TiltCorrection": "acquisition.dataset.instrument.eBeam.tiltCorrectionAngle.value",
     "SEM.WD": "acquisition.dataset.images.stage.workingDistance.value",
     "SEM.StageX": "acquisition.dataset.images.stage.stageX.value",

@@ -8,4 +8,4 @@ deepmerge >= 2.0
 pytest >= 7.4
 pytest-cov >= 6.0
 pytest-mock >= 3.14.0
-magika >= 0.5.1
+magika >= 0.6.0rc

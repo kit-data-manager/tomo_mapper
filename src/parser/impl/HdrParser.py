@@ -41,7 +41,7 @@ class HdrParser(ImageParser):
             exit(1)
         mapping_dict = mapping if mapping else self.internal_mapping
         image_md = map_a_dict(input_md, mapping_dict)
-        print("image_md: ", image_md)
+        #print("image_md: ", image_md)
 
         Preprocessor.normalize_all_units(image_md)
         Preprocessor.normalize_all_datetimes(image_md)
@@ -52,7 +52,7 @@ class HdrParser(ImageParser):
             print("parser mode is not tomo, it is : ", self.mode)
             image_from_md = ImageMD(image_metadata=image_md, filePath="")
 
-        print("image_from_md: ", image_from_md)
+        #print("image_from_md: ", image_from_md)
         return image_from_md, image_md
 
     def _create_tomo_image(self, image_md, fp) -> ImageMD:
@@ -77,7 +77,7 @@ class HdrParser(ImageParser):
         :param tagID: tag to extract from, may be None
         :return: data from extracted tag(s) as dict
         """
-        print(f"I am trying to read a {file_path}")
+        #print(f"I am trying to read a {file_path}")
 
         config = configparser.ConfigParser(allow_no_value=True, delimiters=("="))
         config.optionxform = str

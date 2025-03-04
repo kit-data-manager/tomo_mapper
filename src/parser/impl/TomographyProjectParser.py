@@ -7,6 +7,10 @@ from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import setup_tescan
 from src.util import input_to_dict
+from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
+from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
+from src.model.RunMD import RunMD
+from src.util import normalize_path
 
 
 class TomographyProjectParser(SetupMD_Parser):
@@ -17,6 +21,27 @@ class TomographyProjectParser(SetupMD_Parser):
 
     def __init__(self):
         self.internal_mapping = input_to_dict(setup_tescan.read_text())
+
+    def parse_run(self, payload) -> tuple[RunMD, str]:
+        parsed = self._read_input(payload)
+
+        resultMD = parsed["TomographyProject"]["AcquisitionsHistory"]
+        resultMD = resultMD["Acquisition"]["Datasets"]
+        resultMD = resultMD["Dataset"]["Detectors"]
+        
+        runMD = RunMD()
+
+        for imgmd in resultMD["Data"]:
+            detector = imgmd["@detector"]
+            #print("===detector---> ", detector)
+            if detector in DatasetType:
+                print("=== ", f"{detector}/{imgmd['@path'].split('/')[-1].replace('.png', '-png.hdr')}")
+                fp = normalize_path(f"{detector}/{imgmd['@path'].split('/')[-1].replace('.png', '-png.hdr')}")
+                img = TOMO_Image(localPath=fp)
+                runMD.add_image(img, DatasetType(detector))
+                #print("===fp---> ", fp)
+
+        return runMD, parsed
 
     def parse_setup(self, payload) -> tuple[SetupMD, dict]:
         parsed = self._read_input(payload)

@@ -34,7 +34,9 @@ class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
 
         for imgmd in resultMD["Image"]:
             image_fields = list(imgmd.keys())
+            print("===image_fields===>",image_fields)
             matchingFilenames = [elem for elem in image_fields if re.match(pattern_to_DatasetType, elem)]
+            print("==matchingFilenames==>",matchingFilenames)
             if len(matchingFilenames) != 0:
                 for field in matchingFilenames:
 

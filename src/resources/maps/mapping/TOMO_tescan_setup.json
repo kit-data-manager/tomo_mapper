@@ -1,7 +1,7 @@
 {
     "TomographyProject.Project.@sampleId": "genericMetadata.applicationID.identifierValue",
     "TomographyProject.Project.@description": "genericMetadata.projectDescription",
-    "TomographyProject.Slicing.@thickness": "genericMetadata.zCutSpacing.value",
+    "TomographyProject.Project.Slicing.@thickness": "genericMetadata.zCutSpacing.value",
     "TomographyProject.AcquisitionsHistory.Acquisition.@totalSlices": "genericMetadata.numberOfCuts",
     "TomographyProject.Acquisition.Positions.Position.Datasets.Dataset.ImageSettings.@beam_current": "dataset[*].instrument.eBeam.beamCurrent.value",
     "TomographyProject.Acquisition.Positions.Position.Datasets.Dataset.ImageSettings.@scanMode": "dataset[*].instrument.eBeam.imageMode",
