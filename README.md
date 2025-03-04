@@ -76,7 +76,7 @@ Plugin and Python code base share the same semantic versioning, so the plugin ve
 ## Testing
 Run tests using `pytest`:
 ```
-pytest tests
+pytest
 ```
 
 ## Supported instruments and formats
@@ -89,7 +89,7 @@ The following list provides the minimal range of formats, that have been tested 
 - tiff format
   -  Carl Zeiss SEM (Zeiss instruments, tag 34118)
   -  FibicsXML (Zeiss instruments, tag 51023)
-  -  FEI Helios (FEI / Thermofisher, tag 34682)
+  -  FEI Helios (FEI / Thermofisher, tag 34682) 
 
 ### Tomography metadata
 
