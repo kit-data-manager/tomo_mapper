@@ -25,10 +25,11 @@ jobs:
         run: |
           pip install -r requirements.dist.txt
           pip install pyinstaller
-      # Build python script into a single execute
+       #Build python script into a single execute
       - name: Package Application with PyInstaller
         run: |
           pyinstaller pyinstaller.spec
+      #get version info for artifact
       - name: read project metadata toml
         uses: SebRollen/toml-action@v1.2.0
         id: read_projectmd
@@ -40,4 +41,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: sem_tomo_mapper_${{ steps.read_projectmd.outputs.value }}_${{ matrix.operating-system }}
-          path:  ${{ matrix.operating-system == 'windows-latest' && 'dist/sem_tomo_mapper.exe' || 'dist/sem_tomo_mapper' }}
+          path:  dist/sem_tomo_mapper*
