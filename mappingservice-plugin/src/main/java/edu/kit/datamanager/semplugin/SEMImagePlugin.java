@@ -21,6 +21,8 @@ public class SEMImagePlugin implements IMappingPlugin{
     private final String REPOSITORY = "https://github.com/kit-data-manager/tomo_mapper";
     private String TAG;
     private Path dir;
+    private String pluginVenv = "venv/PluginVenv";
+    private String venvInterpreter;
 
 
     public SEMImagePlugin() {
@@ -43,6 +45,12 @@ public class SEMImagePlugin implements IMappingPlugin{
                 version = "unavailable";
                 TAG = "unavailable";
             }
+            if (System.getProperty("os.name").startsWith("Windows")) {
+                venvInterpreter =  pluginVenv + "/Scripts/python.exe";
+            } else {
+                venvInterpreter = pluginVenv + "/bin/python3";
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -87,13 +95,13 @@ public class SEMImagePlugin implements IMappingPlugin{
             dir = FileUtil.cloneGitRepository(REPOSITORY, TAG);
             // Install Python dependencies
 
-            ProcessBuilder pb = new ProcessBuilder("python3", "-m", "pip", "install", "-r", dir + "/requirements.dist.txt");
-            pb.inheritIO();
-            Process p = pb.start();
-
-            int exitCode = p.waitFor();
-            if (exitCode != 0) {
-                LOGGER.error("Failed to install Python packages");
+            MappingPluginState venvState = PythonRunnerUtil.runPythonScript("-m",  "venv", "--system-site-packages", dir + "/" + pluginVenv);
+            if (venvState == MappingPluginState.SUCCESS) {
+                LOGGER.info("Venv for plugin installed succesfully.");
+                LOGGER.info("Installing packages");
+                ShellRunnerUtil.run(dir + "/" + venvInterpreter, "-m", "pip", "install", "-r", dir + "/" + "requirements.dist.txt");
+            } else {
+                LOGGER.error("venv installation was not successful");
             }
 
         } catch (Exception e) {
@@ -105,9 +113,7 @@ public class SEMImagePlugin implements IMappingPlugin{
     public MappingPluginState mapFile(Path mappingFile, Path inputFile, Path outputFile) throws MappingPluginException {
         long startTime = System.currentTimeMillis();
         LOGGER.trace("Run SEM-Mapping-Tool on '{}' with mapping '{}' -> '{}'", mappingFile, inputFile, outputFile);
-        //MappingPluginState result = PythonRunnerUtil.runPythonScript(dir + "/metaMapper.py", mappingFile.toString(), inputFile.toString(), outputFile.toString());
-        String[] args = {"sem", "-m", mappingFile.toString(), "-i", inputFile.toString(), "-o", outputFile.toString()};
-        MappingPluginState result = PythonRunnerUtil.runPythonScript(dir + "/plugin_wrapper.py", args);
+        MappingPluginState result = ShellRunnerUtil.run(dir + "/" + venvInterpreter, dir + "/plugin_wrapper.py", "sem", "-m", mappingFile.toString(), "-i", inputFile.toString(), "-o", outputFile.toString());
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;
         LOGGER.info("Execution time of mapFile: {} milliseconds", totalTime);
