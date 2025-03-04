@@ -7,7 +7,11 @@
 ## Overview
 SEM-FIB-Tomography Mapper is a tool designed for mapping SEM (Scanning Electron Microscope) images and SEM-FIB Tomography metadata to a uniform, schema-compliant json format. This project includes functionality for both SEM and tomography mapping, sharing a common mapping concept.
 
-[TDB short schema description / explanation]
+The target format of the mapper follows pre-defined schemas developed for metadata description of SEM microscopy and SEM-FIB tomography, respectively. Technical information is contained in this repository,
+for further conceptional description see
+
+- Joseph, R., Chauhan, A., Eschke, C., Ihsan, A. Z., Jalali, M., Jäntsch, U., Jung, N., Shyam Kumar, C. N., Kübel, C., Lucas, C., Mail, M., Mazilkin, A., Neidiger, C., Panighel, M., Sandfeld, S., Stotzka, R., Thelen, R., & Aversa, R. (2021). Metadata schema to support FAIR data in scanning electron microscopy. CEUR-WS.Org. https://doi.org/10.5445/IR/1000141604
+- Pauly, C., Joseph, R. E., Vitali, E. G. G., Aversa, R., Stotzka, R., Mücklich, F., Engstler, M., Hermann, H.-G., & Fell, J. (2024). Metadata schema and mapping service for FIB/SEM serial-sectioning and computed tomography. https://doi.org/10.5445/IR/1000175919
 
 ## Usage
 
@@ -38,23 +42,25 @@ To run the mapper, use the `mapping_cli` module:
 python -m mapping_cli
 ```
 
-**1. Tomography Mapping**
-
-Use the `tomo` subcommand for tomography mapping. The mapper expects a map file, a zip file, and a JSON output path:
-```
-python -m mapping_cli tomo -m <map_file> -i <zip_file> -o <json_output_path>
-```
-
-Fur further information about the necessary map file, see [Parsing README](./src/resources/maps/parsing/README.md)
-
-**2. SEM Mapping**
+**1. SEM Mapping**
 
 Use the `sem` subcommand for SEM mapping. The mapper expects a map file, an image or image metadata file, and a JSON output path:
 ```
 python -m mapping_cli sem -m <map_file> -i <zip_file> -o <json_output_path>
 ```
 
-For further information about the necessary map file, see [TBD]
+For further information about the necessary map file, see [Mapping README](./src/resources/maps/mapping/README.md)
+
+**2. Tomography Mapping**
+
+Use the `tomo` subcommand for tomography mapping. The mapper expects a map file, a zip file, and a JSON output path:
+```
+python -m mapping_cli tomo -m <map_file> -i <zip_file> -o <json_output_path>
+```
+
+For further information about the necessary map file, see [Parsing README](./src/resources/maps/parsing/README.md)
+
+For further information about mappings used internally, see [Mapping README](./src/resources/maps/mapping/README.md)
 
 ### 2. Command Line Interface Executable
 
