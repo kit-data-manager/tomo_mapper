@@ -107,3 +107,5 @@ The following list provides the minimal range of formats, that have been tested 
 
 This work is supported by the consortium NFDI-MatWerk, funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) under the National Research Data Infrastructure – NFDI 38/1 – project number 460247524.
 
+All sample and test data included in this repository, if not otherwise specified, was contributed by participant projects of NFDI-Matwerk. Special thanks to participant project pp13.
+
