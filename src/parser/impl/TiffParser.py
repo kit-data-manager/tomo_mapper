@@ -1,12 +1,16 @@
 import logging
 from typing import Optional
+from importlib import resources
 
 from PIL import Image
 
+from src.IO.MappingAbortionError import MappingAbortionError
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.parser.ImageParser import ImageParser, ParserMode
-from src.parser.mapping_util import map_a_dict, get_internal_mapping
+from src.parser.mapping_util import map_a_dict
+from src.resources.maps.mapping import tiffparser_tomo_51023, tiffparser_tomo_34682, tiffparser_sem_34682, \
+    tiffparser_sem_34118
 from src.util import input_to_dict
 
 
@@ -14,6 +18,17 @@ from src.util import input_to_dict
 
 class TiffParser(ImageParser):
 
+    available_tomo_mappings = {
+        "34682": tiffparser_tomo_34682,
+        "51023": tiffparser_tomo_51023
+    }
+
+    available_sem_mappings = {
+        "34682": tiffparser_sem_34682,
+        "34118": tiffparser_sem_34118
+    }
+
+    expected_input = "image/tiff"
     tagID = None
     internal_mapping = None
 
@@ -21,14 +36,21 @@ class TiffParser(ImageParser):
         if tagID:
             self.tagID = tagID
             if mode == ParserMode.TOMO:
-                self.internal_mapping = get_internal_mapping((tagID, "TOMO_Schema"), "image")
+                if self.tagID not in self.available_tomo_mappings:
+                    logging.error("Internal mapping for tag '{}' is not available".format(self.tagID))
+                    raise MappingAbortionError("Setting up image parser failed.")
+                m = self.available_tomo_mappings[self.tagID]
             if mode == ParserMode.SEM:
-                self.internal_mapping = get_internal_mapping((tagID, "SEM_Schema"), "image")
+                try:
+                    m = self.available_sem_mappings[self.tagID]
+                except KeyError:
+                    pass
+            self.internal_mapping = input_to_dict(m.read_text())
         super().__init__(mode)
 
     @staticmethod
-    def expected_input_format():
-        return "tiff"
+    def expected_input_format() -> str:
+        return TiffParser.expected_input
 
     def parse(self, file_path, mapping) -> tuple[ImageMD, str]:
         input_md = self._read_input_file(file_path, self.tagID)
@@ -38,7 +60,7 @@ class TiffParser(ImageParser):
 
         if not mapping and not self.internal_mapping:
             logging.error("No mapping provided for image parsing. Aborting")
-            exit(1)
+            raise MappingAbortionError("Image parsing failed.")
         mapping_dict = mapping if mapping else self.internal_mapping
         image_md = map_a_dict(input_md, mapping_dict)
 
@@ -93,19 +115,12 @@ class TiffParser(ImageParser):
         output_dict = {}
         for md in md_list:
             try:
+                additional_input = input_to_dict(md)
+                if not additional_input:
+                    logging.debug("Unable to extract metadata as dictionary for {}".format(md))
                 output_dict.update(input_to_dict(md))
             except Exception as e:
-                logging.debug("Unable to extract metadata for {}".format(md))
+                logging.debug("Unable to extract metadata as dictionary for {}".format(md))
                 pass
 
         return output_dict
-        '''
-        if metadata:
-            dict_from_input = input_to_dict(metadata)
-            if dict_from_input:
-                logging.debug("Input metadata parsed from {}".format(file_path))
-                return dict_from_input
-            logging.error("Metadata extracted but unable convert to dictionary for further processing")
-        else:
-            logging.error("No matching tag found in exif data for {} on {}".format(tagID, file_path))
-        '''
