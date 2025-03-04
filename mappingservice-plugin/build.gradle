@@ -1,3 +1,5 @@
+import org.tomlj.Toml
+
 plugins {
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'org.springframework.boot' version '2.6.6'
@@ -33,14 +35,16 @@ dependencies {
     implementation 'javax.validation:validation-api:2.0.1.Final'
     implementation 'edu.kit.datamanager:service-base:1.0.4'
     implementation files("src/main/lib/mapping-service-plain.jar")
+    implementation 'org.tomlj:tomlj:1.1.1'
 }
 
 if (System.getenv('CI_BRANCH_NAME')) {
     project.version = System.getenv('CI_BRANCH_NAME')
 } else {
     def rDir = new File(projectDir, '../')
-    def versionFile = new File(rDir, 'version.txt')
-    project.version = versionFile.text.trim()
+    def somesyFile = new File(rDir, 'somesy.toml')
+    def toml = Toml.parse(somesyFile.toPath())
+    project.version = toml.get("project.version")
 }
 
 tasks.register('printVersion') {
