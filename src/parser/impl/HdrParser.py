@@ -49,7 +49,6 @@ class HdrParser(ImageParser):
         if self.mode == ParserMode.TOMO:
             image_from_md = self._create_tomo_image(image_md, file_path)
         else:
-            print("parser mode is not tomo, it is : ", self.mode)
             image_from_md = ImageMD(image_metadata=image_md, filePath="")
 
         #print("image_from_md: ", image_from_md)

@@ -52,7 +52,7 @@ class Preprocessor:
             if not input_value.get("Date") and input_value.get("Time"):
                 logging.warning("Encountered complex date field, but cannot interpret it")
                 return input_value
-            input_value = input_value.get("Date") + " " + input_value.get("Time")
+            input_value = input_value.get("Date").replace("/","-") + "T" + input_value.get("Time")
         output_value = parse_datetime(input_value)
         if type(output_value) == datetime:
             return output_value.isoformat()

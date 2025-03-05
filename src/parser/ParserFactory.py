@@ -6,6 +6,7 @@ from src.parser.impl.ProjectDataParser import ProjectDataParser
 from src.parser.impl.TomographyProjectParser import TomographyProjectParser
 from src.parser.impl.TiffParser import TiffParser
 from src.parser.impl.HdrParser import HdrParser
+from src.parser.impl.TxtParser import TxtParser
 
 
 class ParserFactory:
@@ -24,7 +25,8 @@ class ParserFactory:
 
     available_img_parsers = {
         "TiffParser": TiffParser,
-        "HdrParser": HdrParser
+        "HdrParser": HdrParser,
+        "TxtParser": TxtParser
     }
 
     @staticmethod
