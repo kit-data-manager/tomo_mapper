@@ -15,6 +15,6 @@
         "sources": [
             "./**/*.hdr"
         ],
-        "parser": "HdrParser"
+        "parser": "TxtParser"
     }
 }

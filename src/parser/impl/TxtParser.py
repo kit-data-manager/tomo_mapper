@@ -7,7 +7,7 @@ from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.parser.ImageParser import ImageParser, ParserMode
 from src.parser.mapping_util import map_a_dict
-from src.resources.maps.mapping import textparser_sem_jeol
+from src.resources.maps.mapping import textparser_sem_jeol, textparser_tomo_tescan
 from src.util import input_to_dict
 import configparser
 
@@ -18,10 +18,11 @@ import configparser
 class TxtParser(ImageParser):
 
     internal_mapping = None
-
     def __init__(self, mode):
-        if mode == ParserMode.SEM:
-            self.internal_mapping = input_to_dict(textparser_sem_jeol.read_text())
+        if mode == ParserMode.TOMO:
+            m1 = input_to_dict(textparser_tomo_tescan.read_text())
+            m2 = input_to_dict(textparser_sem_jeol.read_text())
+            self.internal_mapping = m1 | m2
         super().__init__(mode)
 
     @staticmethod
