@@ -2,6 +2,7 @@ import importlib
 from enum import Enum
 
 from src.Preprocessor import Preprocessor
+from src.model.SchemaConcepts.codegen.SchemaClasses_SEM import Entry
 
 
 class TestPreprocessor:
@@ -39,3 +40,14 @@ class TestPreprocessor:
         Preprocessor.normalize_all_units(input_dict)
         normalized_units = [x["unit"] for x in input_dict['some']['nested']['units']]
         assert not [x for x in normalized_units if x not in all_units]
+
+    def test_date_preprocessing(self):
+        input_date = {"Date": "12 Apr 2015", "Time": "14:15:00"}
+        normalized = Preprocessor.normalize_datetime(input_date)
+
+        semEntry = Entry(startTime=normalized)
+
+        input_date = {"Date": "2015/04/13", "Time": "14:15:00"}
+        normalized = Preprocessor.normalize_datetime(input_date)
+
+        semEntry = Entry(startTime=normalized)

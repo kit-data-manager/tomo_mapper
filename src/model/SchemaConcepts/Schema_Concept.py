@@ -8,17 +8,20 @@ from pydantic_core.core_schema import SerializerFunctionWrapHandler, Serializati
 
 #Custom deserializer for datetime fields
 def parse_datetime(value: str):
+    norm_value = value.replace(".", "/")
     try:
-        if "/" in value:
-            return datetime.strptime(value, "%m/%d/%Y %H:%M:%S")
-        if "." in value:
-            return datetime.strptime(value, '%d.%m.%Y %H:%M:%S')
-        return datetime.strptime(value, '%d %b %Y %H:%M:%S')#specific handling of expected date format that usual validator cannot handle
+        return datetime.strptime(norm_value, "%Y/%m/%d %H:%M:%S")
     except ValueError:
         try:
-            return datetime.fromisoformat(value)
+            return datetime.strptime(norm_value, '%d/%m/%Y %H:%M:%S')
         except ValueError:
-            return value #not a German date - lets hope that the normal validator can handle it
+            try:
+                return datetime.strptime(norm_value, '%d %b %Y %H:%M:%S')#specific handling of expected date format that usual validator cannot handle
+            except ValueError:
+                try:
+                    return datetime.fromisoformat(norm_value)
+                except ValueError:
+                    return value #not a German date - lets hope that the normal validator can handle it
 
 class Schema_Concept(ABC):
 
