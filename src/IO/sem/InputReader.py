@@ -72,6 +72,6 @@ class InputReader:
             imgp = ParserFactory.create_img_parser(parser, mode=ParserMode.SEM)
 
             result, raw = imgp.parse(input_path, self.mapping)
-            if result.image_metadata:
+            if result and result.image_metadata:
                 output_dict = result.image_metadata.to_schema_dict()
                 return output_dict
