@@ -7,7 +7,7 @@ from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.parser.ImageParser import ImageParser, ParserMode
 from src.parser.mapping_util import map_a_dict
-from src.resources.maps.mapping import textparser_sem_jeol, textparser_tomo_tescan
+from src.resources.maps.mapping import textparser_tomo_tescan
 from src.util import input_to_dict
 import configparser
 
@@ -21,8 +21,7 @@ class TxtParser(ImageParser):
     def __init__(self, mode):
         if mode == ParserMode.TOMO:
             m1 = input_to_dict(textparser_tomo_tescan.read_text())
-            m2 = input_to_dict(textparser_sem_jeol.read_text())
-            self.internal_mapping = m1 | m2
+            self.internal_mapping = m1
         super().__init__(mode)
 
     @staticmethod
@@ -48,7 +47,6 @@ class TxtParser(ImageParser):
         if self.mode == ParserMode.TOMO:
             image_from_md = self._create_tomo_image(image_md, file_path)
         else:
-            print("parser mode is not tomo, it is : ", self.mode)
             image_from_md = ImageMD(image_metadata=image_md, filePath="")
 
         #print("image_from_md: ", image_from_md)
