@@ -2,8 +2,8 @@ name: Build and use plugin
 
 on:
   push:
-    branches:
-      - '*'
+  workflow_dispatch:
+  
 jobs:
   build:
     runs-on: ${{ matrix.operating-system }}

@@ -1,7 +1,17 @@
+<!--![Tests](https://github.com/kit-data-manager/tomo_mapper/actions/workflows/python-app.yml/badge.svg)-->
+![Tests](https://img.shields.io/github/actions/workflow/status/kit-data-manager/tomo_mapper/python-app.yml?label=Tests)
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 # SEM-FIB-Tomography Mapper
 
 ## Overview
-SEM-FIB-Tomography Mapper is a tool designed for mapping and analyzing SEM (Scanning Electron Microscope) images and SEM-FIB Tomography data. This project includes functionality for both SEM and tomography mapping, sharing a common mapping concept.
+SEM-FIB-Tomography Mapper is a tool designed for mapping SEM (Scanning Electron Microscope) images and SEM-FIB Tomography metadata to a uniform, schema-compliant json format. This project includes functionality for both SEM and tomography mapping, sharing a common mapping concept.
+
+The target format of the mapper follows pre-defined schemas developed for metadata description of SEM microscopy and SEM-FIB tomography, respectively. Technical information is contained in this repository,
+for further conceptional description see
+
+- Joseph, R., Chauhan, A., Eschke, C., Ihsan, A. Z., Jalali, M., Jäntsch, U., Jung, N., Shyam Kumar, C. N., Kübel, C., Lucas, C., Mail, M., Mazilkin, A., Neidiger, C., Panighel, M., Sandfeld, S., Stotzka, R., Thelen, R., & Aversa, R. (2021). Metadata schema to support FAIR data in scanning electron microscopy. CEUR-WS.Org. https://doi.org/10.5445/IR/1000141604
+- Pauly, C., Joseph, R. E., Vitali, E. G. G., Aversa, R., Stotzka, R., Mücklich, F., Engstler, M., Hermann, H.-G., & Fell, J. (2024). Metadata schema and mapping service for FIB/SEM serial-sectioning and computed tomography. https://doi.org/10.5445/IR/1000175919
 
 ## Usage
 
@@ -32,23 +42,25 @@ To run the mapper, use the `mapping_cli` module:
 python -m mapping_cli
 ```
 
-**1. Tomography Mapping**
-
-Use the `tomo` subcommand for tomography mapping. The mapper expects a map file, a zip file, and a JSON output path:
-```
-python -m mapping_cli tomo -m <map_file> -i <zip_file> -o <json_output_path>
-```
-
-Fur further information about the necessary map file, see [Parsing README](./src/resources/maps/parsing/README.md)
-
-**2. SEM Mapping**
+**1. SEM Mapping**
 
 Use the `sem` subcommand for SEM mapping. The mapper expects a map file, an image or image metadata file, and a JSON output path:
 ```
 python -m mapping_cli sem -m <map_file> -i <zip_file> -o <json_output_path>
 ```
 
-For further information about the necessary map file, see [TBD]
+For further information about the necessary map file, see [Mapping README](./src/resources/maps/mapping)
+
+**2. Tomography Mapping**
+
+Use the `tomo` subcommand for tomography mapping. The mapper expects a map file, a zip file, and a JSON output path:
+```
+python -m mapping_cli tomo -m <map_file> -i <zip_file> -o <json_output_path>
+```
+
+For further information about the necessary map file, see [Parsing README](./src/resources/maps/parsing)
+
+For further information about mappings used internally, see [Mapping README](./src/resources/maps/mapping)
 
 ### 2. Command Line Interface Executable
 
@@ -64,7 +76,7 @@ Plugin and Python code base share the same semantic versioning, so the plugin ve
 ## Testing
 Run tests using `pytest`:
 ```
-pytest tests
+pytest
 ```
 
 ## Supported instruments and formats
@@ -77,7 +89,7 @@ The following list provides the minimal range of formats, that have been tested 
 - tiff format
   -  Carl Zeiss SEM (Zeiss instruments, tag 34118)
   -  FibicsXML (Zeiss instruments, tag 51023)
-  -  FEI Helios (FEI / Thermofisher, tag 34682)
+  -  FEI Helios (FEI / Thermofisher, tag 34682) 
 
 ### Tomography metadata
 
@@ -90,3 +102,10 @@ The following list provides the minimal range of formats, that have been tested 
 ### Planned, currently not supported
 - Tescan png hdr files
 - JEOL bmp hdr files
+
+## Acknowlegdements
+
+This work is supported by the consortium NFDI-MatWerk, funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) under the National Research Data Infrastructure – NFDI 38/1 – project number 460247524.
+
+All sample and test data included in this repository, if not otherwise specified, was contributed by participant projects of NFDI-Matwerk. Special thanks to participant project pp13.
+
