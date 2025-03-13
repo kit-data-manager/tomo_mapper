@@ -38,8 +38,8 @@ dependencies {
     implementation 'org.tomlj:tomlj:1.1.1'
 }
 
-if (System.getenv('CI_BRANCH_NAME')) {
-    project.version = System.getenv('CI_BRANCH_NAME')
+if (System.getenv('VERSION_OVERRIDE_BY_BRANCH')) {
+    project.version = System.getenv('VERSION_OVERRIDE_BY_BRANCH')
 } else {
     def rDir = new File(projectDir, '../')
     def somesyFile = new File(rDir, 'somesy.toml')

@@ -71,7 +71,9 @@ Each release contains the python CLI as platform-specific packaged executable. U
 
 The mapper can be used as a plugin for the [kit-data-manager/Mapping-Service](https://github.com/kit-data-manager/mapping-service). The necessary gradle project to build the plugin is included in the [plugin subfolder](./mappingservice-plugin).
 
-Plugin and Python code base share the same semantic versioning, so the plugin version always indicates the specific script version used for mapping.
+Plugin and Python code base share the same semantic versioning, so the plugin version always indicates the specific script version used for mapping. This behaviour can be explicitly overriding 
+(for example for testing or for working with older versions of the mapping service). To do this, on gradle build time provide the environment variable `VERSION_OVERRIDE_BY_BRANCH`.
+The variable needs to contain a branch name of this repo and branch deletion may break a plugin in use. Only use this option very carefully. Do not use this option for production. 
 
 ## Testing
 Run tests using `pytest`:
