@@ -52,6 +52,9 @@ class Preprocessor:
             if not input_value.get("Date") and input_value.get("Time"):
                 logging.warning("Encountered complex date field, but cannot interpret it")
                 return input_value
+            if input_value.get("Date") and not input_value.get("Time"):
+                input_value["Time"] = "00:00:00"
+                logging.info("Input with date information but no time information found. Setting time to 00:00:00")
             input_value = input_value.get("Date") + " " + input_value.get("Time")
         output_value = parse_datetime(input_value)
         if type(output_value) == datetime:
