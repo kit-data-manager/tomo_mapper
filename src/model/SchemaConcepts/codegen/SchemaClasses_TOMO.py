@@ -75,7 +75,9 @@ class DatasetType(Enum):
     FIB_Multi_Detector_Image_Q2 = 'FIB Multi-Detector Image-Q2'
     SEM_Multi_Detector_Image_Q1 = 'SEM Multi-Detector Image-Q1'
     SEM_Multi_Detector_Image_Q2 = 'SEM Multi-Detector Image-Q2'
-
+    LE_BSE = 'LE BSE'
+    In_Beam_f_BSE = 'In-Beam f-BSE'
+    SE = 'SE'
 
 class Role(Enum):
     Data_Curator = 'Data Curator'

@@ -33,7 +33,8 @@ class TomographyProjectParser(SetupMD_Parser):
 
         for imgmd in resultMD["Data"]:
             detector = imgmd["@detector"]
-            #print("===detector---> ", detector)
+            print("===detector---> ", detector)
+            print(imgmd['@path'])
             if detector in DatasetType:
                 print("=== ", f"{detector}/{imgmd['@path'].split('/')[-1].replace('.png', '-png.hdr')}")
                 fp = normalize_path(f"{detector}/{imgmd['@path'].split('/')[-1].replace('.png', '-png.hdr')}")
