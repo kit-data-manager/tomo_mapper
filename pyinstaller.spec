@@ -24,7 +24,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='pp13-mapper',
+    name='sem_tomo_mapper',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
