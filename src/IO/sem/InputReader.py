@@ -32,18 +32,25 @@ class InputReader:
 
 
     @staticmethod
-    def get_applicable_parsers(input_path):
+    def get_applicable_parsers(input_path, by_extension = False):
         """
         Filters the available image parsers to those applicable to the input file format.
         It tries to determine by extension, but can fallback to using magica.
+        :param by_extension: set to True if guessing by extension should be used.
         :param input_path: file path to input
         :return: list of parser names that can handle the provided input format
         """
-        mt, _ = mimetypes.guess_type(input_path)
-        if not mt or mt == "application/unknown": #fallback, especially if file extension is not available
+        applicable_types = [ip.expected_input_format() for ip in ParserFactory.available_img_parsers.values()]
+
+        mt = None
+        if by_extension:
+            mt, _ = mimetypes.guess_type(input_path)
+            logging.debug("Mimetypes file identification result: {}".format(mt))
+        if not mt or mt == "application/unknown" or mt not in applicable_types: #fallback, especially if file extension is not available
             #Text files are tricky with magica, so try to read as such first
             mt = get_filetype_with_magica(input_path)
-            if mt != "text/plain" and "image/" not in mt:
+            logging.debug("Magika file identification result: {}".format(mt))
+            if mt not in applicable_types:
                 try:
                     robust_textfile_read(input_path)
                     mt = "text/plain"
