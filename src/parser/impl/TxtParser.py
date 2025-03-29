@@ -80,8 +80,8 @@ class TxtParser(ImageParser):
         config = configparser.ConfigParser(allow_no_value=True, delimiters=(" "))
         config.optionxform = str
 
-        # Read the .txt file
-        with open(file_path, "r", encoding="utf-8") as file:
+        # Read the .txt file either as UTF-8 or a different byte format using errors="replace"
+        with open(file_path, "r", encoding="utf-8", errors="replace") as file:
             md = file.read()
 
         output_dict = {}
