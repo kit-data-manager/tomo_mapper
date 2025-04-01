@@ -46,7 +46,7 @@ python -m mapping_cli
 
 Use the `sem` subcommand for SEM mapping. The mapper expects a map file, an image or image metadata file, and a JSON output path:
 ```
-python -m mapping_cli sem -m <map_file> -i <zip_file> -o <json_output_path>
+python -m mapping_cli sem -m <map_file> -i <image or metadata file> -o <json_output_path>
 ```
 
 For further information about the necessary map file, see [Mapping README](./src/resources/maps/mapping)
