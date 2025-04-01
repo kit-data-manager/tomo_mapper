@@ -53,9 +53,9 @@ For further information about the necessary map file, see [Mapping README](./src
 
 **2. Tomography Mapping**
 
-Use the `tomo` subcommand for tomography mapping. The mapper expects a map file, a zip file, and a JSON output path:
+Use the `tomo` subcommand for tomography mapping. The mapper expects a map file, a zip file or input data folder, and a JSON output path:
 ```
-python -m mapping_cli tomo -m <map_file> -i <zip_file> -o <json_output_path>
+python -m mapping_cli tomo -m <map_file> -i <zip_file or folder> -o <json_output_path>
 ```
 
 For further information about the necessary map file, see [Parsing README](./src/resources/maps/parsing)

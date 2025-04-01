@@ -82,7 +82,6 @@ def run_tomo_mapper(args):
 
     logging.info("Tomography mapping completed.")
     reader.clean_up()
-    logging.debug("Temp folder deletion: {} - {}".format(tmpdir, os.path.exists(tmpdir)))
 
 def run_sem_mapper(args):
     argdict = vars(args)
