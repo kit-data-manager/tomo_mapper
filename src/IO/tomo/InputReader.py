@@ -59,31 +59,34 @@ class InputReader:
         if len(ac_sources) > 1 or len([x for x in ac_sources if "*" in x]) > 0:
             raise NotImplementedError("More than one metadata file for setup info found. This feature is not yet implemented.")
 
-        if not os.path.isfile(input_path):
-            logging.error("Input file does not exist: {}. Aborting".format(input_path))
-            raise MappingAbortionError("Input file loading failed.")
-
-        if not is_zipfile(input_path):
-            logging.error("Invalid input file format: {}. Aborting".format(input_path))
+        if not os.path.isfile(input_path) and not os.path.isdir(input_path):
+            logging.error("Input file or folder does not exist: {}. Aborting".format(input_path))
             raise MappingAbortionError("Input file loading failed.")
 
         logging.info("Map file content successfully read and validated.")
         logging.info("The chosen parsers support the following instruments/vendors: {}".format(", ".join(self._get_supported_instruments())))
 
         ### reading input file
-        if not is_zipfile(input_path):
-            raise NotImplementedError("Input file format is not zipped. This feature is not implemented yet")
-
-        self.temp_dir_path = extract_zip_file(input_path)
-
-        # auto-detect root dir in zip. TODO: make more flexible and robust. Allow for non-zip input (no auto-detect then)
-        root_dir = self._detect_project_root()
-        if root_dir:
-            self.working_dir_path = root_dir
-            logging.info("Root path for data detected: {}".format(strip_workdir_from_path(self.temp_dir_path, root_dir)))
+        if is_zipfile(input_path):
+            self.temp_dir_path = extract_zip_file(input_path)
+            # auto-detect root dir in zip. TODO: make more flexible and robust. Allow for non-zip input (no auto-detect then)
+            root_dir = self._detect_project_root(self.temp_dir_path)
+            if root_dir:
+                self.working_dir_path = root_dir
+                logging.info(
+                    "Root path for data detected: {}".format(strip_workdir_from_path(self.temp_dir_path, root_dir)))
+            else:
+                logging.error("Could not determine common root path for all sources in map file. Aborting")
+                raise MappingAbortionError("Input file loading failed. Mapping info not applicable to input.")
         else:
-            logging.error("Could not determine common root path for all sources in map file. Aborting")
-            raise MappingAbortionError("Input file loading failed. Mapping info not applicable to input.")
+            if not os.path.isdir(input_path):
+                raise MappingAbortionError("Invalid input path. Not an existing directory: {}".format(input_path))
+            detected_root = self._detect_project_root(input_path)
+            if not input_path == detected_root:
+                if self._detect_project_root(input_path):
+                    raise MappingAbortionError("Invalid input path. Did you mean to use {} instead?".format(detected_root)) #most specific error
+                raise MappingAbortionError("Input path is not pointing to the root folder for all sources specified in input map: {}".format(input_path)) #error otherwise
+            self.working_dir_path = input_path
 
         MappingConfig.set_working_dir(self.working_dir_path)
 
@@ -96,7 +99,7 @@ class InputReader:
             supports.update(self.runParser.supported_input_sources())
         return list(supports)
 
-    def _detect_project_root(self) -> str:
+    def _detect_project_root(self, root_dir_path) -> str:
         """
         function to allow for as many nested directories in a zip file iff all described pathes in the mapping file point to the same root directory anyway.
 
@@ -106,9 +109,11 @@ class InputReader:
         sources = []
         if self.setupParser:
             sources += self.mapping_dict["setup info"]["sources"]
+        if self.runParser:
+            sources += self.mapping_dict["run info"]["sources"]
         sources += self.mapping_dict["image info"]["sources"]
 
-        for p, _, _ in os.walk(self.temp_dir_path):
+        for p, _, _ in os.walk(root_dir_path):
             print(p)
             valid_source_path = False
             for s in sources:
@@ -122,8 +127,11 @@ class InputReader:
                 return p
 
     def clean_up(self):
-        if self.working_dir_path:
-            shutil.rmtree(self.working_dir_path)
+        if self.temp_dir_path:
+            shutil.rmtree(self.temp_dir_path)
+            logging.debug("Temp folder deletion: {} - {}".format(self.temp_dir_path, os.path.exists(self.temp_dir_path)))
+        else:
+            logging.debug("No temp folder used, nothing to clean up.")
 
     def retrieve_setup_info(self) -> List[SetupMD]:
 
