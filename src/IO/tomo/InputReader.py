@@ -56,7 +56,7 @@ class InputReader:
 
         ###various further checks for map input
 
-        if len(ac_sources) > 1 or len([x for x in ac_sources if "*" in x]) > 0:
+        if ac_sources and (len(ac_sources) > 1 or len([x for x in ac_sources if "*" in x]) > 0):
             raise NotImplementedError("More than one metadata file for setup info found. This feature is not yet implemented.")
 
         if not os.path.isfile(input_path) and not os.path.isdir(input_path):
@@ -86,7 +86,7 @@ class InputReader:
                 if self._detect_project_root(input_path):
                     raise MappingAbortionError("Invalid input path. Did you mean to use {} instead?".format(detected_root)) #most specific error
                 raise MappingAbortionError("Input path is not pointing to the root folder for all sources specified in input map: {}".format(input_path)) #error otherwise
-            self.working_dir_path = input_path
+            self.working_dir_path = os.path.abspath(input_path)
 
         MappingConfig.set_working_dir(self.working_dir_path)
 

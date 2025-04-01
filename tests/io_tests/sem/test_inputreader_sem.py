@@ -11,7 +11,7 @@ class TestInputReader:
     def set_up_sample_data(self):
         dir_to_testscript = os.path.split(__file__)[0]
 
-        test_path = os.path.join(dir_to_testscript, "../sampleData/")
+        test_path = os.path.join(dir_to_testscript, "../../sampleData/")
         return test_path
 
     def return_plaintext_format(self):
