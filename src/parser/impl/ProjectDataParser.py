@@ -27,7 +27,7 @@ class ProjectDataParser(RunMD_Parser):
                 img = TOMO_Image(localPath=fp)
                 runMD.add_image(img, DatasetType(imgmd["ImagePurpose"]))
 
-        return RunMD(), parsed
+        return runMD, parsed
 
     @staticmethod
     def expected_input_format():
