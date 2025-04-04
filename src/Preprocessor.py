@@ -17,10 +17,11 @@ class Preprocessor:
         'deg': 'degree',
         'degr': 'degree',
         '°': 'degree',
-        'μm': 'um',
+        'um': 'µm',
         'Secs': 's',
         'Mins': 'min'
     }
+
 
     @staticmethod
     def normalize_unit(input_value) -> str:
@@ -35,16 +36,19 @@ class Preprocessor:
         :param input_dict: dictionary to replace units in
         :return: None
         """
-        unit_fields = Preprocessor.parser.parse("$..unit")
-        unit_matches = [m for m in unit_fields.find(input_dict)]
-        for m in unit_matches:
-            if type(m.value) != str: continue #TODO: should this be possible?
-            original_value = m.value
-            if not Preprocessor.unit_normalization.get(original_value): continue
+        unit_field_names = ["unit", "coordinatesUnit"]
+        for field_name in unit_field_names:
+            unit_fields = Preprocessor.parser.parse("$.." + field_name)
+            unit_matches = [m for m in unit_fields.find(input_dict)]
+            print("<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>", unit_matches)
+            for m in unit_matches:
+                if type(m.value) != str: continue #TODO: should this be possible?
+                original_value = m.value
+                if not Preprocessor.unit_normalization.get(original_value): continue
 
-            normalized_value = Preprocessor.unit_normalization[original_value]
-            if normalized_value != original_value:
-                m.full_path.update(input_dict, normalized_value)
+                normalized_value = Preprocessor.unit_normalization[original_value]
+                if normalized_value != original_value:
+                    m.full_path.update(input_dict, normalized_value)
 
     @staticmethod
     def normalize_datetime(input_value) -> str:

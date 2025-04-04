@@ -6,6 +6,7 @@ from src.parser.RunMD_Parser import RunMD_Parser
 from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.model.SetupMD import SetupMD
 from src.parser.mapping_util import map_a_dict
+from src.Preprocessor import Preprocessor
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.resources.maps.mapping import setup_zeiss
 from src.util import normalize_path, input_to_dict
@@ -52,6 +53,8 @@ class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
         mapping_dict = self.internal_mapping
         ac_md = map_a_dict(parsed, mapping_dict)
 
+        Preprocessor.normalize_all_units(ac_md)
+
         acquisition = self._create_acquisition(ac_md)
 
         # Ensure datasets is always a list
@@ -85,12 +88,12 @@ class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
 
     def _create_dataset(self, ds_dict) -> Dataset:
         # Ensure instrument.eBeam.apertureSetting.size is properly formatted
-        if "instrument" in ds_dict and "eBeam" in ds_dict["instrument"]:
-            eBeam = ds_dict["instrument"]["eBeam"]
-            if "apertureSetting" in eBeam and "size" in eBeam["apertureSetting"]:
-                size_value = eBeam["apertureSetting"]["size"]
-                if isinstance(size_value, str):  # Convert only if it's a string
-                    eBeam["apertureSetting"]["size"] = self._parse_aperture_size(size_value)
+        #if "instrument" in ds_dict and "eBeam" in ds_dict["instrument"]:
+            #eBeam = ds_dict["instrument"]["eBeam"]
+            #if "apertureSetting" in eBeam and "size" in eBeam["apertureSetting"]:
+                #size_value = eBeam["apertureSetting"]["size"]
+                #if isinstance(size_value, str):  # Convert only if it's a string
+                    #eBeam["apertureSetting"]["size"] = self._parse_aperture_size(size_value)
 
         # Create the Dataset object with validated data
         ds = Dataset(**ds_dict)

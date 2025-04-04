@@ -268,7 +268,7 @@ class AngleDetails(BaseModel):
 
 class Unit2(Enum):
     nm = 'nm'
-    um = 'um'
+    µm = 'µm'
     mm = 'mm'
     cm = 'cm'
     m = 'm'
@@ -673,7 +673,7 @@ class AngleDetailsModel(BaseModel):
 
 class Unit11(Enum):
     nm = 'nm'
-    um = 'um'
+    µm = 'µm'
     mm = 'mm'
     cm = 'cm'
     m = 'm'

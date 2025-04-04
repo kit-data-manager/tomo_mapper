@@ -61,5 +61,14 @@
         "FIB Working Distance.`sub(/(.+) (.+)/, \\\\1)`":"entry.instrument.FIB.iBeamWorkingDistance.value",
         "FIB Working Distance.`sub(/(.+) (.+)/, \\\\2)`":"entry.instrument.FIB.iBeamWorkingDistance.unit",
         "FIB Pixel Size.`sub(/(.+) (.+)/, \\\\1)`":"entry.instrument.FIB.FIBSpotSize.value",
-        "FIB Pixel Size.`sub(/(.+) (.+)/, \\\\2)`":"entry.instrument.FIB.FIBSpotSize.unit"
+        "FIB Pixel Size.`sub(/(.+) (.+)/, \\\\2)`":"entry.instrument.FIB.FIBSpotSize.unit",
+
+        "Fibics.Application.Version": "entry.program.programVersion",
+        "Fibics.ScanInfo.item.#text.`sub(/= ([+-]?[0-9]*[.]?[0-9]+)(.)/, \\\\1)`": "entry.instrument.stage.tiltCorrectionAngle.value",
+        "Fibics.Scan.Focus": "entry.instrument.stage.eBeamWorkingDistance.value",
+        "Fibics.Stage.X.#text": "entry.instrument.stage.coordinates.xValue",
+        "Fibics.Stage.X.@units": "entry.instrument.stage.coordinates.coordinatesUnit",
+        "Fibics.Stage.Y.#text": "entry.instrument.stage.coordinates.yValue",
+        "Fibics.Stage.Z.#text": "entry.instrument.stage.coordinates.zValue",
+        "Fibics.Image.Detector": "entry.instrument.detectors.detector1.detectorName"
     }
