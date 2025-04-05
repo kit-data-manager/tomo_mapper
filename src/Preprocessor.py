@@ -40,7 +40,6 @@ class Preprocessor:
         for field_name in unit_field_names:
             unit_fields = Preprocessor.parser.parse("$.." + field_name)
             unit_matches = [m for m in unit_fields.find(input_dict)]
-            print("<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>", unit_matches)
             for m in unit_matches:
                 if type(m.value) != str: continue #TODO: should this be possible?
                 original_value = m.value
