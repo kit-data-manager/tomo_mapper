@@ -14,7 +14,7 @@ class TestPreprocessor:
                         {"unit": "degr"},
                         {"unit": "°"},
                         {"unit": "kV"},
-                        {"unit": "μm"}
+                        {"unit": "um"}
                     ]
                 }
             }
