@@ -1,6 +1,10 @@
 #We are likely switching to pyinstaller due to limitations in nuitka. Keeping this file for now for documentation
 name: build executable
-on: push
+on: 
+  push:
+    branches:
+      - development
+      - main
 jobs:
   build:
     runs-on: ${{ matrix.operating-system }}
@@ -9,7 +13,7 @@ jobs:
       matrix:
         operating-system: [windows-latest, ubuntu-latest, macOS-latest]
         python-version: ["3.12"]
-    if: contains(github.event.head_commit.message, 'build executable')
+    #if: contains(github.event.head_commit.message, 'build executable')
 
     steps:
       # Check-out repository
