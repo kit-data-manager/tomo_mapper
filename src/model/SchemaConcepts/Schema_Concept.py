@@ -1,5 +1,7 @@
+import logging
 from abc import ABC, abstractmethod
 from datetime import datetime, timezone
+from dateutil.parser import parse, ParserError
 from typing import Any
 
 from pydantic import ConfigDict, field_serializer
@@ -9,12 +11,18 @@ from pydantic_core.core_schema import SerializerFunctionWrapHandler, Serializati
 #Custom deserializer for datetime fields
 def parse_datetime(value: str):
     try:
+        """
+        #old behaviour for documentation about expected inputs
         if "/" in value:
             return datetime.strptime(value, "%m/%d/%Y %H:%M:%S")
-        if "." in value:
+        if len(value.split(".")) > 2:
             return datetime.strptime(value, '%d.%m.%Y %H:%M:%S')
-        return datetime.strptime(value, '%d %b %Y %H:%M:%S')#specific handling of expected date format that usual validator cannot handle
-    except ValueError:
+        if len(value.split(" ")) > 2:
+            return datetime.strptime(value, '%d %b %Y %H:%M:%S')#specific handling of expected date format that usual validator cannot handle
+        """
+        return parse(value)
+    except ParserError as e:
+        logging.warning("Dateparser encountered parsing error on {}".format(value))
         return value #not a German date - lets hope that the normal validator can handle it
 
 class Schema_Concept(ABC):
