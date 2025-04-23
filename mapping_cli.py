@@ -7,6 +7,7 @@ from src.IO.MappingAbortionError import MappingAbortionError
 from src.IO.sem.InputReader import InputReader as InputReader_SEM
 from src.IO.tomo.InputReader import InputReader as InputReader_TOMO
 from src.IO.tomo.OutputWriter import OutputWriter
+from src.resources.maps.parsing import map_from_flag
 
 #make log level configurable from ENV, defaults to info level
 logging.basicConfig(
@@ -19,9 +20,19 @@ def add_tomo_parser(subparsers):
         help="Tomography mapping functionality",
         description='Extracting of SEM FIB Tomography metadata to unified json format'
     )
-    parser_t.add_argument('-i','--input', help='Input zip file or folder as path', required=True)
-    parser_t.add_argument('-m', '--map', help='Map file as path or remote URI', required=True)
+    # Add arguments for input, output, and map
+    parser_t.add_argument('-i', '--input', help='Input zip file or folder as path', required=True)
     parser_t.add_argument('-o', '--output', help='Path to output json file', required=True)
+
+    # Create a group for the mutually exclusive map options
+    map_group = parser_t.add_mutually_exclusive_group(required=True)
+
+    # Add the map file option to the group
+    map_group.add_argument('-m', '--map', help='Map file as path or remote URI')
+
+    # Add the default map option to the group with the allowed values
+    map_group.add_argument('-dm', '--default-map', help='Use a default map for a vendor', choices=map_from_flag.keys(), type=str.lower)
+
     parser_t.set_defaults(func=run_tomo_mapper)
 
 
@@ -51,7 +62,7 @@ def run_cli():
 def run_tomo_mapper(args):
     argdict = vars(args)
     INPUT_SOURCE = argdict.get('input')
-    MAP_SOURCE = argdict.get('map')
+    MAP_SOURCE = argdict.get('map') or str(map_from_flag.get(argdict.get('default_map')))
     OUTPUT_PATH = argdict.get('output')
 
     reader = None
