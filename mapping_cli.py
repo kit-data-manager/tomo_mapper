@@ -19,7 +19,7 @@ def add_tomo_parser(subparsers):
         help="Tomography mapping functionality",
         description='Extracting of SEM FIB Tomography metadata to unified json format'
     )
-    parser_t.add_argument('-i','--input', help='Input zip file as file path', required=True)
+    parser_t.add_argument('-i','--input', help='Input zip file or folder as path', required=True)
     parser_t.add_argument('-m', '--map', help='Map file as path or remote URI', required=True)
     parser_t.add_argument('-o', '--output', help='Path to output json file', required=True)
     parser_t.set_defaults(func=run_tomo_mapper)
