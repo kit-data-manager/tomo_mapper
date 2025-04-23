@@ -25,7 +25,7 @@
   ],
   "name": "SEM-FIB-Tomo mapper",
   "description": "SEM-FIB-Tomography Mapper is a tool designed for mapping SEM (Scanning Electron Microscope) images and SEM-FIB Tomography metadata to a uniform, schema-compliant json format.",
-  "version": "0.0.1-SNAPSHOT",
+  "version": "v1.0.0-SNAPSHOT",
   "keywords": [
     "SEM",
     "Tomography",
