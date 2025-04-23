@@ -62,6 +62,20 @@ For further information about the necessary map file, see [Parsing README](./src
 
 For further information about mappings used internally, see [Mapping README](./src/resources/maps/mapping)
 
+In cases with no need of tweaking the parsing map file there is a shortcut option to use the supplied vendor-specific default map.
+
+Example usage
+```
+python -m mapping_cli tomo -dm TF -i <zip_file or folder> -o <json_output_path>
+```
+
+This is equivalent to the following command run from the project folder of this repo
+```
+python -m mapping_cli tomo -m "./src/resources/maps/parsing/inputmap_thermofisher.json" -i <zip_file or folder> -o <json_output_path>
+```
+
+To get the current available default map options, check `tomo --help`. 
+
 ### 2. Command Line Interface Executable
 
 Each release contains the python CLI as platform-specific packaged executable. Usage is identical to use with python, just replace
