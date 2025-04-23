@@ -2,6 +2,7 @@ import argparse
 import json
 import logging
 import os
+from sys import exit
 
 from src.IO.MappingAbortionError import MappingAbortionError
 from src.IO.sem.InputReader import InputReader as InputReader_SEM
