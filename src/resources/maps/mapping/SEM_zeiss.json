@@ -70,5 +70,6 @@
         "Fibics.Stage.X.@units": "entry.instrument.stage.coordinates.coordinatesUnit",
         "Fibics.Stage.Y.#text": "entry.instrument.stage.coordinates.yValue",
         "Fibics.Stage.Z.#text": "entry.instrument.stage.coordinates.zValue",
-        "Fibics.Image.Detector": "entry.instrument.detectors.detector1.detectorName"
-    }
+        "Fibics.Image.Detector": "entry.instrument.detectors.detector1.detectorName",
+        "Fibics.Application.Date": "entry.endTime"
+}

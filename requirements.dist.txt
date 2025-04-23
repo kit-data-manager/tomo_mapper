@@ -6,3 +6,4 @@ validators >= 0.34
 jsonpath-ng >= 1.7
 deepmerge >= 2.0
 magika >= 0.5.1
+python-dateutil

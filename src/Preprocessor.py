@@ -1,5 +1,5 @@
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 from jsonpath_ng.parser import JsonPathParser
 
@@ -58,7 +58,7 @@ class Preprocessor:
             input_value = input_value.get("Date") + " " + input_value.get("Time")
         output_value = parse_datetime(input_value)
         if type(output_value) == datetime:
-            return output_value.isoformat()
+            return output_value.astimezone(timezone.utc).isoformat()
         return input_value
 
     @staticmethod
