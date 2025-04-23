@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any
 
 from pydantic import ConfigDict, field_serializer
@@ -34,7 +34,7 @@ class Schema_Concept(ABC):
             _info: SerializationInfo,
     ):
         if isinstance(value, datetime):
-            return value.strftime('%Y-%m-%dT%H:%M:%SZ')
+            return value.astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
         return nxt(value)
 
     @abstractmethod
