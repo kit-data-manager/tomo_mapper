@@ -90,6 +90,14 @@ Plugin and Python code base share the same semantic versioning, so the plugin ve
 (for example for testing or for working with older versions of the mapping service). To do this, on gradle build time provide the environment variable `VERSION_OVERRIDE_BY_BRANCH`.
 The variable needs to contain a branch name of this repo and branch deletion may break a plugin in use. Only use this option very carefully. Do not use this option for production. 
 
+To find out tested alignments between plugin versions and mapping-service versions check the following table:
+
+| Plugin version  | mapping-service version |
+|-----------------|------------------------|
+| v1.0.0          | v1.0.5*), v1.1.1*)     |
+
+*) Plugin needs to be built with version override to work with the specified version of the mapping-service
+
 ## Testing
 Run tests using `pytest`:
 ```
