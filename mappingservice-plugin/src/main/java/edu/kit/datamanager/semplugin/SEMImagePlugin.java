@@ -1,5 +1,6 @@
 package edu.kit.datamanager.semplugin;
 
+import edu.kit.datamanager.mappingservice.exception.PluginInitializationFailedException;
 import edu.kit.datamanager.mappingservice.plugins.*;
 import edu.kit.datamanager.mappingservice.util.*;
 import org.slf4j.Logger;
@@ -53,7 +54,7 @@ public class SEMImagePlugin implements IMappingPlugin {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new PluginInitializationFailedException("Failed to instantiate plugin class.", e);
         }
     }
 
@@ -95,18 +96,15 @@ public class SEMImagePlugin implements IMappingPlugin {
             LOGGER.info("Cloning git repository {}, Tag {}", REPOSITORY, TAG);
             dir = FileUtil.cloneGitRepository(REPOSITORY, TAG);
             // Install Python dependencies
-
             MappingPluginState venvState = PythonRunnerUtil.runPythonScript("-m", "venv", "--system-site-packages", dir + "/" + pluginVenv);
             if (MappingPluginState.SUCCESS().getState().equals(venvState.getState())) {
-                LOGGER.info("Venv for plugin installed successfully.");
-                LOGGER.info("Installing packages");
+                LOGGER.info("Venv for plugin installed successfully. Installing packages.");
                 ShellRunnerUtil.run(dir + "/" + venvInterpreter, "-m", "pip", "install", "-r", dir + "/" + "requirements.dist.txt");
             } else {
-                LOGGER.error("venv installation was not successful");
+                throw new PluginInitializationFailedException("Venv installation was not successful. Status: " + venvState.getState());
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (MappingPluginException e) {
+            throw new PluginInitializationFailedException("Unexpected error during plugin setup.", e);
         }
     }
 
