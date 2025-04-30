@@ -88,6 +88,13 @@
       "@type": "Person",
       "givenName": "Sabine",
       "familyName": "Schlabach"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Dorothee-Vinga",
+      "familyName": "Szabo",
+      "@id": "https://orcid.org/0000-0002-5139-8771",
+      "identifier": "https://orcid.org/0000-0002-5139-8771"
     }
   ]
 }

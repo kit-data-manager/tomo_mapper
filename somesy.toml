@@ -54,5 +54,12 @@ given-names = "Sabine"
 family-names = "Schlabach"
 publication_author = true
 
+[[project.people]]
+given-names = "Dorothee-Vinga"
+family-names = "Szabo"
+orcid = "https://orcid.org/0000-0002-5139-8771"
+publication_author = true
+
+
 [config]
 verbose = true     # show detailed information about what somesy is doing
