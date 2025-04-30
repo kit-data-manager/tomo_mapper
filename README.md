@@ -107,7 +107,7 @@ pytest
 ## Supported instruments and formats
 
 Due to the large range and variety of vendors, instruments and setups we cannot guarantee successful mapping for all cases. 
-The following list provides the minimal range of formats, that have been tested via sample data.
+The following list provides the **minimal range of formats, that have been tested via sample data**.
 
 ### Image Metadata (SEM and Tomography Mapping)
 
