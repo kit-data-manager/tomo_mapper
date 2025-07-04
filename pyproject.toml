@@ -29,5 +29,5 @@ repository = "https://github.com/kit-data-manager/tomo_mapper"
 [tool.plugin]
 name = "GenericSEMtoJSON"
 description = ""
-input_mimes = []
-output_mimes = []
+input_mimes = ["image/tiff"]
+output_mimes = ["application/json"]
