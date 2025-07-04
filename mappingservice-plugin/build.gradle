@@ -14,10 +14,10 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework:spring-core:6.2.5'
-    implementation 'org.slf4j:slf4j-api:2.0.17'
+    compileOnly 'org.springframework:spring-core:6.2.5'
+    compileOnly 'org.slf4j:slf4j-api:2.0.17'
     implementation 'org.tomlj:tomlj:1.1.0'
-    implementation files("src/main/lib/mapping-service-plain.jar")
+    compileOnly files("src/main/lib/mapping-service-plain.jar")
 }
 
 if (System.getenv('VERSION_OVERRIDE_BY_BRANCH')) {
@@ -59,6 +59,11 @@ resolveMainClassName.dependsOn("generateVersionProps")
 jar {
     dependsOn(generateVersionProps)
     archiveFileName
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 bootJar {
