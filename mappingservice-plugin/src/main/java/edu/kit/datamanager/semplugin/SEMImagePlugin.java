@@ -57,10 +57,6 @@ public class SEMImagePlugin implements IMappingPlugin{
             } catch (Exception e) {
                 LOGGER.error("Failed to load TOML file: " + e.getMessage());
             }
-        } else {
-            System.err.println("Properties file not found!");
-            version = "unavailable";
-            TAG = "unavailable";
         }
     }
 
