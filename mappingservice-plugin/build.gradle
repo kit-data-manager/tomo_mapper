@@ -16,6 +16,7 @@ repositories {
 dependencies {
     implementation 'org.springframework:spring-core:6.2.5'
     implementation 'org.slf4j:slf4j-api:2.0.17'
+    implementation 'org.tomlj:tomlj:1.1.0'
     implementation files("src/main/lib/mapping-service-plain.jar")
 }
 
@@ -35,10 +36,22 @@ tasks.register('printVersion') {
 //Task for creating a resource file with the version info
 tasks.register("generateVersionProps", WriteProperties) { t ->
     def generatedResourcesDir = project.layout.buildDirectory.dir(["resources", "main"].join(File.separator))
-    def outputFile = generatedResourcesDir.map { it.file("sempluginversion.properties") }
+    def outputFile = generatedResourcesDir.map { it.file("pluginversion.properties") }
 
     t.destinationFile = outputFile.get().asFile
     t.property("version", project.version)
+}
+
+tasks.register('copyTomlToResources', Copy) {
+    from '../pyproject.toml'
+    into "${layout.buildDirectory.get()}/generated-resources"
+}
+
+processResources {
+    dependsOn tasks.copyTomlToResources
+    from("${layout.buildDirectory.get()}/generated-resources") {
+        include 'pyproject.toml'
+    }
 }
 
 resolveMainClassName.dependsOn("generateVersionProps")

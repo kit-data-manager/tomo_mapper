@@ -1,0 +1,33 @@
+[project]
+name = "SEM-FIB-Tomo mapper"
+version = "v1.0.0-SNAPSHOT"
+description = "SEM-FIB-Tomography Mapper is a tool designed for mapping SEM (Scanning Electron Microscope) images and SEM-FIB Tomography metadata to a uniform, schema-compliant json format."
+keywords = ["SEM", "Tomography", "TIFF", "metadata", "extraction", "schema"]
+readme = "README.md"
+license = {  text = "Apache-2.0"}
+requires-python = ">=3.12"
+
+[[project.authors]]
+name = "Germaine Götzelmann"
+
+[[project.authors]]
+name = "Gabin Thibaut Oumbe Tekam"
+
+[[project.maintainers]]
+name = "Germaine Götzelmann"
+
+[[project.maintainers]]
+name = "Gabin Thibaut Oumbe Tekam"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[project.urls]
+Homepage = "https://github.com/kit-data-manager/tomo_mapper"
+repository = "https://github.com/kit-data-manager/tomo_mapper"
+
+[tool.plugin]
+name = "GenericSEMtoJSON"
+description = ""
+input_mimes = []
+output_mimes = []
