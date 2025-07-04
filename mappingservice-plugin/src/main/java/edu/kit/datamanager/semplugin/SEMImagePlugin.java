@@ -21,7 +21,7 @@ public class SEMImagePlugin implements IMappingPlugin{
     private static String version;
 
     private final Logger LOGGER = LoggerFactory.getLogger(SEMImagePlugin.class);
-    private String REPOSITORY = "https://github.com/kit-data-manager/tomo_mapper";
+    private String REPOSITORY;
     private String TAG;
     private String NAME;
     private String DESCRIPTION;
