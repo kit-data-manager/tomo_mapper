@@ -1,6 +1,6 @@
 [project]
 name = "SEM-FIB-Tomo mapper"
-version = "v0.0.1-SNAPSHOT"
+version = "v1.0.0-SNAPSHOT"
 description = "SEM-FIB-Tomography Mapper is a tool designed for mapping SEM (Scanning Electron Microscope) images and SEM-FIB Tomography metadata to a uniform, schema-compliant json format."
 
 keywords = ["SEM", "Tomography", "TIFF", "metadata", "extraction", "schema"]
@@ -53,6 +53,13 @@ publication_author = true
 given-names = "Sabine"
 family-names = "Schlabach"
 publication_author = true
+
+[[project.people]]
+given-names = "Dorothee-Vinga"
+family-names = "Szabo"
+orcid = "https://orcid.org/0000-0002-5139-8771"
+publication_author = true
+
 
 [config]
 verbose = true     # show detailed information about what somesy is doing

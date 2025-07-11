@@ -13,7 +13,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         # Use both LTS releases and latest one for tests
-        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 23, mapping-service: latest } ]
+        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 21, mapping-service: latest } ]
 
     steps:
     - name: Checkout repository
@@ -56,7 +56,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         # Use both LTS releases and latest one for tests
-        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 23, mapping-service: latest } ]
+        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 21, mapping-service: latest } ]
     needs: build
     steps:
     - name: Checkout repository

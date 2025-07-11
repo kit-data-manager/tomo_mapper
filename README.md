@@ -46,21 +46,35 @@ python -m mapping_cli
 
 Use the `sem` subcommand for SEM mapping. The mapper expects a map file, an image or image metadata file, and a JSON output path:
 ```
-python -m mapping_cli sem -m <map_file> -i <zip_file> -o <json_output_path>
+python -m mapping_cli sem -m <map_file> -i <image or metadata file> -o <json_output_path>
 ```
 
 For further information about the necessary map file, see [Mapping README](./src/resources/maps/mapping)
 
 **2. Tomography Mapping**
 
-Use the `tomo` subcommand for tomography mapping. The mapper expects a map file, a zip file, and a JSON output path:
+Use the `tomo` subcommand for tomography mapping. The mapper expects a map file, a zip file or input data folder, and a JSON output path:
 ```
-python -m mapping_cli tomo -m <map_file> -i <zip_file> -o <json_output_path>
+python -m mapping_cli tomo -m <map_file> -i <zip_file or folder> -o <json_output_path>
 ```
 
 For further information about the necessary map file, see [Parsing README](./src/resources/maps/parsing)
 
 For further information about mappings used internally, see [Mapping README](./src/resources/maps/mapping)
+
+In cases with no need of tweaking the parsing map file there is a shortcut option to use the supplied vendor-specific default map.
+
+Example usage
+```
+python -m mapping_cli tomo -dm TF -i <zip_file or folder> -o <json_output_path>
+```
+
+This is equivalent to the following command run from the project folder of this repo
+```
+python -m mapping_cli tomo -m "./src/resources/maps/parsing/inputmap_thermofisher.json" -i <zip_file or folder> -o <json_output_path>
+```
+
+To get the current available default map options, check `tomo --help`. 
 
 ### 2. Command Line Interface Executable
 
@@ -70,10 +84,19 @@ Each release contains the python CLI as platform-specific packaged executable. U
 ### 3. Usage as plugin for the [Mapping-Service](https://github.com/kit-data-manager/mapping-service)
 
 The mapper can be used as a plugin for the [kit-data-manager/Mapping-Service](https://github.com/kit-data-manager/mapping-service). The necessary gradle project to build the plugin is included in the [plugin subfolder](./mappingservice-plugin).
+For details on how to build the jar file, see the "Build with Gradle" step in the [github actions pipeline](./.github/workflows/plugin-integration.yml) for the plugin integration test.
 
 Plugin and Python code base share the same semantic versioning, so the plugin version always indicates the specific script version used for mapping. This behaviour can be explicitly overriding 
 (for example for testing or for working with older versions of the mapping service). To do this, on gradle build time provide the environment variable `VERSION_OVERRIDE_BY_BRANCH`.
 The variable needs to contain a branch name of this repo and branch deletion may break a plugin in use. Only use this option very carefully. Do not use this option for production. 
+
+To find out tested alignments between plugin versions and mapping-service versions check the following table:
+
+| Plugin version  | mapping-service version |
+|-----------------|------------------------|
+| v1.0.0          | v1.0.5*), v1.1.1*)     |
+
+*) Plugin needs to be built with version override to work with the specified version of the mapping-service
 
 ## Testing
 Run tests using `pytest`:
@@ -84,7 +107,7 @@ pytest
 ## Supported instruments and formats
 
 Due to the large range and variety of vendors, instruments and setups we cannot guarantee successful mapping for all cases. 
-The following list provides the minimal range of formats, that have been tested via sample data.
+The following list provides the **minimal range of formats, that have been tested via sample data**.
 
 ### Image Metadata (SEM and Tomography Mapping)
 

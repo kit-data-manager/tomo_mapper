@@ -1,12 +1,9 @@
 import org.tomlj.Toml
 
 plugins {
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-    id 'org.springframework.boot' version '2.6.6'
-    id "org.asciidoctor.jvm.convert" version "3.3.0"
-    id "org.owasp.dependencycheck" version "7.0.4.1"
+    id 'io.spring.dependency-management' version "1.1.7"
+    id 'org.springframework.boot' version "3.4.4"
     id 'java'
-    id 'jacoco'
 }
 
 group 'edu.kit.datamanager'
@@ -17,25 +14,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-starter-security:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-starter-validation:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-starter-web:2.7.3'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.7.3'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
-    implementation 'org.springdoc:springdoc-openapi-data-rest:1.6.11'
-    implementation 'org.springdoc:springdoc-openapi-webmvc-core:1.6.11'
-    implementation 'org.javers:javers-spring-boot-starter-sql:6.6.5'
-    implementation 'org.apache.httpcomponents:httpclient:4.5.13'
-    implementation 'org.apache.commons:commons-collections4:4.4'
-    implementation 'org.json:json:20220320'
-    implementation 'com.github.jknack:handlebars:4.3.0'
-    implementation 'com.google.guava:guava:31.1-jre'
-    implementation 'commons-io:commons-io:2.11.0'
-    implementation 'javax.validation:validation-api:2.0.1.Final'
-    implementation 'edu.kit.datamanager:service-base:1.0.4'
+    implementation 'org.springframework:spring-core:6.2.5'
+    implementation 'org.slf4j:slf4j-api:2.0.17'
     implementation files("src/main/lib/mapping-service-plain.jar")
-    implementation 'org.tomlj:tomlj:1.1.1'
 }
 
 if (System.getenv('VERSION_OVERRIDE_BY_BRANCH')) {
@@ -52,12 +33,15 @@ tasks.register('printVersion') {
 }
 
 //Task for creating a resource file with the version info
-def versionTask = tasks.register("generateVersionProps", WriteProperties) { t ->
+tasks.register("generateVersionProps", WriteProperties) { t ->
     def generatedResourcesDir = project.layout.buildDirectory.dir(["resources", "main"].join(File.separator))
-    def outputFile = generatedResourcesDir.map {it -> it.file("sempluginversion.properties") }
-    t.outputFile(outputFile)
+    def outputFile = generatedResourcesDir.map { it.file("sempluginversion.properties") }
+
+    t.destinationFile = outputFile.get().asFile
     t.property("version", project.version)
 }
+
+resolveMainClassName.dependsOn("generateVersionProps")
 
 jar {
     dependsOn(generateVersionProps)

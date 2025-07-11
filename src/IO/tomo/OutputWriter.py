@@ -88,7 +88,7 @@ class OutputWriter:
 
     @staticmethod
     def writeOutput(outputDict, fp):
-        with open(fp, "w") as f:
-            json.dump(outputDict, f, indent=4)
+        with open(fp, "w", encoding="utf-8") as f:
+            json.dump(outputDict, f, indent=4, ensure_ascii=False)
 
 
