@@ -6,6 +6,17 @@ keywords = ["SEM", "Tomography", "TIFF", "metadata", "extraction", "schema"]
 readme = "README.md"
 license = {  text = "Apache-2.0"}
 requires-python = ">=3.12"
+dependencies = [
+    "pillow >= 10.3",
+    "pydantic[email] >= 2.11",
+    "xmltodict >= 0.14",
+    "requests",
+    "validators >= 0.34",
+    "jsonpath-ng >= 1.7",
+    "deepmerge >= 2.0",
+    "magika >= 0.5.1",
+    "python-dateutil"
+]
 
 [[project.authors]]
 name = "Germaine Götzelmann"
@@ -18,15 +29,24 @@ name = "Germaine Götzelmann"
 
 [[project.maintainers]]
 name = "Gabin Thibaut Oumbe Tekam"
+
+[build-system]
+requires = ["setuptools>=66.1.0", "setuptools-scm", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project.scripts]
-sem-tomo-mapper = "mapping_cli:run_cli"
+sem-tomo-mapper = "tomo_mapper.mapping_main:run_cli"
+
+[tool.setuptools]
+include-package-data = true
+#package-dir = { "" = "src" }
+
+#[tool.setuptools.packages.find]
+#where = ["src"]
+#include = ["tomo_mapper*"]
 
 [tool.setuptools.dynamic]
-dependencies = {file = ["requirements.dist.txt"]}
-
-[tool.setuptools.packages.find]
-where = ["src"]
+dependencies = {file = [ "requirements.txt" ] }
 
 [project.urls]
 Homepage = "https://github.com/kit-data-manager/tomo_mapper"

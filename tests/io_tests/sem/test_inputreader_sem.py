@@ -1,7 +1,7 @@
 import os
 
-from src import InputReader
-from src import TiffParser
+from tomo_mapper.IO.sem.InputReader import InputReader
+from tomo_mapper.parser.impl.TiffParser import TiffParser
 
 
 class TestInputReader:
@@ -10,6 +10,7 @@ class TestInputReader:
         dir_to_testscript = os.path.split(__file__)[0]
 
         test_path = os.path.join(dir_to_testscript, "../../sampleData/")
+        print(test_path)
         return test_path
 
     def return_plaintext_format(self):
@@ -32,7 +33,7 @@ class TestInputReader:
         tp = self.set_up_sample_data()
 
         ret = "text/plain"
-        mocker.patch('src.parser.impl.TiffParser.TiffParser.expected_input', self.return_plaintext_format())
+        mocker.patch('tomo_mapper.parser.impl.TiffParser.TiffParser.expected_input', self.return_plaintext_format())
         assert TiffParser.expected_input_format() == "text/plain"
 
         jeolfile = os.path.join(tp, "./images/SEM/JEOL/image000.txt")
@@ -44,7 +45,7 @@ class TestInputReader:
         tp = self.set_up_sample_data()
 
         ret = "text/plain"
-        mocker.patch('src.parser.impl.TiffParser.TiffParser.expected_input', self.return_plaintext_format())
+        mocker.patch('tomo_mapper.parser.impl.TiffParser.TiffParser.expected_input', self.return_plaintext_format())
         assert TiffParser.expected_input_format() == "text/plain"
 
         jeolfile = os.path.join(tp, "./images/SEM/JEOL/image000")

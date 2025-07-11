@@ -1,6 +1,6 @@
 import jsonpath_ng.ext
 
-from src import escape_pathelements
+from tomo_mapper.parser.mapping_util import escape_pathelements
 
 
 class TestMappingUtil:

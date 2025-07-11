@@ -1,6 +1,6 @@
-from src import RunMD
-from src import TOMO_Image
-from src import DatasetType
+from tomo_mapper.model.RunMD import RunMD
+from tomo_mapper.model.SchemaConcepts.TOMO_Image import TOMO_Image
+from tomo_mapper.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 
 
 class TestSetupMD:

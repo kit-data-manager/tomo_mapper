@@ -5,12 +5,12 @@ import tempfile
 
 import pytest
 
-from src.IO.tomo.MapfileReader import MapFileReader
-from src.parser.impl.Atlas3dParser import Atlas3dParser
+from tomo_mapper.IO.tomo.MapfileReader import MapFileReader
+from tomo_mapper.parser.impl.Atlas3dParser import Atlas3dParser
 
-from src.parser.impl.Dataset_infoParser import Dataset_infoParser
-from src.parser.impl.ProjectDataParser import ProjectDataParser
-from src.parser.impl.TomographyProjectParser import TomographyProjectParser
+from tomo_mapper.parser.impl.Dataset_infoParser import Dataset_infoParser
+from tomo_mapper.parser.impl.ProjectDataParser import ProjectDataParser
+from tomo_mapper.parser.impl.TomographyProjectParser import TomographyProjectParser
 
 class TestMapfileReader:
 

@@ -4,9 +4,10 @@ import tempfile
 
 import pytest
 
-from src import MappingAbortionError
-from src import InputReader
-from src import RunMD
+from tomo_mapper.IO.MappingAbortionError import MappingAbortionError
+from tomo_mapper.IO.tomo.InputReader import InputReader
+from tomo_mapper.model.RunMD import RunMD
+from tomo_mapper.util import is_zipfile
 
 
 class TestInputReader:
@@ -60,7 +61,7 @@ class TestInputReader:
         Test sample data folder and setup parser
         """
         datapath = self.set_up_sample_data()
-        mocker.patch('src.parser.impl.ProjectDataParser.ProjectDataParser.parse_run', return_value=(RunMD(), {}))
+        mocker.patch('tomo_mapper.parser.impl.ProjectDataParser.ProjectDataParser.parse_run', return_value=(RunMD(), {}))
         ir = InputReader(mapfile, datapath)
 
         ir.retrieve_setup_info()

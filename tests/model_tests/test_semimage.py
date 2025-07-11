@@ -1,8 +1,9 @@
 import json
 from datetime import datetime
 
-from src import MappingConfig
-from src import SEM_Image
+from tomo_mapper.config import MappingConfig
+from tomo_mapper.model.SchemaConcepts.SEM_Image import SEM_Image
+from tomo_mapper.model.SchemaConcepts.TOMO_Image import TOMO_Image
 
 
 class TestSEMImage:
