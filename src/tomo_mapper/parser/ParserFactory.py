@@ -1,7 +1,7 @@
 import logging
 from typing import Dict, Type
 
-from tomo_mapper..parser.ImageParser import ImageParser
+from tomo_mapper.parser.ImageParser import ImageParser
 from tomo_mapper.parser.RunMD_Parser import RunMD_Parser
 from tomo_mapper.parser.SetupMD_Parser import SetupMD_Parser
 from tomo_mapper.parser.impl.Atlas3dParser import Atlas3dParser

@@ -1,6 +1,8 @@
 # run_mapping.py
 import sys
-from src.tomo_mapper.mapping_main import run_cli
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent / "src"))
+from tomo_mapper.mapping_main import run_cli
 
 if __name__ == "__main__":
     # Extract arguments from the command line
