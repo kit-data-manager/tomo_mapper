@@ -1,4 +1,4 @@
-from src.model.SchemaConcepts.Dataset_simplified import Dataset
+from src import Dataset
 
 class TestDataset:
 

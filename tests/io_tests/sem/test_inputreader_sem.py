@@ -1,9 +1,7 @@
 import os
 
-import pytest
-
-from src.IO.sem.InputReader import InputReader
-from src.parser.impl.TiffParser import TiffParser
+from src import InputReader
+from src import TiffParser
 
 
 class TestInputReader:

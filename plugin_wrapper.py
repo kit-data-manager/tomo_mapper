@@ -1,6 +1,6 @@
 # run_mapping.py
 import sys
-from mapping_cli import run_cli
+from tomo_mapper.mapping_main import run_cli
 
 if __name__ == "__main__":
     # Extract arguments from the command line

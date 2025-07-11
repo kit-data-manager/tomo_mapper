@@ -1,7 +1,7 @@
 import os
 from pprint import pprint
 
-from src.parser.impl.EMProjectParser import EMProjectParser
+from src import EMProjectParser
 
 
 class TestEmprojectParser:

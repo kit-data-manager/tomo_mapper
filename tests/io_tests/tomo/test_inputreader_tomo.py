@@ -4,10 +4,9 @@ import tempfile
 
 import pytest
 
-from src.IO.MappingAbortionError import MappingAbortionError
-from src.IO.tomo.InputReader import InputReader
-from src.model.RunMD import RunMD
-from src.util import is_zipfile
+from src import MappingAbortionError
+from src import InputReader
+from src import RunMD
 
 
 class TestInputReader:

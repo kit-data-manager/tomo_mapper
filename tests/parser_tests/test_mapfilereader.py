@@ -4,11 +4,11 @@ import os
 
 import pytest
 
-from src.IO.MappingAbortionError import MappingAbortionError
-from src.IO.tomo.MapfileReader import MapFileReader
-from src.parser.impl.Atlas3dParser import Atlas3dParser
-from src.parser.impl.EMProjectParser import EMProjectParser
-from src.parser.impl.TiffParser import TiffParser
+from src import MappingAbortionError
+from src import MapFileReader
+from src import Atlas3dParser
+from src import EMProjectParser
+from src import TiffParser
 
 
 class TestMapfileReader:

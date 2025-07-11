@@ -2,8 +2,8 @@ import json
 import os
 from datetime import datetime
 
-from src.config import MappingConfig
-from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
+from src import MappingConfig
+from src import TOMO_Image
 
 
 class TestTOMOImage:
