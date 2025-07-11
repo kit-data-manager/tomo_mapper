@@ -19,6 +19,12 @@ name = "Germaine Götzelmann"
 [[project.maintainers]]
 name = "Gabin Thibaut Oumbe Tekam"
 
+[project.scripts]
+sem-tomo-mapper = "mapping_cli:run_cli"
+
+[tool.setuptools.dynamic]
+dependencies = {file = ["requirements.dist.txt"]}
+
 [tool.setuptools.packages.find]
 where = ["src"]
 
@@ -31,3 +37,4 @@ name = "GenericSEMtoJSON"
 description = ""
 input_mimes = ["image/tiff"]
 output_mimes = ["application/json"]
+
