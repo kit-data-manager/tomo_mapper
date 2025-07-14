@@ -17,6 +17,7 @@ import xmltodict
 from xml.parsers.expat import ExpatError
 
 from src.IO.MappingAbortionError import MappingAbortionError
+import re
 
 def robust_textfile_read(filepath):
     try:
