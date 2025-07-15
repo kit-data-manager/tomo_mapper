@@ -7,7 +7,7 @@ The map file for tomography mapping is aiming for fine-tuning the mapping for sp
 - `image info`: Provide files to parse als image metadata (may be images or separate header files)
 - source paths may contain inclusion wildcard patterns (glob syntax)
 
-For more details check out the default maps in this folder:
+For mor details check out the default maps in this folder:
 
 [Default map for Thermofisher input](./inputmap_thermofisher.json)
 

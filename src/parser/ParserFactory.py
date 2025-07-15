@@ -3,28 +3,23 @@ import logging
 from src.parser.impl.Atlas3dParser import Atlas3dParser
 from src.parser.impl.EMProjectParser import EMProjectParser
 from src.parser.impl.ProjectDataParser import ProjectDataParser
-from src.parser.impl.TomographyProjectParser import TomographyProjectParser
 from src.parser.impl.TiffParser import TiffParser
-from src.parser.impl.TxtParser import TxtParser
 
 
 class ParserFactory:
 
     available_setupmd_parsers = {
         "EMProjectParser": EMProjectParser,
-        "Atlas3DParser": Atlas3dParser,
-        "TomographyProjectParser": TomographyProjectParser
+        "Atlas3DParser": Atlas3dParser
     }
 
     available_runmd_parsers = {
         "ProjectDataParser": ProjectDataParser,
-        "Atlas3DParser": Atlas3dParser,
-        "TomographyProjectParser": TomographyProjectParser
+        "Atlas3DParser": Atlas3dParser
     }
 
     available_img_parsers = {
-        "TiffParser": TiffParser,
-        "TxtParser": TxtParser
+        "TiffParser": TiffParser
     }
 
     @staticmethod

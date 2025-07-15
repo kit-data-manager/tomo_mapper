@@ -40,8 +40,7 @@ class TestTiffparser:
             test_tiffpath = os.path.join(dir_to_testscript, "../sampleData/images/SEM_Image-SliceImage-001.tif")
 
             parser = TiffParser(ParserMode.SEM, "34682")
-            SEM_map = input_to_dict(tiffparser_sem_34682.read_text())
-            img, raw = parser.parse(test_tiffpath, SEM_map)
+            img, raw = parser.parse(test_tiffpath, None)
             #pprint(raw)
 
             pprint(img.image_metadata.to_schema_dict())

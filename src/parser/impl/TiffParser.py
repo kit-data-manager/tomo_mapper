@@ -40,7 +40,12 @@ class TiffParser(ImageParser):
                     logging.error("Internal mapping for tag '{}' is not available".format(self.tagID))
                     raise MappingAbortionError("Setting up image parser failed.")
                 m = self.available_tomo_mappings[self.tagID]
-                self.internal_mapping = input_to_dict(m.read_text())
+            if mode == ParserMode.SEM:
+                try:
+                    m = self.available_sem_mappings[self.tagID]
+                except KeyError:
+                    pass
+            self.internal_mapping = input_to_dict(m.read_text())
         super().__init__(mode)
 
     @staticmethod
