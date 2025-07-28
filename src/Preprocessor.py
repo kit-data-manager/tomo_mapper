@@ -19,7 +19,8 @@ class Preprocessor:
         '°': 'degree',
         'um': 'µm',
         'Secs': 's',
-        'Mins': 'min'
+        'Mins': 'min',
+        'μs': 'us'
     }
 
 

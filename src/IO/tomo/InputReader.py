@@ -42,25 +42,16 @@ class InputReader:
         ### reading and sanity checking map file
         self.mapping_dict = MapFileReader.read_mapfile(map_path)
 
-        ac_sources, ac_parser = MapFileReader.parse_mapinfo_for_setup(self.mapping_dict)
-        self.setupParser = ac_parser
-        self.setupmdSources = ac_sources
+        self.setupmdPairs = MapFileReader.parse_mapinfo_for_setup(self.mapping_dict) #list of setup (source, parser) pairs
 
-        run_sources, run_parser = MapFileReader.parse_mapinfo_for_run(self.mapping_dict)
-        self.runParser = run_parser
-        self.runmdSources = run_sources
+        self.runmdPairs = MapFileReader.parse_mapinfo_for_run(self.mapping_dict) #list of run (source, parser) pairs
 
         im_sources, im_parser = MapFileReader.parse_mapinfo_for_images(self.mapping_dict)
         self.imageParser = im_parser
         self.imageSources = im_sources
-
-        ###various further checks for map input
-
-        if ac_sources and (len(ac_sources) > 1 or len([x for x in ac_sources if "*" in x]) > 0):
-            raise NotImplementedError("More than one metadata file for setup info found. This feature is not yet implemented.")
-
+        
         if not os.path.isfile(input_path) and not os.path.isdir(input_path):
-            logging.error("Input file or folder does not exist: {}. Aborting".format(input_path))
+            logging.error("Input file does not exist: {}. Aborting".format(input_path))
             raise MappingAbortionError("Input file loading failed.")
 
         logging.info("Map file content successfully read and validated.")
@@ -93,10 +84,12 @@ class InputReader:
 
     def _get_supported_instruments(self) -> List[str]:
         supports = set()
-        if self.setupParser:
-            supports.update(self.setupParser.supported_input_sources())
-        if self.runParser:
-            supports.update(self.runParser.supported_input_sources())
+        if self.setupmdPairs:
+            for _, p in self.setupmdPairs:
+                supports.update(p.supported_input_sources())
+        if self.runmdPairs:
+            for _, p in self.runmdPairs:
+                supports.update(p.supported_input_sources())
         return list(supports)
 
     def _detect_project_root(self, root_dir_path) -> str:
@@ -107,10 +100,10 @@ class InputReader:
         :return:
         """
         sources = []
-        if self.setupParser:
-            sources += self.mapping_dict["setup info"]["sources"]
-        if self.runParser:
-            sources += self.mapping_dict["run info"]["sources"]
+
+        if self.setupmdPairs:
+            sources += [s for s, _ in self.setupmdPairs]
+
         sources += self.mapping_dict["image info"]["sources"]
 
         for p, _, _ in os.walk(root_dir_path):
@@ -137,12 +130,12 @@ class InputReader:
 
         setup_infos = []
 
-        if self.setupParser:
-            for s in self.setupmdSources:
+        if self.setupmdPairs:
+            for s, p in self.setupmdPairs:
                 try:
                     logging.info("Extracting setup info from: {}".format(s))
                     file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
-                    setupMD, _ = self.setupParser.parse_setup(file_contents)
+                    setupMD, _ = p.parse_setup(file_contents)
                     setup_infos.append(setupMD)
                 except FileNotFoundError:
                     logging.error("Setup md file does not exist: {}. Please make sure the configuration in the map file matches your input data".format(s))
@@ -152,12 +145,12 @@ class InputReader:
 
         run_infos = []
 
-        if self.runParser:
-            for s in self.runmdSources:
+        if self.runmdPairs:
+            for s, p in self.runmdPairs:
                 try:
                     logging.info("Extracting run info from: {}".format(s))
                     file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
-                    runMD, _ = self.runParser.parse_run(file_contents)
+                    runMD, _ = p.parse_run(file_contents)
                     run_infos.append(runMD)
                 except FileNotFoundError:
                     logging.error("Run md file does not exist: {}. Please make sure the configuration in the map file matches your input data".format(s))

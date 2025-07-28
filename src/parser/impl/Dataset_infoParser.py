@@ -11,9 +11,10 @@ from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 from src.model.RunMD import RunMD
 from src.util import normalize_path
+from src.Preprocessor import Preprocessor
 
 
-class TomographyProjectParser(SetupMD_Parser):
+class Dataset_infoParser(SetupMD_Parser):
 
     @staticmethod
     def supported_input_sources() -> List[str]:
@@ -24,31 +25,24 @@ class TomographyProjectParser(SetupMD_Parser):
 
     def parse_run(self, payload) -> tuple[RunMD, str]:
         parsed = self._read_input(payload)
-
-        resultMD = parsed["TomographyProject"]["AcquisitionsHistory"]
-        resultMD = resultMD["Acquisition"]["Datasets"]
-        resultMD = resultMD["Dataset"]["Detectors"]
+        resultMD = parsed["Datasets - Dataset 1"]
         
         runMD = RunMD()
 
-        for imgmd in resultMD["Data"]:
-            detector = imgmd["@detector"]
-            #print("===detector---> ", detector)
-            #print(imgmd['@path'])
-            if detector in DatasetType:
-                #print("=== ", f"{detector}/{imgmd['@path'].split('/')[-1].replace('.png', '-png.hdr')}")
-                fp = normalize_path(f"{detector}/{imgmd['@path'].split('/')[-1].replace('.png', '-png.hdr')}")
-                img = TOMO_Image(localPath=fp)
-                runMD.add_image(img, DatasetType(detector))
-                #print("===fp---> ", fp)
+        for detector in resultMD["Detectors"].split(","):
+            if detector not in DatasetType:
+                pass
 
-        return runMD, parsed
+        return None, parsed
 
     def parse_setup(self, payload) -> tuple[SetupMD, dict]:
         parsed = self._read_input(payload)
-
+        #print("..............",parsed)
         mapping_dict = self.internal_mapping
         ac_md = map_a_dict(parsed, mapping_dict)
+
+        Preprocessor.normalize_all_units(ac_md)
+
         acquisition = self._create_acquisition(ac_md)
         datasets = self._create_datasets(ac_md)
         if not datasets:
@@ -88,7 +82,4 @@ class TomographyProjectParser(SetupMD_Parser):
 
     @staticmethod
     def expected_input_format():
-        return "xml"
-
-
-
+        return "text/plain"
