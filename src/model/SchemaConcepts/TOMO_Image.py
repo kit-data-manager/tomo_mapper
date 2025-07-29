@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from pydantic import BeforeValidator, BaseModel, computed_field
+from pydantic import BeforeValidator, BaseModel, computed_field, model_validator
 from typing_extensions import Annotated
 
 from src.config import MappingConfig
@@ -58,3 +58,10 @@ class TOMO_Image(Schema_Concept, BaseModel):
         if not os.path.exists(self.absolutePath()): return False
         if not os.path.exists(other.absolutePath()): return False
         return os.path.samefile(self.absolutePath(), other.absolutePath())
+    
+    @model_validator(mode="after")
+    def set_fileLink(self):
+        # Automatically populate fileLink from filePath if not set.
+        if not self.fileLink and self.localPath:
+            self.fileLink = Identifier(identifierValue=self.filePath)
+        return self
