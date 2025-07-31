@@ -1,5 +1,7 @@
+import logging
 from abc import ABC, abstractmethod
-from datetime import datetime
+from datetime import datetime, timezone
+from dateutil.parser import parse, ParserError
 from typing import Any
 
 from pydantic import ConfigDict, field_serializer
@@ -8,20 +10,20 @@ from pydantic_core.core_schema import SerializerFunctionWrapHandler, Serializati
 
 #Custom deserializer for datetime fields
 def parse_datetime(value: str):
-    norm_value = value.replace(".", "/")
     try:
-        return datetime.strptime(norm_value, "%Y/%m/%d %H:%M:%S")
-    except ValueError:
-        try:
-            return datetime.strptime(norm_value, '%d/%m/%Y %H:%M:%S')
-        except ValueError:
-            try:
-                return datetime.strptime(norm_value, '%d %b %Y %H:%M:%S')#specific handling of expected date format that usual validator cannot handle
-            except ValueError:
-                try:
-                    return datetime.fromisoformat(norm_value)
-                except ValueError:
-                    return value #not a German date - lets hope that the normal validator can handle it
+        """
+        #old behaviour for documentation about expected inputs
+        if "/" in value:
+            return datetime.strptime(value, "%m/%d/%Y %H:%M:%S")
+        if len(value.split(".")) > 2:
+            return datetime.strptime(value, '%d.%m.%Y %H:%M:%S')
+        if len(value.split(" ")) > 2:
+            return datetime.strptime(value, '%d %b %Y %H:%M:%S')#specific handling of expected date format that usual validator cannot handle
+        """
+        return parse(value)
+    except ParserError as e:
+        logging.warning("Dateparser encountered parsing error on {}".format(value))
+        return value #not a German date - lets hope that the normal validator can handle it
 
 class Schema_Concept(ABC):
 
@@ -40,7 +42,7 @@ class Schema_Concept(ABC):
             _info: SerializationInfo,
     ):
         if isinstance(value, datetime):
-            return value.strftime('%Y-%m-%dT%H:%M:%SZ')
+            return value.astimezone(timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ')
         return nxt(value)
 
     @abstractmethod

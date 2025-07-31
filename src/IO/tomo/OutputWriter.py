@@ -4,9 +4,13 @@ from collections import defaultdict
 from pprint import pprint
 from typing import List
 
+from pydantic import ValidationError
+
+from src.IO.MappingAbortionError import MappingAbortionError
 from src.model.ImageMD import ImageMD
 from src.model.RunMD import RunMD
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
+from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import AcquisitionMain
 from src.model.SetupMD import SetupMD
 from deepmerge import always_merger, conservative_merger
 
@@ -18,6 +22,7 @@ class OutputWriter:
 
         acquisitionModel = dict()
         predefined_ds = dict()
+        ds_template = None
 
         #add the base info about the acquisition from metadata files
         if setupMD and setupMD.acquisition_metadata:
@@ -25,6 +30,8 @@ class OutputWriter:
 
                 predefined_ds = dict([(x.datasetType, x) for x in setupMD.acquisition_metadata.datasets])
                 setupMD.acquisition_metadata.datasets = None
+            if setupMD.acquisition_metadata.dataset_template:
+                ds_template = setupMD.acquisition_metadata.dataset_template
             always_merger.merge(acquisitionModel, setupMD.acquisition_metadata.to_schema_dict())
 
         dsDict = {}
@@ -69,12 +76,19 @@ class OutputWriter:
             acquisitionModel["acquisition"]["dataset"].append(v_dict)
             conservative_merger.merge(v_dict, dsinfo_from_images[k])
 
-        #print(json.dumps(acquisitionModel, indent=4))
+            if ds_template:
+                conservative_merger.merge(v_dict, ds_template.to_schema_dict())
+
+        #since we operated on dicts a lot in this output writer, we do a final conversion to the class model to ensure schema compliance
+        try:
+            AcquisitionMain(**acquisitionModel)
+        except ValidationError as e:
+            raise MappingAbortionError("Final check for schema compliance failed")
         return acquisitionModel
 
     @staticmethod
     def writeOutput(outputDict, fp):
-        with open(fp, "w") as f:
-            json.dump(outputDict, f, indent=4)
+        with open(fp, "w", encoding="utf-8") as f:
+            json.dump(outputDict, f, indent=4, ensure_ascii=False)
 
 

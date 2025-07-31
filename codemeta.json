@@ -1,0 +1,100 @@
+{
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "https://w3id.org/software-iodata",
+    "https://raw.githubusercontent.com/jantman/repostatus.org/master/badges/latest/ontology.jsonld",
+    "https://schema.org",
+    "https://w3id.org/software-types"
+  ],
+  "@type": "SoftwareSourceCode",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Germaine",
+      "familyName": "Götzelmann",
+      "@id": "https://orcid.org/0000-0003-3974-3728",
+      "identifier": "https://orcid.org/0000-0003-3974-3728"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Gabin Thibaut",
+      "familyName": "Oumbe Tekam",
+      "@id": "https://orcid.org/0000-0002-6745-3464",
+      "identifier": "https://orcid.org/0000-0002-6745-3464"
+    }
+  ],
+  "name": "SEM-FIB-Tomo mapper",
+  "description": "SEM-FIB-Tomography Mapper is a tool designed for mapping SEM (Scanning Electron Microscope) images and SEM-FIB Tomography metadata to a uniform, schema-compliant json format.",
+  "version": "v1.0.0-SNAPSHOT",
+  "keywords": [
+    "SEM",
+    "Tomography",
+    "TIFF",
+    "metadata",
+    "extraction",
+    "schema"
+  ],
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Germaine",
+      "familyName": "Götzelmann",
+      "@id": "https://orcid.org/0000-0003-3974-3728",
+      "identifier": "https://orcid.org/0000-0003-3974-3728"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Gabin Thibaut",
+      "familyName": "Oumbe Tekam",
+      "@id": "https://orcid.org/0000-0002-6745-3464",
+      "identifier": "https://orcid.org/0000-0002-6745-3464"
+    }
+  ],
+  "license": [
+    "https://spdx.org/licenses/Apache-2.0"
+  ],
+  "codeRepository": "https://github.com/kit-data-manager/tomo_mapper",
+  "contributor": [
+    {
+      "@type": "Person",
+      "givenName": "Pauly",
+      "familyName": "Christoph",
+      "@id": "https://orcid.org/0000-0002-6368-2067",
+      "identifier": "https://orcid.org/0000-0002-6368-2067"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Rossella",
+      "familyName": "Aversa",
+      "@id": "https://orcid.org/0000-0003-2534-0063",
+      "identifier": "https://orcid.org/0000-0003-2534-0063"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Frank",
+      "familyName": "Mücklich"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Michael",
+      "familyName": "Engstler"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Jonas",
+      "familyName": "Fell"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Sabine",
+      "familyName": "Schlabach"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Dorothee-Vinga",
+      "familyName": "Szabo",
+      "@id": "https://orcid.org/0000-0002-5139-8771",
+      "identifier": "https://orcid.org/0000-0002-5139-8771"
+    }
+  ]
+}

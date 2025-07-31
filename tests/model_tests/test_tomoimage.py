@@ -87,7 +87,9 @@ class TestTOMOImage:
 
         img = TOMO_Image(creationTime="2017-04-04T16:22:20.855+02:00", localPath="p")
         assert img.creationTime.year == 2017
-        img.to_schema_dict()
+        output_dict = img.to_schema_dict()
+        assert output_dict["creationTime"].endswith("Z")
+        assert "14:22:20" in output_dict["creationTime"]
 
         #setting with expected output format
         img.creationTime = "2017-04-04T16:22:20.855"

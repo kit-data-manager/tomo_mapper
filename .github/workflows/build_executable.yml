@@ -1,6 +1,10 @@
 #We are likely switching to pyinstaller due to limitations in nuitka. Keeping this file for now for documentation
 name: build executable
-on: push
+on: 
+  push:
+    branches:
+      - development
+      - main
 jobs:
   build:
     runs-on: ${{ matrix.operating-system }}
@@ -9,7 +13,7 @@ jobs:
       matrix:
         operating-system: [windows-latest, ubuntu-latest, macOS-latest]
         python-version: ["3.12"]
-    if: contains(github.event.head_commit.message, 'build installer')
+    #if: contains(github.event.head_commit.message, 'build executable')
 
     steps:
       # Check-out repository
@@ -25,13 +29,20 @@ jobs:
         run: |
           pip install -r requirements.dist.txt
           pip install pyinstaller
-      # Build python script into a single execute
+       #Build python script into a single execute
       - name: Package Application with PyInstaller
         run: |
-          pyinstaller pp13-mapper.spec
+          pyinstaller pyinstaller.spec
+      #get version info for artifact
+      - name: read project metadata toml
+        uses: SebRollen/toml-action@v1.2.0
+        id: read_projectmd
+        with:
+          file: 'somesy.toml'
+          field: 'project.version'
       # Uploads artifact
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: pp13-mapper_${{ matrix.operating-system }}
-          path:  ${{ matrix.operating-system == 'windows-latest' && 'dist/pp13-mapper.exe' || 'dist/pp13-mapper' }}
+          name: sem_tomo_mapper_${{ steps.read_projectmd.outputs.value }}_${{ matrix.operating-system }}
+          path:  dist/sem_tomo_mapper*

@@ -138,4 +138,3 @@ class MapFileReader:
             if "*" not in s:
                 logging.warning("Expected a wildcard path to multiple files, got singular path. This is likely a faulty map input: {}".format(s))
         return sources, parser
-

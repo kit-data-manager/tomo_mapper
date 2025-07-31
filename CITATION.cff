@@ -1,0 +1,48 @@
+cff-version: 1.2.0
+message: If you use this software, please cite it using these metadata.
+type: software
+title: SEM-FIB-Tomo mapper
+abstract: SEM-FIB-Tomography Mapper is a tool designed for mapping SEM (Scanning Electron
+  Microscope) images and SEM-FIB Tomography metadata to a uniform, schema-compliant
+  json format.
+version: v1.0.0-SNAPSHOT
+keywords:
+- SEM
+- Tomography
+- TIFF
+- metadata
+- extraction
+- schema
+authors:
+- orcid: https://orcid.org/0000-0003-3974-3728
+  given-names: Germaine
+  family-names: Götzelmann
+- orcid: https://orcid.org/0000-0002-6745-3464
+  given-names: Gabin Thibaut
+  family-names: Oumbe Tekam
+- orcid: https://orcid.org/0000-0002-6368-2067
+  given-names: Pauly
+  family-names: Christoph
+- orcid: https://orcid.org/0000-0003-2534-0063
+  given-names: Rossella
+  family-names: Aversa
+- given-names: Frank
+  family-names: Mücklich
+- given-names: Michael
+  family-names: Engstler
+- given-names: Jonas
+  family-names: Fell
+- given-names: Sabine
+  family-names: Schlabach
+- family-names: Szabo
+  given-names: Dorothee-Vinga
+  orcid: https://orcid.org/0000-0002-5139-8771
+contact:
+- orcid: https://orcid.org/0000-0003-3974-3728
+  given-names: Germaine
+  family-names: Götzelmann
+- orcid: https://orcid.org/0000-0002-6745-3464
+  given-names: Gabin Thibaut
+  family-names: Oumbe Tekam
+license: Apache-2.0
+repository-code: https://github.com/kit-data-manager/tomo_mapper

@@ -2,8 +2,8 @@ name: Build and use plugin
 
 on:
   push:
-    branches:
-      - '*'
+  workflow_dispatch:
+  
 jobs:
   build:
     runs-on: ${{ matrix.operating-system }}
@@ -13,7 +13,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         # Use both LTS releases and latest one for tests
-        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 23, mapping-service: latest } ]
+        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 21, mapping-service: latest } ]
 
     steps:
     - name: Checkout repository
@@ -39,7 +39,7 @@ jobs:
         echo "JAR_VERSION=${JAR_VERSION}"
         mv -v ./mappingservice-plugin/build/libs/SEMImagePlugin-$JAR_VERSION-plain.jar ./mappingservice-plugin/build/libs/SEMplugin.jar
       env:
-        CI_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+        VERSION_OVERRIDE_BY_BRANCH: ${{ steps.extract_branch.outputs.branch }}
 
     - name: Upload job artifact
       uses: actions/upload-artifact@v4
@@ -56,7 +56,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         # Use both LTS releases and latest one for tests
-        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 23, mapping-service: latest } ]
+        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 21, mapping-service: latest } ]
     needs: build
     steps:
     - name: Checkout repository
@@ -96,6 +96,6 @@ jobs:
          unix2dos -n ./mappingservice-plugin/integrationtests/basic.hurl ./mappingservice-plugin/integrationtests/basic_crlf.hurl
          hurl --variable host=http://localhost:8095 --test ./mappingservice-plugin/integrationtests/basic_crlf.hurl --verbose --file-root .
       env:
-        CI_BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+        VERSION_OVERRIDE_BY_BRANCH: ${{ steps.extract_branch.outputs.branch }}
     - name: Stop Docker Container
       run: docker stop mapping4docker
