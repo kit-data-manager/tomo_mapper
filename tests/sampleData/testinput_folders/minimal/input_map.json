@@ -1,0 +1,10 @@
+{
+    "image info": {
+        "sources": [
+            "./**/*.tif",
+            "./nested/**/*.tif"
+        ],
+        "tag": "34682",
+        "parser": "TiffParser"
+    }
+}
