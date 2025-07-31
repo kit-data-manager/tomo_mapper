@@ -1,5 +1,6 @@
 import json
 import logging
+import os
 from collections import defaultdict
 from pprint import pprint
 from typing import List
@@ -14,7 +15,6 @@ from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import AcquisitionMain
 from src.model.SetupMD import SetupMD
 from deepmerge import always_merger, conservative_merger
 
-
 class OutputWriter:
 
     @staticmethod
@@ -25,6 +25,7 @@ class OutputWriter:
         ds_template = None
 
         #add the base info about the acquisition from metadata files
+        #setup MD
         if setupMD and setupMD.acquisition_metadata:
             if setupMD.acquisition_metadata.datasets:
 
@@ -36,13 +37,15 @@ class OutputWriter:
 
         dsDict = {}
 
+        #run MD
         if runMD:
             if runMD.acquisition_metadata:
                 always_merger.merge(acquisitionModel, runMD.acquisition_metadata.to_schema_dict())
             dsDict = dict([(x, Dataset(datasetType=x)) for x in runMD.get_datasetTypes()])
 
-        dsinfo_from_images = defaultdict(dict)
+        dsinfo_from_images = defaultdict(list)
 
+        #add info from images
         for img in imageMD:
             if not img.image_metadata:
                 logging.warning("No image metadata extracted from image {}. Omitting from output".format(img.fileName()))
@@ -53,10 +56,13 @@ class OutputWriter:
             else:
                 dt = runMD.get_datasetType_for_image(img.image_metadata)
             if not dt:
-                logging.warning("Dataset Type for image {} cannot be determined. Omitting from output".format(img.fileName()))
-                continue
+                logging.warning("Dataset Type for image {} cannot be determined".format(img.fileName()))
+                dt = "unknown"
             if not dsDict.get(dt):
-                dsDict[dt] = Dataset(datasetType=dt)
+                if dt != "unknown":
+                    dsDict[dt] = Dataset(datasetType=dt)
+                else: #we create an initial fallback dataset for all images that are not matchable
+                    dsDict[dt] = Dataset()
             if dsDict[dt].images:
                 dsDict[dt].images.append(img.image_metadata)
             else: dsDict[dt].images = [img.image_metadata]
@@ -64,17 +70,44 @@ class OutputWriter:
             if img.acquisition_info:
                 always_merger.merge(acquisitionModel, img.acquisition_info.to_schema_dict())
             if img.dataset_metadata:
-                conservative_merger.merge(dsinfo_from_images[dt], img.dataset_metadata.to_schema_dict())
+                dsinfo_from_images[dt].append(img.dataset_metadata)
 
-        for k, v in dsDict.items():
+        '''
+        FALLBACK in case we have image metadata extracted but cannot map to a dataset type
+        We split the remaining images by their individual folder and their detector type or name
+        The dataset extraction is currently only based on the first image per bucket without further checking,
+        so the dataset info might be lacking in some cases.
+        '''
+        unknown_ds = dsDict.pop("unknown", None)
+        dsDict_items = list(dsDict.values())
+        if unknown_ds:
+            image_buckets = defaultdict(list)
+            md_buckets = defaultdict(list)
+            for k, img in enumerate(unknown_ds.images):
+                folderpath = os.path.dirname(img.filePath)
+                instrument = dsinfo_from_images["unknown"][k].instrument
+                detector = instrument.detector if instrument else None
+                detectorType = detector.detectorType if detector else None
+                detectorType = detector.name if not detectorType else detectorType
+                image_buckets[(folderpath, detectorType)].append(img)
+                md_buckets[(folderpath, detectorType)].append(dsinfo_from_images["unknown"][k])
+            for k, v in image_buckets.items():
+                current_ds = Dataset(**md_buckets[k][0].to_schema_dict())
+                current_ds.images = v
+                dsDict_items.append(current_ds)
+
+        for v in dsDict_items:
             if not v.images:
                 logging.warning("No images successfully extracted for {}. Omitting from output".format(v.datasetType))
                 continue
             v_dict = v.to_schema_dict()
-            if predefined_ds and predefined_ds.get(k):
-                conservative_merger.merge(v_dict, predefined_ds[k].to_schema_dict())
+            k = v.datasetType
+            if k:
+                if predefined_ds and predefined_ds.get(k):
+                    conservative_merger.merge(v_dict, predefined_ds[k].to_schema_dict())
+                for ds_md in dsinfo_from_images[k]:
+                    conservative_merger.merge(v_dict, ds_md.to_schema_dict())
             acquisitionModel["acquisition"]["dataset"].append(v_dict)
-            conservative_merger.merge(v_dict, dsinfo_from_images[k])
 
             if ds_template:
                 conservative_merger.merge(v_dict, ds_template.to_schema_dict())
