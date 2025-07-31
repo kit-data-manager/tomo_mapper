@@ -46,8 +46,28 @@ class TestPreprocessor:
         normalized = Preprocessor.normalize_datetime(input_date)
 
         semEntry = Entry(startTime=normalized)
+        assert semEntry.startTime == "2015-04-12T14:15:00Z"
 
-        input_date = {"Date": "2015/04/13", "Time": "14:15:00"}
+        input_date = {"Date": "2015/04/12", "Time": "14:15:00"}
         normalized = Preprocessor.normalize_datetime(input_date)
 
         semEntry = Entry(startTime=normalized)
+        assert semEntry.startTime == "2015-04-12T14:15:00Z"
+
+        input_date = {"Date": "2015/04/12", "Time": "14:15:00+03:00"}
+        normalized = Preprocessor.normalize_datetime(input_date)
+
+        semEntry = Entry(startTime=normalized)
+        assert semEntry.startTime == "2015-04-12T11:15:00Z"
+
+        input_date = {"Date": "2015/04/12", "Time": "14:15:00Z"}
+        normalized = Preprocessor.normalize_datetime(input_date)
+
+        semEntry = Entry(startTime=normalized)
+        assert semEntry.startTime == "2015-04-12T14:15:00Z"
+
+        input_date = {"Date": "12 Apr 2015"}
+        normalized = Preprocessor.normalize_datetime(input_date)
+
+        semEntry = Entry(startTime=normalized)
+        assert semEntry.startTime == "2015-04-12T00:00:00Z"

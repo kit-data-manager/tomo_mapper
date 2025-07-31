@@ -52,16 +52,20 @@ class Preprocessor:
     @staticmethod
     def normalize_datetime(input_value) -> str:
         if type(input_value) == dict:
-            if not input_value.get("Date") and input_value.get("Time"):
+            if not input_value.get("Date") and input_value.get("Time"): # Not possible to handle only Time
                 logging.warning("Encountered complex date field, but cannot interpret it")
                 return input_value
-            if input_value.get("Date") and not input_value.get("Time"):
+            if input_value.get("Date") and not input_value.get("Time"): # Handle only Date
                 input_value["Time"] = "00:00:00"
                 logging.info("Input with date information but no time information found. Setting time to 00:00:00")
             input_value = input_value.get("Date") + " " + input_value.get("Time")
         output_value = parse_datetime(input_value)
         if type(output_value) == datetime:
-            return output_value.astimezone(timezone.utc).isoformat()
+            if output_value.tzinfo:
+                output_value = output_value.astimezone(timezone.utc) # datetime has timezone info, convert it to UTC
+            else:
+                output_value = output_value.replace(tzinfo=timezone.utc) # No timezone, assume it's already in UTC
+            return output_value.isoformat().replace("+00:00", "Z")
         return input_value
 
     @staticmethod
