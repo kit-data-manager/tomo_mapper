@@ -93,9 +93,9 @@ The variable needs to contain a branch name of this repo and branch deletion may
 
 To find out tested alignments between plugin versions and mapping-service versions check the following table:
 
-| Plugin version  | mapping-service version |
-|-----------------|------------------------|
-| v1.0.0          | v1.0.5*), v1.1.1*)     |
+| Plugin version | mapping-service version |
+|----------------|------------------------|
+| v1.0.0, v1.1.0 | v1.0.5*), v1.1.1*)     |
 
 *) Plugin needs to be built with version override to work with the specified version of the mapping-service
 
