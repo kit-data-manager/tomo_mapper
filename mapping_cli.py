@@ -83,10 +83,10 @@ def run_tomo_mapper(args):
         imgs = reader.retrieve_image_info()
 
         # Now all cases are taken into account
-        si = setup_infos if len(setup_infos) >= 1 else None
-        ri = run_infos if len(run_infos) >= 1 else None
+        #si = setup_infos if len(setup_infos) >= 1 else None
+        #ri = run_infos if len(run_infos) >= 1 else None
 
-        output = OutputWriter.stitch_together(si, ri, imgs)
+        output = OutputWriter.stitch_together(setup_infos, run_infos, imgs)
         OutputWriter.writeOutput(output, OUTPUT_PATH)
     except MappingAbortionError as e:
         reader.clean_up()
