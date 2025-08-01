@@ -7,8 +7,6 @@ on:
 jobs:
   build:
     runs-on: ${{ matrix.operating-system }}
-    environment:
-      name: ${{ github.ref_name }}
     strategy:
       matrix:
         operating-system: [ubuntu-latest]
@@ -49,8 +47,6 @@ jobs:
 
   test:
     runs-on: ${{ matrix.operating-system }}
-    environment:
-      name: ${{ github.ref_name }}
     strategy:
       fail-fast: false #We want to test independent of each other - success on a stable version is more important than on the latest version
       matrix:
