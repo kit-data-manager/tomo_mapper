@@ -17,6 +17,7 @@ import xmltodict
 from xml.parsers.expat import ExpatError
 
 from src.IO.MappingAbortionError import MappingAbortionError
+import re
 
 def robust_textfile_read(filepath):
     try:
@@ -113,6 +114,21 @@ def input_to_dict(stringPayload, stick_to_wellformed=False) -> Optional[dict]:
                 return dict_from_ini
             except (configparser.NoSectionError, configparser.NoOptionError):
                 logging.debug("Reading input as INI not successful")
+        if stringPayload.startswith("$"):  # Check if the input starts with "$"
+            try: #TXT
+                dict_from_txt = {}
+                lines = stringPayload.strip().split("\n") # Split the input into lines and process them
+                for line in lines:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    match = re.match(r"^(\${1,2}[\w_]+)\s+(.*)", line) # Use regex to extract key-value pairs from lines starting with $ or $$
+                    if match:
+                        key, value = match.groups()
+                        dict_from_txt[key] = value.strip()  # Store key-value pairs in dictionary
+                return dict_from_txt
+            except Exception as e:
+                logging.debug(f"Reading input as txt not successful: {e}")
         if not stick_to_wellformed and "\n" in stringPayload: #We try our best, but if this is not wanted, please stick to wellformed formats instead
             output_dict = {}
             data = stringPayload.replace("\r", "")

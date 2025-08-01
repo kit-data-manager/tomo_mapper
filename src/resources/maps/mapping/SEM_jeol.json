@@ -1,0 +1,19 @@
+{
+  "$CM_TITLE": "entry.title",
+  "$CM_DATE": "entry.endTime.Date",
+  "$CM_TIME": "entry.endTime.Time",
+  "$CM_VERSION": "entry.program.programVersion",
+  "$CM_OPERATOR": "entry.user.userName",
+  "$CM_ACCEL_VOLT": "entry.instrument.eBeamSource.accelerationVoltage.value",
+  "$$SM_PROBE_CURRENT": "entry.instrument.eBeamSource.beamCurrent.value",
+  "$SM_PENNING_VAC": "entry.instrument.eBeamSource.gunVacuum.value",
+  "$$SM_SCAN_ROTATION": "entry.instrument.stage.tiltCorrectionAngle.value",
+  "$$SM_WD": "entry.instrument.stage.eBeamWorkingDistance.value",
+  "$$SM_OL_APERTURE": "entry.instrument.imaging.apertureSetting.size.value",
+  "$$CM_SCAN_SPEED": "entry.instrument.imaging.dwellTime.value",
+  "$$CM_SCAN_MODE": "entry.instrument.imaging.cycleTime.value",
+  "$CM_INSTRUMENT": "entry.instrument.instrumentManufacturer.modelName",
+  "$$SM_DET_SE1_MODE_NUMBER": "entry.instrument.detectors.detector1.detectorName",
+  "$CM_FORMAT": "entry.instrument.instrumentName",
+  "$SM_VACUUM_MODE_FOR_SPECIMEN_CHAMBER": "entry.instrument.chamberPressure.value"
+}
