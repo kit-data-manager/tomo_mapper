@@ -70,7 +70,7 @@ public class SEMImagePlugin implements IMappingPlugin{
 
     @Override
     public MimeType[] inputTypes() {
-        return new MimeType[]{MimeTypeUtils.parseMimeType("image/tiff"), MimeTypeUtils.parseMimeType("text/plain")}; //should currently be IMAGE/TIFF
+        return new MimeType[]{MimeTypeUtils.parseMimeType("image/tiff"), MimeTypeUtils.parseMimeType("text/plain")};
     }
 
     @Override
