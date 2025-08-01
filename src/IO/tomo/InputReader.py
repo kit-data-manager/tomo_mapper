@@ -51,7 +51,7 @@ class InputReader:
         self.imageSources = im_sources
         
         if not os.path.isfile(input_path) and not os.path.isdir(input_path):
-            logging.error("Input file does not exist: {}. Aborting".format(input_path))
+            logging.error("Input file or folder does not exist: {}. Aborting".format(input_path))
             raise MappingAbortionError("Input file loading failed.")
 
         logging.info("Map file content successfully read and validated.")
