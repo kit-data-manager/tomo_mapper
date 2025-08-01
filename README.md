@@ -115,6 +115,8 @@ The following list provides the **minimal range of formats, that have been teste
   -  Carl Zeiss SEM (Zeiss instruments, tag 34118)
   -  FibicsXML (Zeiss instruments, tag 51023)
   -  FEI Helios (FEI / Thermofisher, tag 34682) 
+- text format
+  -  Tescan hdr files 
 
 ### Tomography metadata
 
@@ -123,9 +125,11 @@ The following list provides the **minimal range of formats, that have been teste
   - ATLAS3D-Setup (Zeiss)
   - EMProject (Thermofisher)
   - ProjectData (Thermofisher)
+  - TomographyProject (Tescan)
+- HDR format
+  - Dataset_info (Tescan) 
 
 ### Planned, currently not supported
-- Tescan png hdr files
 - JEOL bmp hdr files
 
 ## Acknowlegdements

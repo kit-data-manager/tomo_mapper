@@ -12,3 +12,8 @@ For more details check out the default maps in this folder:
 [Default map for Thermofisher input](./inputmap_thermofisher.json)
 
 [Default map for Zeiss input](./inputmap_zeiss-auriga.json)
+
+[Default map for Tescan input](./inputmap_tescan-minimal.json) (dataset_info.hdr file only for setup md)
+
+[Extended map for Tescan input](./inputmap_tescan.json) <br>
+(additionally reads in an xml setup md file. The file name likely needs to be changed on usage)
