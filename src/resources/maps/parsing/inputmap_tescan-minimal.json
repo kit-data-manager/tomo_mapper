@@ -1,12 +1,10 @@
 {
     "setup info": {
         "sources": [
-            "./Dataset_info.hdr",
-            "./CaSO4_as-is_Tomo1.xml"
+            "./Dataset_info.hdr"
         ],
         "parser": [
-            "Dataset_infoParser",
-            "TomographyProjectParser"
+            "Dataset_infoParser"
         ]
     },
     "image info": {
