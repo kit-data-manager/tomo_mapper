@@ -100,24 +100,26 @@ class InputReader:
         :return:
         """
         sources = []
-
-        if self.setupmdPairs:
-            sources += [s for s, _ in self.setupmdPairs]
+        setup_sources = [s for s, _ in self.setupmdPairs]
 
         sources += self.mapping_dict["image info"]["sources"]
 
-        for p, _, _ in os.walk(root_dir_path):
-            print(p)
-            valid_source_path = False
-            for s in sources:
-                full_source_path = os.path.normpath(os.path.join(p, s))
-                if glob(full_source_path):
-                    valid_source_path = True
-                else:
-                    valid_source_path = False
-                    break
-            if valid_source_path:
-                return p
+        #we treat multiple setup md files as optional, we are fine if we succeed with one of them
+        for setup_source in setup_sources:
+            current_sources = sources.copy()
+            current_sources.append(setup_source)
+            for p, _, _ in os.walk(root_dir_path):
+                print(p)
+                valid_source_path = False
+                for s in current_sources:
+                    full_source_path = os.path.normpath(os.path.join(p, s))
+                    if glob(full_source_path):
+                        valid_source_path = True
+                    else:
+                        valid_source_path = False
+                        break
+                if valid_source_path:
+                    return p
 
     def clean_up(self):
         if self.temp_dir_path:
