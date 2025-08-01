@@ -9,6 +9,7 @@ tiffparser_tomo_51023 = files.joinpath("TOMO_zeiss_image.json")
 
 textparser_tomo_tescan = files.joinpath("TOMO_tescan_image.json")
 textparser_sem_tescan = files.joinpath("SEM_tescan.json")
+textparser_sem_jeol = files.joinpath("SEM_jeol.json")
 
 setup_zeiss = files.joinpath("TOMO_zeiss_setup.json")
 setup_tf = files.joinpath("TOMO_thermofisher_setup.json")
