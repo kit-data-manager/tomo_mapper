@@ -100,14 +100,15 @@ class InputReader:
         :return:
         """
         sources = []
-        setup_sources = [s for s, _ in self.setupmdPairs]
+        setup_sources = [s for s, _ in self.setupmdPairs] if len(self.setupmdPairs) else [None]
 
         sources += self.mapping_dict["image info"]["sources"]
 
         #we treat multiple setup md files as optional, we are fine if we succeed with one of them
         for setup_source in setup_sources:
             current_sources = sources.copy()
-            current_sources.append(setup_source)
+            if setup_source: #if no setup_md source is defined, we only need to check the image sources
+                current_sources.append(setup_source)
             for p, _, _ in os.walk(root_dir_path):
                 print(p)
                 valid_source_path = False
