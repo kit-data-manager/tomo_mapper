@@ -75,6 +75,7 @@ def run_tomo_mapper(args):
             reader.clean_up()
         exit(e)
 
+    output = None
     try:
         setup_infos = reader.retrieve_setup_info()
 
@@ -94,6 +95,7 @@ def run_tomo_mapper(args):
 
     logging.info("Tomography mapping completed.")
     reader.clean_up()
+    return output
 
 def run_sem_mapper(args):
     argdict = vars(args)
