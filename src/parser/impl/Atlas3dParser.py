@@ -61,7 +61,7 @@ class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
 
         # Ensure datasets is always a list
         datasets = self._create_datasets(ac_md)
-        print(datasets)
+        #print(datasets)
 
         if not datasets:
             return acquisition, parsed
