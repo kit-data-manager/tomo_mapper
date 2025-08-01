@@ -116,7 +116,8 @@ The following list provides the **minimal range of formats, that have been teste
   -  FibicsXML (Zeiss instruments, tag 51023)
   -  FEI Helios (FEI / Thermofisher, tag 34682) 
 - text format
-  -  Tescan hdr files 
+  -  Tescan hdr files
+  -  JEOL txt files
 
 ### Tomography metadata
 
@@ -127,10 +128,7 @@ The following list provides the **minimal range of formats, that have been teste
   - ProjectData (Thermofisher)
   - TomographyProject (Tescan)
 - HDR format
-  - Dataset_info (Tescan) 
-
-### Planned, currently not supported
-- JEOL bmp hdr files
+  - Dataset_info (Tescan)
 
 ## Acknowlegdements
 
