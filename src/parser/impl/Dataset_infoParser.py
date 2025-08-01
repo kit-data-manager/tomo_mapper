@@ -7,10 +7,6 @@ from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import setup_tescan
 from src.util import input_to_dict
-from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
-from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
-from src.model.RunMD import RunMD
-from src.util import normalize_path
 from src.Preprocessor import Preprocessor
 
 
@@ -22,18 +18,6 @@ class Dataset_infoParser(SetupMD_Parser):
 
     def __init__(self):
         self.internal_mapping = input_to_dict(setup_tescan.read_text())
-
-    def parse_run(self, payload) -> tuple[RunMD, str]:
-        parsed = self._read_input(payload)
-        resultMD = parsed["Datasets - Dataset 1"]
-        
-        runMD = RunMD()
-
-        for detector in resultMD["Detectors"].split(","):
-            if detector not in DatasetType:
-                pass
-
-        return None, parsed
 
     def parse_setup(self, payload) -> tuple[SetupMD, dict]:
         parsed = self._read_input(payload)
