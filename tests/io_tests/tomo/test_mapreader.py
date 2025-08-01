@@ -7,6 +7,9 @@ import pytest
 
 from src.IO.tomo.MapfileReader import MapFileReader
 
+from src.parser.impl.Dataset_infoParser import Dataset_infoParser
+from src.parser.impl.TomographyProjectParser import TomographyProjectParser
+
 class TestMapfileReader:
 
     mapdata = {
@@ -76,3 +79,72 @@ class TestMapfileReader:
 
         test_map["image info"]["sources"] = ["./relative/path.tif"]
         MapFileReader.parse_mapinfo_for_images(test_map)
+
+    def test_single_parser_multiple_sources_setup(self):
+        """
+        Test single parser applied to multiple sources
+        """
+        test_map = {
+            "setup info": {
+                "sources": ["./src1.xml", "./src2.xml"],
+                "parser": "TomographyProjectParser"
+            }
+        }
+        setupmdPairs = MapFileReader.parse_mapinfo_for_setup(test_map)
+        for item in setupmdPairs: # [("./src1.xml", <"TomographyProjectParser" instance>), ("./src2.xml", <"TomographyProjectParser" instance>)]
+            assert len(item) == 2
+        assert len(setupmdPairs) == 2 
+        assert isinstance(setupmdPairs[0][1], TomographyProjectParser)
+        assert isinstance(setupmdPairs[1][1], TomographyProjectParser)
+
+    def test_parser_sources_list_matching_setup(self):
+        """
+        Test matching list of parsers and sources
+        """
+        test_map = {
+            "setup info": {
+                "sources": ["./src1.hdr", "./src2.xml"],
+                "parser": ["Dataset_infoParser", "TomographyProjectParser"]
+            }
+        }
+        setupmdPairs = MapFileReader.parse_mapinfo_for_setup(test_map)
+        for item in setupmdPairs: # [("./src1.hdr", <"TomographyProjectParser" instance>), ("./src2.xml", <"TomographyProjectParser" instance>)]
+            assert len(item) == 2
+        assert len(setupmdPairs) == 2 
+        assert isinstance(setupmdPairs[0][1], Dataset_infoParser)
+        assert isinstance(setupmdPairs[1][1], TomographyProjectParser)
+
+    def test_single_parser_multiple_sources_run(self):
+        """
+        Test single parser applied to multiple sources
+        """
+        test_map = {
+            "run info": {
+                "sources": ["./src1.xml", "./src2.xml"],
+                "parser": "TomographyProjectParser"
+            }
+        }
+        setupmdPairs = MapFileReader.parse_mapinfo_for_run(test_map)
+        for item in setupmdPairs: # [("./src1.xml", <"TomographyProjectParser" instance>), ("./src2.xml", <"TomographyProjectParser" instance>)]
+            assert len(item) == 2
+        assert len(setupmdPairs) == 2 
+        assert isinstance(setupmdPairs[0][1], TomographyProjectParser)
+        assert isinstance(setupmdPairs[1][1], TomographyProjectParser)
+
+    def test_parser_sources_list_matching_run(self):
+        """
+        Test matching list of parsers and sources
+        """
+        test_map = {
+            "run info": {
+                "sources": ["./src1.hdr", "./src2.xml"],
+                "parser": ["Dataset_infoParser", "TomographyProjectParser"]
+            }
+        }
+        setupmdPairs = MapFileReader.parse_mapinfo_for_run(test_map)
+        for item in setupmdPairs: # [("./src1.hdr", <"TomographyProjectParser" instance>), ("./src2.xml", <"TomographyProjectParser" instance>)]
+            assert len(item) == 2
+        assert len(setupmdPairs) == 2 
+        assert isinstance(setupmdPairs[0][1], Dataset_infoParser)
+        assert isinstance(setupmdPairs[1][1], TomographyProjectParser)
+

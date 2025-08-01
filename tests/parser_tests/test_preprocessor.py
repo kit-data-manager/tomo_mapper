@@ -71,8 +71,3 @@ class TestPreprocessor:
 
         semEntry = Entry(startTime=normalized)
         assert semEntry.startTime == "2015-04-12T00:00:00Z"
-
-        #input_date = {"Time": "14:15:00"}
-        #normalized = Preprocessor.normalize_datetime(input_date)
-
-        #semEntry = Entry(startTime=normalized)

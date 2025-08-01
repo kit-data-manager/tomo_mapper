@@ -10,7 +10,7 @@ from src.IO.tomo.InputReader import InputReader as InputReader_TOMO
 from src.IO.tomo.OutputWriter import OutputWriter
 from src.resources.maps.parsing import map_from_flag
 
-#make log level configurable from ENV, defaults to info level
+# make log level configurable from ENV, defaults to info level
 logging.basicConfig(
     level=os.environ.get('LOGLEVEL', 'INFO').upper()
 )
@@ -83,11 +83,11 @@ def run_tomo_mapper(args):
 
         imgs = reader.retrieve_image_info()
 
-        #TODO: Currently we only extract and use the first md file extraction
-        si = setup_infos[0] if len(setup_infos) == 1 else None
-        ri = run_infos[0] if len(run_infos) == 1 else None
+        # Now all cases are taken into account
+        #si = setup_infos if len(setup_infos) >= 1 else None
+        #ri = run_infos if len(run_infos) >= 1 else None
 
-        output = OutputWriter.stitch_together(si, ri, imgs)
+        output = OutputWriter.stitch_together(setup_infos, run_infos, imgs)
         OutputWriter.writeOutput(output, OUTPUT_PATH)
     except MappingAbortionError as e:
         reader.clean_up()

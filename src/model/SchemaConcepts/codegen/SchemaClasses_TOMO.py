@@ -76,7 +76,6 @@ class DatasetType(Enum):
     SEM_Multi_Detector_Image_Q1 = 'SEM Multi-Detector Image-Q1'
     SEM_Multi_Detector_Image_Q2 = 'SEM Multi-Detector Image-Q2'
 
-
 class Role(Enum):
     Data_Curator = 'Data Curator'
     Instrument_Scientist = 'Instrument Scientist'

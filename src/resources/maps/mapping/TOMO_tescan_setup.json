@@ -1,0 +1,23 @@
+{
+    "TomographyProject.Project.Slicing.@preset": "genericMetadata.program.programName",
+    "TomographyProject.Project.@sampleId": "genericMetadata.applicationID.identifierValue",
+    "TomographyProject.Project.@description": "genericMetadata.projectDescription",
+    "TomographyProject.Project.Slicing.@thickness": "genericMetadata.zCutSpacing.value",
+    "TomographyProject.AcquisitionsHistory.Acquisition.@totalSlices": "genericMetadata.numberOfCuts",
+    "TomographyProject.Acquisition.Positions.Position.Datasets.Dataset.ImageSettings.@beam_current": "dataset[*].instrument.eBeam.beamCurrent.value",
+    "TomographyProject.Acquisition.Positions.Position.Datasets.Dataset.ImageSettings.@scanMode": "dataset[*].instrument.eBeam.imageMode",
+    "TomographyProject.Acquisition.Positions.Position.Datasets.Dataset.@dwelltime": "dataset[*].instrument.scan.dwellTime.value",
+    "TomographyProject.Acquisition.Positions.Position.Datasets.Dataset.@pxlsize": "dataset[*].instrument.scan.pixelHeight.value",
+    "TomographyProject.Acquisition.Positions.Position.Datasets.Dataset.Detectors.@acc_count": "dataset[*].instrument.scan.eScan.lineAveraging",
+
+    "Slicing.FIB Preset": "genericMetadata.program.programName",
+    "Project & Sample.Sample ID": "genericMetadata.applicationID.identifierValue",
+    "Project & Sample.Description": "genericMetadata.projectDescription",
+    "Slicing.Slice Thickness.`sub(/(.+) (.+)/, \\\\1)`": "genericMetadata.zCutSpacing.value",
+    "Slicing.Slice Thickness.`sub(/(.+) (.+)/, \\\\2)`": "genericMetadata.zCutSpacing.unit",
+    "Datasets - Dataset 1.Dwell Time.`sub(/(.+) (.+)/, \\\\1)`": "dataset[*].instrument.scan.dwellTime.value",
+    "Datasets - Dataset 1.Dwell Time.`sub(/(.+) (.+)/, \\\\2)`": "dataset[*].instrument.scan.dwellTime.unit",
+    "Datasets - Dataset 1.Pixel Size.`sub(/(.+) (.+)/, \\\\1)`": "dataset[*].instrument.scan.pixelHeight.value",
+    "Datasets - Dataset 1.Pixel Size.`sub(/(.+) (.+)/, \\\\2)`": "dataset[*].instrument.scan.pixelHeight.unit",
+    "Datasets - Dataset 1.Accumulation - count": "dataset[*].instrument.scan.eScan.lineAveraging"
+}

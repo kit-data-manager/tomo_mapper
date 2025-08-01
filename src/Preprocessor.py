@@ -19,7 +19,8 @@ class Preprocessor:
         '°': 'degree',
         'um': 'µm',
         'Secs': 's',
-        'Mins': 'min'
+        'Mins': 'min',
+        'μs': 'us'
     }
 
 
@@ -80,4 +81,3 @@ class Preprocessor:
                 normalized_value = Preprocessor.normalize_datetime(original_value)
                 if normalized_value != original_value:
                     m.full_path.update(input_dict, normalized_value)
-
