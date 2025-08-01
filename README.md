@@ -1,5 +1,6 @@
 <!--![Tests](https://github.com/kit-data-manager/tomo_mapper/actions/workflows/python-app.yml/badge.svg)-->
 ![Tests](https://img.shields.io/github/actions/workflow/status/kit-data-manager/tomo_mapper/python-app.yml?label=Tests)
+[![Coverage Status](https://coveralls.io/repos/github/kit-data-manager/tomo_mapper/badge.svg)](https://coveralls.io/github/kit-data-manager/tomo_mapper)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 # SEM-FIB-Tomography Mapper
