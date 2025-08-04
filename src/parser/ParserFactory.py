@@ -1,5 +1,9 @@
 import logging
+from typing import Dict, Type
 
+from src.parser.ImageParser import ImageParser
+from src.parser.RunMD_Parser import RunMD_Parser
+from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.impl.Atlas3dParser import Atlas3dParser
 from src.parser.impl.EMProjectParser import EMProjectParser
 from src.parser.impl.ProjectDataParser import ProjectDataParser
@@ -11,14 +15,14 @@ from src.parser.impl.TxtParser import TxtParser
 
 class ParserFactory:
 
-    available_setupmd_parsers = {
+    available_setupmd_parsers: Dict[str, Type[SetupMD_Parser]]  = {
         "EMProjectParser": EMProjectParser,
         "Atlas3DParser": Atlas3dParser,
         "TomographyProjectParser": TomographyProjectParser,
         "Dataset_infoParser": Dataset_infoParser
     }
 
-    available_runmd_parsers = {
+    available_runmd_parsers: Dict[str, Type[RunMD_Parser]] = {
         "ProjectDataParser": ProjectDataParser,
         "Atlas3DParser": Atlas3dParser,
         "TomographyProjectParser": TomographyProjectParser,
@@ -31,7 +35,7 @@ class ParserFactory:
     }
 
     @staticmethod
-    def create_setupmd_parser(parser_name):
+    def create_setupmd_parser(parser_name) -> SetupMD_Parser:
         parser_class = ParserFactory.available_setupmd_parsers.get(parser_name)
         if parser_class:
             return parser_class()
@@ -40,7 +44,7 @@ class ParserFactory:
             raise ValueError(f"Parser {parser_name} not found")
 
     @staticmethod
-    def create_runmd_parser(parser_name):
+    def create_runmd_parser(parser_name) -> RunMD_Parser:
         parser_class = ParserFactory.available_runmd_parsers.get(parser_name)
         if parser_class:
             return parser_class()
@@ -49,7 +53,7 @@ class ParserFactory:
             raise ValueError(f"Parser {parser_name} not found")
 
     @staticmethod
-    def create_img_parser(parser_name, **kwargs):
+    def create_img_parser(parser_name, **kwargs) -> ImageParser:
         parser_class = ParserFactory.available_img_parsers.get(parser_name)
         if parser_class:
             return parser_class(**kwargs)
