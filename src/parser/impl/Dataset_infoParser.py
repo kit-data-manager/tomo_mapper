@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
@@ -19,7 +19,7 @@ class Dataset_infoParser(SetupMD_Parser):
     def __init__(self):
         self.internal_mapping = input_to_dict(setup_tescan.read_text())
 
-    def parse_setup(self, payload) -> tuple[SetupMD, dict]:
+    def parse_setup(self, payload) -> Tuple[SetupMD, dict]:
         parsed = self._read_input(payload)
         #print("..............",parsed)
         mapping_dict = self.internal_mapping

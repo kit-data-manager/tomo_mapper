@@ -1,6 +1,7 @@
 import logging
 import mimetypes
 import os
+from typing import List, Optional
 
 from src.IO.MappingAbortionError import MappingAbortionError
 from src.parser.ImageParser import ParserMode
@@ -11,7 +12,7 @@ from src.util import load_json, get_filetype_with_magica, robust_textfile_read
 class InputReader:
 
     mapping = None
-    parser_names = None
+    parser_names = []
 
     def __init__(self, map_path, input_path):
         logging.info("Preparing parsers based on parsing map file and input.")
@@ -32,7 +33,7 @@ class InputReader:
 
 
     @staticmethod
-    def get_applicable_parsers(input_path, by_extension = False):
+    def get_applicable_parsers(input_path, by_extension = False) -> List[str]:
         """
         Filters the available image parsers to those applicable to the input file format.
         It tries to determine by extension, but can fallback to using magica.
@@ -67,7 +68,7 @@ class InputReader:
                 available_parsers.append(k)
         return available_parsers
 
-    def retrieve_image_info(self, input_path):
+    def retrieve_image_info(self, input_path) -> Optional[dict]:
         """
         Applies the applicable list of parsers to the provided input. Stops on the first successful parsing result and returns it.
         Usually we do not expect more than one applicable parser to be available. If so, it would be advised to add more checks to keep the list of parsers at len 1.

@@ -1,13 +1,16 @@
 import logging
 import os.path
 from json import JSONDecodeError
+from typing import List, Tuple
 from urllib.parse import urlparse
 
 from requests import HTTPError
 
 from src.IO.MappingAbortionError import MappingAbortionError
-from src.parser.ImageParser import ParserMode
+from src.parser.ImageParser import ParserMode, ImageParser
 from src.parser.ParserFactory import ParserFactory
+from src.parser.RunMD_Parser import RunMD_Parser
+from src.parser.SetupMD_Parser import SetupMD_Parser
 from src.util import load_json
 
 import validators
@@ -45,7 +48,7 @@ class MapFileReader:
 
     #TODO: method might me a more generic util function. Move if needed elsewhere
     @staticmethod
-    def validate_relative_path(path_string):
+    def validate_relative_path(path_string) -> bool:
         if os.path.isabs(path_string):
             logging.error("Absolute path found in path string.")
             raise ValueError("Input was validated as relative path. Absolute path found instead: {}".format(path_string))
@@ -63,7 +66,7 @@ class MapFileReader:
         return True
 
     @staticmethod
-    def parse_mapinfo_for_setup(mapping_dict):
+    def parse_mapinfo_for_setup(mapping_dict) -> List[Tuple[str, SetupMD_Parser]]:
         setup = mapping_dict.get("setup info")
 
         if not setup or not setup.get("sources"):
@@ -98,7 +101,7 @@ class MapFileReader:
         return source_parser_pairs
     
     @staticmethod
-    def parse_mapinfo_for_run(mapping_dict):
+    def parse_mapinfo_for_run(mapping_dict) -> List[Tuple[str, RunMD_Parser]]:
         #TODO: create less redundant method for setup and run parsing
         run = mapping_dict.get("run info")
 
@@ -131,10 +134,8 @@ class MapFileReader:
 
         return source_parser_pairs
 
-
-
     @staticmethod
-    def parse_mapinfo_for_images(mapping_dict):
+    def parse_mapinfo_for_images(mapping_dict) -> Tuple[List[str], ImageParser]:
         #TODO: parse other information as well (tag, map)
         im_dict = mapping_dict.get("image info")
 
@@ -152,7 +153,6 @@ class MapFileReader:
             logging.error("No image parser defined in map file")
             raise ValueError('Error reading map info for images. No parser provided')
 
-        #parser = available_parsers.get(im_dict["parser"])
         parserArgs = dict()
         parserArgs["mode"] = ParserMode.TOMO
         if im_dict.get("tag"):

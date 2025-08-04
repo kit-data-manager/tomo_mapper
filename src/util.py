@@ -32,7 +32,7 @@ def robust_textfile_read(filepath):
             #TODO: since it is not clear who calls this function for what, it may make more sense to raise a unified error to handle instead of error for exit
             raise MappingAbortionError("File loading failed due to encoding.")
 
-def load_json(source) -> Optional[dict]:
+def load_json(source) -> dict:
     """
     Load JSON data from a local file path or a web URL.
 

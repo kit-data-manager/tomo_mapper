@@ -1,7 +1,7 @@
 import os
 import shutil
 from glob import glob
-from typing import List
+from typing import List, Optional
 
 from src.IO.MappingAbortionError import MappingAbortionError
 from src.IO.tomo.MapfileReader import MapFileReader
@@ -27,13 +27,13 @@ class InputReader:
     - warn about unusual input
     """
 
-    setupParser: SetupMD_Parser = None
-    setupmdSources: List[str] = []
-    imageParser: ImageParser = None
-    imageSources: List[str] = []
-    mapping_dict: dict = None
-    temp_dir_path: str = None
-    working_dir_path: str = None
+    setupParser: SetupMD_Parser
+    setupmdSources: List[str]
+    imageParser: ImageParser
+    imageSources: List[str]
+    mapping_dict: dict
+    temp_dir_path: str = ""
+    working_dir_path: str
 
     parserFactory = ParserFactory()
 
@@ -92,7 +92,7 @@ class InputReader:
                 supports.update(p.supported_input_sources())
         return list(supports)
 
-    def _detect_project_root(self, root_dir_path) -> str:
+    def _detect_project_root(self, root_dir_path) -> Optional[str]:
         """
         function to allow for as many nested directories in a zip file iff all described pathes in the mapping file point to the same root directory anyway.
 

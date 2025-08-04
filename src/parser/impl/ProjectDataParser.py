@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Tuple
 
 from src.model.RunMD import RunMD
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
@@ -12,10 +12,8 @@ class ProjectDataParser(RunMD_Parser):
     def supported_input_sources() -> List[str]:
         return ['Thermofisher Helios']
 
-    def parse_run(self, payload) -> tuple[RunMD, str]:
+    def parse_run(self, payload) -> Tuple[RunMD, str]:
         parsed = self._read_input(payload)
-
-        #get root dir for md file somehow?
 
         resultMD = parsed["Project"]["Results"]
 

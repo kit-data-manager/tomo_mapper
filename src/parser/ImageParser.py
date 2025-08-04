@@ -1,5 +1,6 @@
 import enum
 from abc import ABC, abstractmethod
+from typing import Tuple
 
 from src.model.ImageMD import ImageMD
 
@@ -22,7 +23,7 @@ class ImageParser(ABC):
         pass
 
     @abstractmethod
-    def parse(self, file_path, mapping) -> tuple[ImageMD, str]:
+    def parse(self, file_path, mapping) -> Tuple[ImageMD, str]:
         pass
 
     @abstractmethod

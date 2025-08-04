@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 import logging
+from typing import Tuple
 
 from src.model.SetupMD import SetupMD
 from src.parser.MetadataParser import MetadataParser
@@ -17,7 +18,7 @@ class SetupMD_Parser(MetadataParser):
         pass
 
     @abstractmethod
-    def parse_setup(self, payload) -> tuple[SetupMD, dict]:
+    def parse_setup(self, payload) -> Tuple[SetupMD, dict]:
         """
         derives a basic acquisition object from the payload
         :param payload:
