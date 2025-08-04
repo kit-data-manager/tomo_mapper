@@ -62,7 +62,7 @@ class EMProjectParser(SetupMD_Parser):
 
     @staticmethod
     def expected_input_format():
-        return "xml"
+        return "text/xml"
 
 
 

@@ -32,10 +32,10 @@ class MetadataParser(ABC):
         :param payload: input String
         :return: metadata dict
         """
-        if self.expected_input_format() == "xml":
+        if self.expected_input_format() == "text/xml":
             self.parsed_data = xmltodict.parse(payload)
             return self.parsed_data
-        if self.expected_input_format() == "json":
+        if self.expected_input_format() == "application/json":
             self.parsed_data = json.loads(payload)
             return self.parsed_data
         if self.expected_input_format() == "text/plain":
