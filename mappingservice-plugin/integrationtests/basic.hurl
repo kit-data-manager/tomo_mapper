@@ -7,7 +7,7 @@ HTTP 200
 [Captures]
 mappingType: jsonpath "$[0].id"
 
-#---------------- BEGIN Test Mapping for Thermofisher, Tescan and Jeol ----------------------------------
+#---------------- BEGIN Test Mapping for Thermofisher ----------------------------------
 
 #Register with a very small portion of real mapping file info as dummy mapping file
 POST {{host}}/api/v1/mappingAdministration/
@@ -67,6 +67,8 @@ DELETE {{host}}/api/v1/mappingAdministration/{{id1}}
 If-Match: {{etag}}
 HTTP 204
 
+#---------------- END Test Mapping for Thermofisher ----------------------------------
+#---------------- BEGIN Test Mapping for Tescan --------------------------------------
 
 #Register with a very small portion of real mapping file info as dummy mapping file
 POST {{host}}/api/v1/mappingAdministration/
@@ -126,6 +128,8 @@ DELETE {{host}}/api/v1/mappingAdministration/{{id1}}
 If-Match: {{etag}}
 HTTP 204
 
+#---------------- END Test Mapping for Tescan --------------------------------------
+#---------------- BEGIN Test Mapping for JEOL --------------------------------------
 
 #Register with a very small portion of real mapping file info as dummy mapping file
 POST {{host}}/api/v1/mappingAdministration/
@@ -185,4 +189,4 @@ DELETE {{host}}/api/v1/mappingAdministration/{{id1}}
 If-Match: {{etag}}
 HTTP 204
 
-#---------------- END Test Mapping for Thermofisher, Tescan and Jeol ----------------------------------
+#---------------- END Test Mapping for JEOL --------------------------------------
