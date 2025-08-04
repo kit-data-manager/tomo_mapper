@@ -1,6 +1,6 @@
 [project]
 name = "SEM-FIB-Tomo mapper"
-version = "v1.1.0"
+version = "1.2.0rc"
 description = "SEM-FIB-Tomography Mapper is a tool designed for mapping SEM (Scanning Electron Microscope) images and SEM-FIB Tomography metadata to a uniform, schema-compliant json format."
 
 keywords = ["SEM", "Tomography", "TIFF", "metadata", "extraction", "schema"]
