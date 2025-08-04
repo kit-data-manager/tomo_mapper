@@ -1,0 +1,16 @@
+{
+    "setup info": {
+        "sources": [
+            "./Dataset_info.hdr"
+        ],
+        "parser": [
+            "Dataset_infoParser"
+        ]
+    },
+    "image info": {
+        "sources": [
+            "./**/*.hdr"
+        ],
+        "parser": "TxtParser"
+    }
+}

@@ -64,26 +64,39 @@ class MapFileReader:
 
     @staticmethod
     def parse_mapinfo_for_setup(mapping_dict):
-
         setup = mapping_dict.get("setup info")
 
         if not setup or not setup.get("sources"):
             logging.warning("No source for setup info defined")
-            return None, None
+            return []
 
+        # Normalize sources to list
         sources = setup.get("sources")
+        if isinstance(sources, str):
+            sources = [sources]
 
-        if not setup.get("parser"):
-            logging.error("Setup metadata source(s) found, but no parser defined. This is likely a faulty map. If this is intended, remove the source or the whole setup info section")
-            raise ValueError('Error reading map info for setup metadata.')
+        # Normalize parsers
+        parsers = setup.get("parser")
+        if not parsers:
+            logging.error("Setup metadata source(s) found, but no parser defined.")
+            raise ValueError("Error reading map info for setup metadata.")
 
-        parser = ParserFactory.create_setupmd_parser(setup.get("parser"))
+        if isinstance(parsers, str):
+            parsers = [parsers] * len(sources)  # replicate one parser for all sources
 
-        for s in sources:
-            MapFileReader.validate_relative_path(s)
+        if not isinstance(parsers, list) or len(parsers) != len(sources):
+            raise ValueError(f"Mismatch between number of setup sources ({len(sources)}) and parsers ({len(parsers)}).")
 
-        return sources, parser
+        source_parser_pairs = []
+        for source, parser in zip(sources, parsers):
+            MapFileReader.validate_relative_path(source)
+            parser_class = ParserFactory.available_setupmd_parsers.get(parser)
+            if not parser_class:
+                raise ValueError(f"Unknown setup parser: {parser}")
+            source_parser_pairs.append((source, parser_class()))
 
+        return source_parser_pairs
+    
     @staticmethod
     def parse_mapinfo_for_run(mapping_dict):
         #TODO: create less redundant method for setup and run parsing
@@ -91,20 +104,34 @@ class MapFileReader:
 
         if not run or not run.get("sources"):
             logging.warning("No source for run info defined")
-            return None, None
+            return []
 
         sources = run.get("sources")
+        if isinstance(sources, str):
+            sources = [sources]
 
-        if not run.get("parser"):
-            logging.error("Run metadata source(s) found, but no parser defined. This is likely a faulty map. If this is intended, remove the source or the whole info section")
-            raise ValueError('Error reading map info for run metadata.')
+        parsers = run.get("parser")
+        if not parsers:
+            logging.error("Run metadata source(s) found, but no parser defined.")
+            raise ValueError("Error reading map info for run metadata.")
 
-        parser = ParserFactory.create_runmd_parser(run.get("parser"))
+        if isinstance(parsers, str):
+            parsers = [parsers] * len(sources)
 
-        for s in sources:
-            MapFileReader.validate_relative_path(s)
+        if not isinstance(parsers, list) or len(parsers) != len(sources):
+            raise ValueError(f"Mismatch between number of run sources ({len(sources)}) and parsers ({len(parsers)}).")
 
-        return sources, parser
+        source_parser_pairs = []
+        for source, parser in zip(sources, parsers):
+            MapFileReader.validate_relative_path(source)
+            parser_class = ParserFactory.available_runmd_parsers.get(parser)
+            if not parser_class:
+                raise ValueError(f"Unknown run parser: {parser}")
+            source_parser_pairs.append((source, parser_class()))
+
+        return source_parser_pairs
+
+
 
     @staticmethod
     def parse_mapinfo_for_images(mapping_dict):

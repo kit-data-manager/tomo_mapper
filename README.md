@@ -93,9 +93,9 @@ The variable needs to contain a branch name of this repo and branch deletion may
 
 To find out tested alignments between plugin versions and mapping-service versions check the following table:
 
-| Plugin version  | mapping-service version |
-|-----------------|------------------------|
-| v1.0.0          | v1.0.5*), v1.1.1*)     |
+| Plugin version | mapping-service version |
+|----------------|------------------------|
+| v1.0.0, v1.1.0 | v1.0.5*), v1.1.1*)     |
 
 *) Plugin needs to be built with version override to work with the specified version of the mapping-service
 
@@ -116,6 +116,9 @@ The following list provides the **minimal range of formats, that have been teste
   -  Carl Zeiss SEM (Zeiss instruments, tag 34118)
   -  FibicsXML (Zeiss instruments, tag 51023)
   -  FEI Helios (FEI / Thermofisher, tag 34682) 
+- text format
+  -  Tescan hdr files
+  -  JEOL txt files
 
 ### Tomography metadata
 
@@ -124,10 +127,9 @@ The following list provides the **minimal range of formats, that have been teste
   - ATLAS3D-Setup (Zeiss)
   - EMProject (Thermofisher)
   - ProjectData (Thermofisher)
-
-### Planned, currently not supported
-- Tescan png hdr files
-- JEOL bmp hdr files
+  - TomographyProject (Tescan)
+- HDR format
+  - Dataset_info (Tescan)
 
 ## Acknowlegdements
 

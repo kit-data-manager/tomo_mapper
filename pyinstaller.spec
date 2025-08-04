@@ -1,14 +1,19 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from PyInstaller.utils.hooks import collect_all
+
+# Collect all Magika-related files
+magika_datas, magika_binaries, magika_hiddenimports = collect_all('magika')
 
 a = Analysis(
     ['mapping_cli.py'],
     pathex=[],
-    binaries=[],
+    binaries=magika_binaries,
     datas=[
         ('src/resources', 'src/resources'),
+        *magika_datas,  # Include Magika's data files
     ],
-    hiddenimports=[],
+    hiddenimports=magika_hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
@@ -16,6 +21,7 @@ a = Analysis(
     noarchive=False,
     optimize=0,
 )
+
 pyz = PYZ(a.pure)
 
 exe = EXE(

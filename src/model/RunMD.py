@@ -14,7 +14,7 @@ class RunMD:
     """
 
     acquisition_metadata: Acquisition = None
-    images_by_datasets = defaultdict(list,{ k:[] for k in [e.value for e in DatasetType] })
+    images_by_datasets = defaultdict(list,{ DatasetType(k):[] for k in [e.value for e in DatasetType] })
 
     def get_images_for_datasetType(self, datasetType: DatasetType) -> List[TOMO_Image]:
         return self.images_by_datasets[datasetType]

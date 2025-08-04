@@ -1,0 +1,20 @@
+{
+    "MAIN.Date":"entry.endTime.Date",
+    "MAIN.Time":"entry.endTime.Time",
+    "MAIN.SoftwareVersion":"entry.program.programVersion",
+    "MAIN.UserName":"entry.user.userName",
+    "MAIN.Device": "entry.instrument.instrumentName",
+    "MAIN.DeviceModel": "entry.instrument.instrumentManufacturer.modelName",
+    "SEM.ChamberPressure":"entry.instrument.chamberPressure.value",
+    "SEM.AcceleratorVoltage":"entry.instrument.eBeamSource.accelerationVoltage.value",
+    "SEM.PredictedBeamCurrent":"entry.instrument.eBeamSource.beamCurrent.value",
+    "SEM.TiltCorrection":"entry.instrument.stage.tiltCorrectionAngle.value",
+    "SEM.StageX":"entry.instrument.stage.coordinates.xValue",
+    "SEM.StageY":"entry.instrument.stage.coordinates.yValue",
+    "SEM.StageZ":"entry.instrument.stage.coordinates.zValue",
+    "SEM.WD":"entry.instrument.stage.eBeamWorkingDistance.value",
+    "MAIN.PixelSizeX": "entry.instrument.imaging.pixelSize.xPixelSize.value",
+    "MAIN.PixelSizeY": "entry.instrument.imaging.pixelSize.yPixelSize.value",
+    "SEM.DwellTime":"entry.instrument.imaging.dwellTime.value",
+    "SEM.Detector":"entry.instrument.detectors.detector1.detectorName"
+}
