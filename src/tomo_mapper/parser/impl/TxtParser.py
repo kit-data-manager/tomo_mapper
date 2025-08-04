@@ -1,19 +1,13 @@
 import logging
 from typing import Optional
 
-from PIL import Image
-
-from src.Preprocessor import Preprocessor
-from src.model.ImageMD import ImageMD
-from src.parser.ImageParser import ImageParser, ParserMode
-from src.parser.mapping_util import map_a_dict
-from src.resources.maps.mapping import textparser_tomo_tescan
-from src.util import input_to_dict
+from tomo_mapper.Preprocessor import Preprocessor
+from tomo_mapper.model.ImageMD import ImageMD
+from tomo_mapper.parser.ImageParser import ImageParser, ParserMode
+from tomo_mapper.parser.mapping_util import map_a_dict
+from tomo_mapper.resources.maps.mapping import textparser_tomo_tescan
+from tomo_mapper.util import input_to_dict
 import configparser
-
-
-
-#TODO: would this have any benefit from replacing with tifffile lib?
 
 class TxtParser(ImageParser):
 
