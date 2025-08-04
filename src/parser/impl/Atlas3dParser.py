@@ -121,4 +121,4 @@ class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
 
     @staticmethod
     def expected_input_format():
-        return "xml"
+        return "text/xml"
