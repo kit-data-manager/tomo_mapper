@@ -24,9 +24,7 @@ class ParserFactory:
 
     available_runmd_parsers: Dict[str, Type[RunMD_Parser]] = {
         "ProjectDataParser": ProjectDataParser,
-        "Atlas3DParser": Atlas3dParser,
-        "TomographyProjectParser": TomographyProjectParser,
-        "Dataset_infoParser": Dataset_infoParser
+        "Atlas3DParser": Atlas3dParser
     }
 
     available_img_parsers = {
