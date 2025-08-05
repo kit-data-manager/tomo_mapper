@@ -17,13 +17,13 @@ from src.util import normalize_path
 class TomographyProjectParser(SetupMD_Parser):
 
     @staticmethod
-    def supported_input_sources() -> List[str]:
+    def supported_input_sources():
         return ['Tescan Solaris']
 
     def __init__(self):
         self.internal_mapping = input_to_dict(setup_tescan.read_text())
 
-    def parse_setup(self, payload) -> SetupMD:
+    def parse_setup(self, payload):
         parsed = self._read_input(payload)
 
         mapping_dict = self.internal_mapping

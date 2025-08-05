@@ -10,7 +10,7 @@ class SetupMD_Parser(MetadataParser):
 
     @staticmethod
     @abstractmethod
-    def retrievable_datasets():
+    def retrievable_datasets() -> bool:
         """
         :param self:
         :return: true if the metadata in question provides information about the datasets, false otherwise

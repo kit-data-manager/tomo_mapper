@@ -167,7 +167,7 @@ class InputReader:
             curr_impath_list = glob(os.path.normpath(os.path.join(self.working_dir_path, s)))
             for ip in curr_impath_list:
                 logging.info("Extracting image info from: {}/{}".format(os.path.basename(os.path.dirname(ip)), os.path.basename(ip)))
-                img, _ = self.imageParser.parse(ip, mapping=None) #TODO: sanitize and prepare params before
+                img = self.imageParser.parse(ip, mapping=None) #TODO: sanitize and prepare params before
                 if img:
                     image_infos.append(img)
         return image_infos

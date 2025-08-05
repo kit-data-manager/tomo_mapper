@@ -9,21 +9,22 @@ from src.util import normalize_path
 
 class ProjectDataParser(RunMD_Parser):
     @staticmethod
-    def supported_input_sources() -> List[str]:
+    def supported_input_sources():
         return ['Thermofisher Helios']
 
-    def parse_run(self, payload) -> RunMD:
+    def parse_run(self, payload):
         parsed = self._read_input(payload)
-
-        resultMD = parsed["Project"]["Results"]
 
         runMD = RunMD()
 
-        for imgmd in resultMD["Image"]:
-            if imgmd.get("ImagePurpose") and imgmd["ImagePurpose"] in DatasetType:
-                fp = normalize_path(imgmd["@FilePath"])
-                img = TOMO_Image(localPath=fp)
-                runMD.add_image(img, DatasetType(imgmd["ImagePurpose"]))
+        if parsed and parsed.get("Project"):
+            resultMD = parsed["Project"].get("Results")
+            images = resultMD.get("Image")
+            for imgmd in images:
+                if imgmd.get("ImagePurpose") and imgmd["ImagePurpose"] in DatasetType:
+                    fp = normalize_path(imgmd["@FilePath"])
+                    img = TOMO_Image(localPath=fp)
+                    runMD.add_image(img, DatasetType(imgmd["ImagePurpose"]))
 
         return runMD
 

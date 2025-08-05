@@ -12,13 +12,13 @@ from src.util import input_to_dict
 class EMProjectParser(SetupMD_Parser):
 
     @staticmethod
-    def supported_input_sources() -> List[str]:
+    def supported_input_sources():
         return ['Thermofisher Helios']
 
     def __init__(self):
         self.internal_mapping = input_to_dict(setup_tf.read_text())
 
-    def parse_setup(self, payload) -> SetupMD:
+    def parse_setup(self, payload):
         parsed = self._read_input(payload)
 
         mapping_dict = self.internal_mapping

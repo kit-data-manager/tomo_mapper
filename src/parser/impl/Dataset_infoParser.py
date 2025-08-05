@@ -19,7 +19,7 @@ class Dataset_infoParser(SetupMD_Parser):
     def __init__(self):
         self.internal_mapping = input_to_dict(setup_tescan.read_text())
 
-    def parse_setup(self, payload) -> SetupMD:
+    def parse_setup(self, payload):
         parsed = self._read_input(payload)
         #print("..............",parsed)
         mapping_dict = self.internal_mapping
