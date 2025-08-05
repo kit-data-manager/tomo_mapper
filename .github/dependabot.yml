@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    target-branch: "development"
+    directory: "/"  # Root directory
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+
+  #PLUGIN
+  - package-ecosystem: "gradle" # See documentation for possible values
+    target-branch: "development"
+    directory: "/mappingservice-plugin" # Location of package manifests
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
