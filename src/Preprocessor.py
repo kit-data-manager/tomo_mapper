@@ -63,7 +63,7 @@ class Preprocessor:
             if curr_date and not curr_time: # Handle only Date
                 curr_time = "00:00:00"
                 logging.info("Input with date information but no time information found. Setting time to 00:00:00")
-            input_value = curr_date + " " + curr_time
+            input_value = curr_date + " " + curr_time # type: ignore # <- ignore hint for static checker, please remove on code change
         output_value = parse_datetime(input_value)
         if type(output_value) == datetime:
             if output_value.tzinfo:

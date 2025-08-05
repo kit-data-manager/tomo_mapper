@@ -7,6 +7,10 @@ import json
 import logging
 
 import configparser
+
+from src.util import configparser_keep_keystring
+
+
 #from configparser import ConfigParser, NoInterpolation
 
 class MetadataParser(ABC):
@@ -40,18 +44,9 @@ class MetadataParser(ABC):
             return self.parsed_data
         if self.expected_input_format() == "text/plain":
             
-            def keep_keystring(optionstr: str) -> str:
-                '''
-                normally the configparser would convert keys to lowercase
-                we override this default function by a function that leaves the keys untouched
-                :param optionstr: 
-                :return: 
-                '''
-                return optionstr
-            
             self.parsed_data = {}
             config = configparser.ConfigParser(interpolation=configparser.Interpolation()) # disables interpolation explicitly
-            config.optionxform = keep_keystring # do this if you do not want to read in data as lowercase
+            config.optionxform = configparser_keep_keystring # do this if you do not want to read in data as lowercase
             config.read_string(payload)
             for section in config.sections():
                 items = config.items(section)

@@ -106,7 +106,7 @@ def input_to_dict(stringPayload, stick_to_wellformed=False) -> Optional[dict]:
             try: #INI
                 dict_from_ini = {}
                 config = configparser.ConfigParser()
-                config.optionxform = str #do this if you do not want to read in data as lowercase
+                config.optionxform = configparser_keep_keystring #do this if you do not want to read in data as lowercase
                 config.read_string(stringPayload)
                 for section in config.sections():
                     items = config.items(section)
@@ -155,3 +155,13 @@ def get_filetype_with_magica(filepath):
     m = Magika()
     res = m.identify_path(Path(filepath))
     return res.output.mime_type
+
+
+def configparser_keep_keystring(optionstr: str) -> str:
+    '''
+    normally the configparser would convert keys to lowercase
+    we override this default function by a function that leaves the keys untouched
+    :param optionstr: 
+    :return: 
+    '''
+    return optionstr

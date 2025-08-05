@@ -9,7 +9,7 @@ from src.model.SchemaConcepts.SEM_Image import SEM_Image
 from src.parser.ImageParser import ImageParser, ParserMode
 from src.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import textparser_tomo_tescan
-from src.util import input_to_dict
+from src.util import input_to_dict, configparser_keep_keystring
 import configparser
 
 
@@ -78,7 +78,7 @@ class TxtParser(ImageParser):
         #print(f"I am trying to read a {file_path}")
 
         config = configparser.ConfigParser(allow_no_value=True, delimiters=(" "))
-        config.optionxform = str
+        config.optionxform = configparser_keep_keystring
 
         # Read the .txt file either as UTF-8 or a different byte format using errors="replace"
         with open(file_path, "r", encoding="utf-8", errors="replace") as file:

@@ -114,7 +114,8 @@ class TiffParser(ImageParser):
                 additional_input = input_to_dict(md)
                 if not additional_input:
                     logging.debug("Unable to extract metadata as dictionary for {}".format(md))
-                output_dict.update(input_to_dict(md))
+                else:
+                    output_dict.update(additional_input)
             except Exception as e:
                 logging.debug("Unable to extract metadata as dictionary for {}".format(md))
                 pass
