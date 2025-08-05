@@ -1,8 +1,6 @@
-import unittest
-
-from src.model.RunMD import RunMD
-from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
-from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
+from tomo_mapper.model.RunMD import RunMD
+from tomo_mapper.model.SchemaConcepts.TOMO_Image import TOMO_Image
+from tomo_mapper.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 
 
 class TestSetupMD:

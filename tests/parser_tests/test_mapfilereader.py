@@ -4,11 +4,11 @@ import os
 
 import pytest
 
-from src.IO.MappingAbortionError import MappingAbortionError
-from src.IO.tomo.MapfileReader import MapFileReader
-from src.parser.impl.Atlas3dParser import Atlas3dParser
-from src.parser.impl.EMProjectParser import EMProjectParser
-from src.parser.impl.TiffParser import TiffParser
+from tomo_mapper.IO.MappingAbortionError import MappingAbortionError
+from tomo_mapper.IO.tomo.MapfileReader import MapFileReader
+from tomo_mapper.parser.impl.Atlas3dParser import Atlas3dParser
+from tomo_mapper.parser.impl.EMProjectParser import EMProjectParser
+from tomo_mapper.parser.impl.TiffParser import TiffParser
 
 
 class TestMapfileReader:
@@ -35,7 +35,7 @@ class TestMapfileReader:
         assert MapFileReader.validate_relative_path("../correct/**/wildcard_path")
 
     def test_loading_default_maps(self):
-        sourcesPath = os.path.join(self.testpath, "../../src/resources/maps/parsing/inputmap_*.json")
+        sourcesPath = os.path.join(self.testpath, "../../src/tomo_mapper/resources/maps/parsing/inputmap_*.json")
         map_sources = glob(sourcesPath)
 
         assert len(map_sources) > 0
@@ -48,7 +48,7 @@ class TestMapfileReader:
 
 
     def test_parsing_default_maps(self):
-        sourcesPath = os.path.join(self.testpath, "../../src/resources/maps/parsing/inputmap_*.json")
+        sourcesPath = os.path.join(self.testpath, "../../src/tomo_mapper/resources/maps/parsing/inputmap_*.json")
         map_sources = glob(sourcesPath)
 
         available_ac_parsers = {

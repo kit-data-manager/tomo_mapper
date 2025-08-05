@@ -5,12 +5,12 @@ import tempfile
 
 import pytest
 
-from src.IO.tomo.MapfileReader import MapFileReader
-from src.parser.impl.Atlas3dParser import Atlas3dParser
+from tomo_mapper.IO.tomo.MapfileReader import MapFileReader
+from tomo_mapper.parser.impl.Atlas3dParser import Atlas3dParser
 
-from src.parser.impl.Dataset_infoParser import Dataset_infoParser
-from src.parser.impl.ProjectDataParser import ProjectDataParser
-from src.parser.impl.TomographyProjectParser import TomographyProjectParser
+from tomo_mapper.parser.impl.Dataset_infoParser import Dataset_infoParser
+from tomo_mapper.parser.impl.ProjectDataParser import ProjectDataParser
+from tomo_mapper.parser.impl.TomographyProjectParser import TomographyProjectParser
 
 class TestMapfileReader:
 
@@ -95,7 +95,7 @@ class TestMapfileReader:
         setupmdPairs = MapFileReader.parse_mapinfo_for_setup(test_map)
         for item in setupmdPairs: # [("./src1.xml", <"TomographyProjectParser" instance>), ("./src2.xml", <"TomographyProjectParser" instance>)]
             assert len(item) == 2
-        assert len(setupmdPairs) == 2 
+        assert len(setupmdPairs) == 2
         assert isinstance(setupmdPairs[0][1], TomographyProjectParser)
         assert isinstance(setupmdPairs[1][1], TomographyProjectParser)
 
@@ -112,7 +112,7 @@ class TestMapfileReader:
         setupmdPairs = MapFileReader.parse_mapinfo_for_setup(test_map)
         for item in setupmdPairs: # [("./src1.hdr", <"TomographyProjectParser" instance>), ("./src2.xml", <"TomographyProjectParser" instance>)]
             assert len(item) == 2
-        assert len(setupmdPairs) == 2 
+        assert len(setupmdPairs) == 2
         assert isinstance(setupmdPairs[0][1], Dataset_infoParser)
         assert isinstance(setupmdPairs[1][1], TomographyProjectParser)
 

@@ -13,22 +13,58 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.util.Properties;
 
+import org.tomlj.Toml;
+import org.tomlj.TomlParseResult;
+
 public class SEMImagePlugin implements IMappingPlugin{
 
     private static String version;
 
     private final Logger LOGGER = LoggerFactory.getLogger(SEMImagePlugin.class);
-    private final String REPOSITORY = "https://github.com/kit-data-manager/tomo_mapper";
+    private String REPOSITORY;
     private String TAG;
+    private String NAME;
+    private String DESCRIPTION;
+    private MimeType[] INPUT_MIME_TYPES;
+    private MimeType[] OUTPUT_MIME_TYPES;
     private Path dir;
 
-
     public SEMImagePlugin() {
+        loadVersion();
+        loadTomlConfig();
+    }
+
+    private void loadTomlConfig() {
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        URL resource = classLoader.getResource("pyproject.toml");
+        LOGGER.info("Resource file: " + resource);
+
+        if (resource != null) {
+            try (InputStream input = resource.openStream()) {
+                TomlParseResult result = Toml.parse(input);
+
+                if (result.hasErrors()) {
+                    result.errors().forEach(error -> LOGGER.warn("TOML parse error: " + error.toString()));
+                } else {
+                    REPOSITORY = result.getString("project.urls.repository");
+                    if (REPOSITORY == null) throw new IllegalArgumentException("Repository URL cannot be read from config");
+                    NAME = result.getString("tool.plugin.name");
+                    if (NAME == null) throw new IllegalArgumentException("Plugin name cannot be read from config");
+                    DESCRIPTION = result.contains("tool.plugin.description") ? result.getString("tool.plugin.description") : "descrption unavailable";
+                    INPUT_MIME_TYPES = result.getArrayOrEmpty("tool.plugin.input_mimes").toList().stream().map(Object::toString).map(MimeTypeUtils::parseMimeType).toArray(MimeType[]::new);
+                    OUTPUT_MIME_TYPES = result.getArrayOrEmpty("tool.plugin.output_mimes").toList().stream().map(Object::toString).map(MimeTypeUtils::parseMimeType).toArray(MimeType[]::new);
+                }
+            } catch (Exception e) {
+                LOGGER.error("Failed to load TOML file: " + e.getMessage());
+            }
+        }
+    }
+
+    private void loadVersion() {
         try {
             // Get the context class loader
             ClassLoader classLoader = this.getClass().getClassLoader();
-            // TODO: do we need to make sure that the resource path is somehow related to the current plugin to avoid loading the wrong property file in case of identical property names?
-            URL resource = classLoader.getResource("sempluginversion.properties");
+            URL resource = classLoader.getResource("pluginversion.properties");
             LOGGER.info("Resource file: {}", resource);
             if (resource != null) {
                 // Load the properties file
@@ -50,12 +86,12 @@ public class SEMImagePlugin implements IMappingPlugin{
 
     @Override
     public String name() {
-        return "GenericSEMtoJSON";
+        return NAME;
     }
 
     @Override
     public String description() {
-        return "This python based tool extracts metadata from machine generated scanning microscopy images and generates a JSON file adhering to the schema.";
+        return DESCRIPTION;
     }
 
     @Override
@@ -75,7 +111,7 @@ public class SEMImagePlugin implements IMappingPlugin{
 
     @Override
     public MimeType[] outputTypes() {
-        return new MimeType[]{MimeTypeUtils.APPLICATION_JSON};
+        return OUTPUT_MIME_TYPES;
     }
 
     @Override
@@ -104,9 +140,9 @@ public class SEMImagePlugin implements IMappingPlugin{
     @Override
     public MappingPluginState mapFile(Path mappingFile, Path inputFile, Path outputFile) throws MappingPluginException {
         long startTime = System.currentTimeMillis();
-        LOGGER.trace("Run SEM-Mapping-Tool on '{}' with mapping '{}' -> '{}'", mappingFile, inputFile, outputFile);
+        LOGGER.trace("Run {} on '{}' with mapping '{}' -> '{}'", this.name(), mappingFile, inputFile, outputFile);
         //MappingPluginState result = PythonRunnerUtil.runPythonScript(dir + "/metaMapper.py", mappingFile.toString(), inputFile.toString(), outputFile.toString());
-        String[] args = {"sem", "-m", mappingFile.toString(), "-i", inputFile.toString(), "-o", outputFile.toString()};
+        String[] args = {"-m", mappingFile.toString(), "-i", inputFile.toString(), "-o", outputFile.toString()};
         MappingPluginState result = PythonRunnerUtil.runPythonScript(dir + "/plugin_wrapper.py", args);
         long endTime = System.currentTimeMillis();
         long totalTime = endTime - startTime;

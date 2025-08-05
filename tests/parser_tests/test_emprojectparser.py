@@ -1,7 +1,7 @@
 import os
 from pprint import pprint
 
-from src.parser.impl.EMProjectParser import EMProjectParser
+from tomo_mapper.parser.impl.EMProjectParser import EMProjectParser
 
 
 class TestEmprojectParser:

@@ -1,4 +1,4 @@
-from src.model.SchemaConcepts.Dataset_simplified import Dataset
+from tomo_mapper.model.SchemaConcepts.Dataset_simplified import Dataset
 
 class TestDataset:
 

@@ -1,8 +1,8 @@
 import importlib
 from enum import Enum
 
-from src.Preprocessor import Preprocessor
-from src.model.SchemaConcepts.codegen.SchemaClasses_SEM import Entry
+from tomo_mapper.Preprocessor import Preprocessor
+from tomo_mapper.model.SchemaConcepts.codegen.SchemaClasses_SEM import Entry
 
 
 class TestPreprocessor:
@@ -21,7 +21,7 @@ class TestPreprocessor:
             }
         }
 
-        units_module = importlib.import_module('src.model.SchemaConcepts.codegen.SchemaClasses_TOMO')
+        units_module = importlib.import_module('tomo_mapper.model.SchemaConcepts.codegen.SchemaClasses_TOMO')
 
         # Collect all unit values that are allowed
         all_units = set()
