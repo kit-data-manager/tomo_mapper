@@ -138,7 +138,7 @@ class InputReader:
                 try:
                     logging.info("Extracting setup info from: {}".format(s))
                     file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
-                    setupMD, _ = p.parse_setup(file_contents)
+                    setupMD = p.parse_setup(file_contents)
                     setup_infos.append(setupMD)
                 except FileNotFoundError:
                     logging.error("Setup md file does not exist: {}. Please make sure the configuration in the map file matches your input data".format(s))
@@ -153,7 +153,7 @@ class InputReader:
                 try:
                     logging.info("Extracting run info from: {}".format(s))
                     file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
-                    runMD, _ = p.parse_run(file_contents)
+                    runMD = p.parse_run(file_contents)
                     run_infos.append(runMD)
                 except FileNotFoundError:
                     logging.error("Run md file does not exist: {}. Please make sure the configuration in the map file matches your input data".format(s))

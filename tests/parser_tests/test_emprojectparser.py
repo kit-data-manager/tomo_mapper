@@ -20,7 +20,6 @@ class TestEmprojectParser:
         self.setUp()
         # TODO: You are not a real test yet
         parser = EMProjectParser()
-        setupmd, raw = parser.parse_setup(self.payload)
+        setupmd = parser.parse_setup(self.payload)
         print(setupmd.__dict__)
-        print(raw)
         pprint(setupmd.acquisition_metadata.to_schema_dict())

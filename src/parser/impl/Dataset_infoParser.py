@@ -19,7 +19,7 @@ class Dataset_infoParser(SetupMD_Parser):
     def __init__(self):
         self.internal_mapping = input_to_dict(setup_tescan.read_text())
 
-    def parse_setup(self, payload) -> Tuple[SetupMD, dict]:
+    def parse_setup(self, payload) -> SetupMD:
         parsed = self._read_input(payload)
         #print("..............",parsed)
         mapping_dict = self.internal_mapping
@@ -29,14 +29,12 @@ class Dataset_infoParser(SetupMD_Parser):
 
         acquisition = self._create_acquisition(ac_md)
         datasets = self._create_datasets(ac_md)
-        if not datasets:
-            return acquisition, parsed
 
         if len(datasets) == 1:
             acquisition.dataset_template = datasets[0]
-        else:
+        if len(datasets) > 1:
             acquisition.datasets = datasets
-        return SetupMD(acquisition_metadata=acquisition), parsed
+        return SetupMD(acquisition_metadata=acquisition)
 
     def _create_acquisition(self, ac_md) -> Acquisition:
 

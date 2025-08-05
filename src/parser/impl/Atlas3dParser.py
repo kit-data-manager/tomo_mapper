@@ -24,7 +24,7 @@ class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
     def __init__(self):
         self.internal_mapping = input_to_dict(setup_zeiss.read_text())
 
-    def parse_run(self, payload) -> tuple[RunMD, str]:
+    def parse_run(self, payload) -> RunMD:
         parsed = self._read_input(payload)
 
         resultMD = parsed["ATLAS3D-Job"]["ATLAS3D-Run"]
@@ -46,10 +46,10 @@ class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
                         img = TOMO_Image(localPath=fp)
                         runMD.add_image(img, DatasetType(imgmd.get(field).split("\\")[0]))
 
-        return runMD, parsed
+        return runMD
 
 
-    def parse_setup(self, payload) -> tuple[SetupMD, dict]:
+    def parse_setup(self, payload) -> SetupMD:
         parsed = self._read_input(payload)
 
         mapping_dict = self.internal_mapping
@@ -63,14 +63,11 @@ class Atlas3dParser(SetupMD_Parser, RunMD_Parser):
         datasets = self._create_datasets(ac_md)
         #print(datasets)
 
-        if not datasets:
-            return acquisition, parsed
-
         if len(datasets) == 1:
             acquisition.dataset_template = datasets[0]
-        else:
+        if len(datasets) > 1:
             acquisition.datasets = datasets
-        return SetupMD(acquisition_metadata=acquisition), parsed
+        return SetupMD(acquisition_metadata=acquisition)
 
     def _create_acquisition(self, ac_md) -> Acquisition:
 

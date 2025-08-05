@@ -7,9 +7,8 @@ from src.parser.MetadataParser import MetadataParser
 
 class RunMD_Parser(MetadataParser):
 
-    @staticmethod
     @abstractmethod
-    def parse_run(self, payload) -> Tuple[RunMD, dict]:
+    def parse_run(self, payload) -> RunMD:
         """
         derives setup md from metadata file
         :param self:

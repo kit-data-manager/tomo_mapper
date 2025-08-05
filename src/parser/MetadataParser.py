@@ -25,7 +25,7 @@ class MetadataParser(ABC):
         :return:
         """
         pass
-
+    
     def _read_input(self, payload) -> Optional[dict]:
         """
         creates metadata dictionary from payload

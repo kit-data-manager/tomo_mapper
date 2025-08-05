@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List
 
 from src.model.RunMD import RunMD
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
@@ -12,7 +12,7 @@ class ProjectDataParser(RunMD_Parser):
     def supported_input_sources() -> List[str]:
         return ['Thermofisher Helios']
 
-    def parse_run(self, payload) -> Tuple[RunMD, str]:
+    def parse_run(self, payload) -> RunMD:
         parsed = self._read_input(payload)
 
         resultMD = parsed["Project"]["Results"]
@@ -25,7 +25,7 @@ class ProjectDataParser(RunMD_Parser):
                 img = TOMO_Image(localPath=fp)
                 runMD.add_image(img, DatasetType(imgmd["ImagePurpose"]))
 
-        return runMD, parsed
+        return runMD
 
     @staticmethod
     def expected_input_format():

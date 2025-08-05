@@ -18,21 +18,19 @@ class EMProjectParser(SetupMD_Parser):
     def __init__(self):
         self.internal_mapping = input_to_dict(setup_tf.read_text())
 
-    def parse_setup(self, payload) -> tuple[SetupMD, dict]:
+    def parse_setup(self, payload) -> SetupMD:
         parsed = self._read_input(payload)
 
         mapping_dict = self.internal_mapping
         ac_md = map_a_dict(parsed, mapping_dict)
         acquisition = self._create_acquisition(ac_md)
         datasets = self._create_datasets(ac_md)
-        if not datasets:
-            return acquisition, parsed
 
         if len(datasets) == 1:
             acquisition.dataset_template = datasets[0]
-        else:
+        if len(datasets) > 1:
             acquisition.datasets = datasets
-        return SetupMD(acquisition_metadata=acquisition), parsed
+        return SetupMD(acquisition_metadata=acquisition)
 
     def _create_acquisition(self, ac_md) -> Acquisition:
 
