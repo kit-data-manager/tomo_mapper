@@ -1,4 +1,5 @@
 import os.path
+from typing import Optional
 
 
 class MappingConfig:
@@ -10,5 +11,5 @@ class MappingConfig:
         cls.working_dir = os.path.normpath(working_dir)
 
     @classmethod
-    def get_working_dir(cls):
+    def get_working_dir(cls) -> Optional[str]:
         return cls.working_dir

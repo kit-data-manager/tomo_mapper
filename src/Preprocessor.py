@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime, timezone
+from typing import Union
 
 from jsonpath_ng.parser import JsonPathParser
 
@@ -29,7 +30,7 @@ class Preprocessor:
         if input_value in Preprocessor.unit_normalization.keys():
             return Preprocessor.unit_normalization[input_value]
         return input_value
-
+    
     @staticmethod
     def normalize_all_units(input_dict):
         """
@@ -51,15 +52,18 @@ class Preprocessor:
                     m.full_path.update(input_dict, normalized_value)
 
     @staticmethod
-    def normalize_datetime(input_value) -> str:
+    def normalize_datetime(input_value) -> Union[str, dict]:
         if type(input_value) == dict:
-            if not input_value.get("Date") and input_value.get("Time"): # Not possible to handle only Time
+            curr_date = input_value.get("Date")
+            curr_time = input_value.get("Time")
+            if not curr_date and not curr_time: return input_value
+            if not curr_date and curr_time: # Not possible to handle only Time
                 logging.warning("Encountered complex date field, but cannot interpret it")
                 return input_value
-            if input_value.get("Date") and not input_value.get("Time"): # Handle only Date
-                input_value["Time"] = "00:00:00"
+            if curr_date and not curr_time: # Handle only Date
+                curr_time = "00:00:00"
                 logging.info("Input with date information but no time information found. Setting time to 00:00:00")
-            input_value = input_value.get("Date") + " " + input_value.get("Time")
+            input_value = curr_date + " " + curr_time
         output_value = parse_datetime(input_value)
         if type(output_value) == datetime:
             if output_value.tzinfo:
@@ -71,6 +75,11 @@ class Preprocessor:
 
     @staticmethod
     def normalize_all_datetimes(input_dict):
+        """
+        Inplace normalization of all values in datetime fields
+        :param input_dict: dictionary to replace in
+        :return: 
+        """
         fields_for_normalization = ["creationTime", "startTime", "endTime"] #we could do it more generically but may want to limit it to specific fields
 
         for f in fields_for_normalization:
