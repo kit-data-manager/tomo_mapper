@@ -4,7 +4,7 @@ from pprint import pprint
 
 import pytest
 
-from mapping_cli import run_tomo_mapper
+from tomo_mapper.mapping_main import run_tomo_mapper
 
 class TestInputFolder:
 

@@ -1,6 +1,6 @@
 [project]
 name = "tomo_mapper"
-version = "1.0.1rc"
+version = "1.2.0rc"
 description = "SEM-FIB-Tomography Mapper is a tool designed for mapping SEM (Scanning Electron Microscope) images and SEM-FIB Tomography metadata to a uniform, schema-compliant json format."
 keywords = ["SEM", "Tomography", "TIFF", "metadata", "extraction", "schema"]
 readme = "README.md"
@@ -44,6 +44,9 @@ include-package-data = true
 #[tool.setuptools.packages.find]
 #where = ["src"]
 #include = ["tomo_mapper*"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
 
 [tool.setuptools.dynamic]
 dependencies = {file = [ "requirements.txt" ] }

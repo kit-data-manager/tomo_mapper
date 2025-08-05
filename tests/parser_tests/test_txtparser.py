@@ -4,11 +4,11 @@ from pprint import pprint
 
 import pytest
 
-from src.config import MappingConfig
-from src.parser.ImageParser import ParserMode
-from src.tomo_mapper.parser.impl.TxtParser import TxtParser
-from src.resources.maps.mapping import textparser_sem_tescan, textparser_sem_jeol
-from src.util import input_to_dict
+from tomo_mapper.config import MappingConfig
+from tomo_mapper.parser.ImageParser import ParserMode
+from tomo_mapper.parser.impl.TxtParser import TxtParser
+from tomo_mapper.resources.maps.mapping import textparser_sem_tescan, textparser_sem_jeol
+from tomo_mapper.util import input_to_dict
 
 
 class TestTXTparser:
