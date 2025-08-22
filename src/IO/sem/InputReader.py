@@ -5,13 +5,14 @@ import os
 from src.IO.MappingAbortionError import MappingAbortionError
 from src.parser.ImageParser import ParserMode
 from src.parser.ParserFactory import ParserFactory
-from src.util import load_json, get_filetype_with_magica, robust_textfile_read
+from src.util import is_zipfile, extract_zip_file, load_json, get_filetype_with_magica, robust_textfile_read
 
 
 class InputReader:
 
     mapping = None
     parser_names = None
+    temp_dir_path: str = None
 
     def __init__(self, map_path, input_path):
         logging.info("Preparing parsers based on parsing map file and input.")
@@ -20,15 +21,18 @@ class InputReader:
         if not os.path.exists(input_path):
             logging.error("Input file {} does not exist. Aborting".format(input_path))
             raise MappingAbortionError("Input file loading failed.")
+        
+        if is_zipfile(input_path):
+            self.temp_dir_path = extract_zip_file(input_path)
+        else:
+            self.parser_names = self.get_applicable_parsers(input_path)
 
-        self.parser_names = self.get_applicable_parsers(input_path)
-
-        if not self.parser_names:
-            logging.error("No applicable parsers found for input {}".format(input_path))
-            mimetype_set = list(set([v.expected_input_format() for v in ParserFactory.available_img_parsers.values()]))
-            logging.info("Supported mimetypes: {}".format(mimetype_set))
-            raise MappingAbortionError("Input file parsing aborted.")
-        logging.info("Applicable parsers: {}".format(", ".join(self.parser_names)))
+            if not self.parser_names:
+                logging.error("No applicable parsers found for input {}".format(input_path))
+                mimetype_set = list(set([v.expected_input_format() for v in ParserFactory.available_img_parsers.values()]))
+                logging.info("Supported mimetypes: {}".format(mimetype_set))
+                raise MappingAbortionError("Input file parsing aborted.")
+            logging.info("Applicable parsers: {}".format(", ".join(self.parser_names)))
 
 
     @staticmethod

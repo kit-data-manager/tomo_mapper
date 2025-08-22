@@ -3,11 +3,13 @@ import json
 import logging
 import os
 from sys import exit
+from pathlib import Path
 
 from src.IO.MappingAbortionError import MappingAbortionError
 from src.IO.sem.InputReader import InputReader as InputReader_SEM
 from src.IO.tomo.InputReader import InputReader as InputReader_TOMO
-from src.IO.tomo.OutputWriter import OutputWriter
+from src.IO.sem.OutputWriter import OutputWriter as OutputWriter_SEM
+from src.IO.tomo.OutputWriter import OutputWriter as OutputWriter_TOMO
 from src.resources.maps.parsing import map_from_flag
 
 # make log level configurable from ENV, defaults to info level
@@ -87,8 +89,8 @@ def run_tomo_mapper(args):
         #si = setup_infos if len(setup_infos) >= 1 else None
         #ri = run_infos if len(run_infos) >= 1 else None
 
-        output = OutputWriter.stitch_together(setup_infos, run_infos, imgs)
-        OutputWriter.writeOutput(output, OUTPUT_PATH)
+        output = OutputWriter_TOMO.stitch_together(setup_infos, run_infos, imgs)
+        OutputWriter_TOMO.writeOutput(output, OUTPUT_PATH)
     except MappingAbortionError as e:
         reader.clean_up()
         exit(e)
@@ -105,16 +107,66 @@ def run_sem_mapper(args):
 
     try:
         reader = InputReader_SEM(MAP_SOURCE, INPUT_SOURCE)
+        tmpdir = reader.temp_dir_path
 
-        img_info = reader.retrieve_image_info(INPUT_SOURCE)
-        if not img_info:
-            logging.error('Could not retrieve image information due to unknown error. Aborting.')
-            exit(1)
-        with open(OUTPUT_PATH, 'w', encoding="utf-8") as f:
-            json.dump(img_info, f, indent=4, ensure_ascii=False)
+        if tmpdir:
+            # The case of a zipped input file
+            list_of_file_names = []
+            success_count = 0
+
+            for file_path in Path(tmpdir).rglob('*'):
+                if not file_path.is_file():
+                    continue
+                if '__MACOSX' in str(file_path):
+                    #logging.debug(f"Skipping macOS metadata file: {file_path}")
+                    continue
+
+                logging.info(f"Processing extracted file: {file_path.name}")
+                try:
+                    reader_ = InputReader_SEM(MAP_SOURCE, file_path)
+                    img_info = reader_.retrieve_image_info(file_path)
+                    logging.debug(f"IMAGE_INFO: {img_info}")
+
+                    if not img_info:
+                        raise MappingAbortionError(f"Could not retrieve image information for {input_file}.")
+
+                    file_name = file_path.with_suffix('').name + ".json"
+                    OutputWriter_SEM.save_the_file(img_info, file_name)
+                    list_of_file_names.append(file_name)
+                    success_count += 1
+
+                except MappingAbortionError as e:
+                    logging.warning(f"Skipping file {file_path.name} due to mapping error: {e}")
+                except Exception as e:
+                    logging.exception(f"Unexpected error processing file {file_path.name}")
+
+            if success_count > 0:
+                logging.info(f"In total {success_count} file(s) were successfully processed.")
+                OutputWriter_SEM.save_to_zip(list_of_file_names, OUTPUT_PATH)
+            else:
+                logging.error("No files could be processed successfully. Aborting.")
+                exit(1)
+
+        else:
+            # The case of a single input file
+            logging.info("Processing input as single file.")
+            img_info = reader.retrieve_image_info(INPUT_SOURCE)
+            if not img_info:
+                logging.error("Could not retrieve image information due to unknown error. Aborting.")
+                exit(1)
+            
+            OutputWriter_SEM.save_the_file(img_info, OUTPUT_PATH)
+
+            #with open(OUTPUT_PATH, 'w', encoding="utf-8") as f:
+                #json.dump(img_info, f, indent=4, ensure_ascii=False)
+
     except MappingAbortionError as e:
+        logging.error(f"MappingAbortionError: {e}")
+        if reader:
+            reader.clean_up()
+        if reader_:
+            reader_.clean_up()
         exit(e)
-
 
 if __name__ == '__main__':
     run_cli()
