@@ -128,7 +128,7 @@ def run_sem_mapper(args):
                     logging.debug(f"IMAGE_INFO: {img_info}")
 
                     if not img_info:
-                        raise MappingAbortionError(f"Could not retrieve image information for {input_file}.")
+                        raise MappingAbortionError(f"Could not retrieve image information for {file_path.name}.")
 
                     file_name = file_path.with_suffix('').name + ".json"
                     OutputWriter_SEM.save_the_file(img_info, file_name)
