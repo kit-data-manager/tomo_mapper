@@ -3,6 +3,7 @@ from typing import Optional
 
 from PIL import Image
 
+from src.IO.MappingAbortionError import MappingAbortionError
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.parser.ImageParser import ImageParser, ParserMode
@@ -36,7 +37,7 @@ class TxtParser(ImageParser):
 
         if not mapping and not self.internal_mapping:
             logging.error("No mapping provided for image parsing. Aborting")
-            exit(1)
+            raise MappingAbortionError("Image parsing failed.")
         mapping_dict = mapping if mapping else self.internal_mapping
         image_md = map_a_dict(input_md, mapping_dict)
         #print("image_md: ", image_md)

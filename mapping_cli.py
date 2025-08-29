@@ -144,16 +144,14 @@ def run_sem_mapper(args):
                 logging.info(f"In total {success_count} file(s) were successfully processed.")
                 OutputWriter_SEM.save_to_zip(list_of_file_names, OUTPUT_PATH)
             else:
-                logging.error("No files could be processed successfully. Aborting.")
-                exit(1)
+                raise MappingAbortionError("No files could be processed successfully. Aborting.")
 
         else:
             # The case of a single input file
             logging.info("Processing input as single file.")
             img_info = reader.retrieve_image_info(INPUT_SOURCE)
             if not img_info:
-                logging.error("Could not retrieve image information due to unknown error. Aborting.")
-                exit(1)
+                raise MappingAbortionError("Could not retrieve image information. Aborting.")
             
             OutputWriter_SEM.save_the_file(img_info, OUTPUT_PATH)
 
@@ -161,7 +159,7 @@ def run_sem_mapper(args):
                 #json.dump(img_info, f, indent=4, ensure_ascii=False)
 
     except MappingAbortionError as e:
-        logging.error(f"MappingAbortionError: {e}")
+        #logging.error(f"MappingAbortionError: {e}")
         if reader:
             reader.clean_up()
         if reader_:
