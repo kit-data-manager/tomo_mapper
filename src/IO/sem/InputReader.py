@@ -1,6 +1,7 @@
 import logging
 import mimetypes
 import os
+import shutil
 
 from src.IO.MappingAbortionError import MappingAbortionError
 from src.parser.ImageParser import ParserMode
@@ -86,3 +87,10 @@ class InputReader:
             if result and result.image_metadata:
                 output_dict = result.image_metadata.to_schema_dict()
                 return output_dict
+            
+    def clean_up(self):
+        if self.temp_dir_path:
+            shutil.rmtree(self.temp_dir_path)
+            logging.debug("Temp folder deletion: {} - {}".format(self.temp_dir_path, os.path.exists(self.temp_dir_path)))
+        else:
+            logging.debug("No temp folder used, nothing to clean up.")

@@ -162,8 +162,6 @@ def run_sem_mapper(args):
         #logging.error(f"MappingAbortionError: {e}")
         if reader:
             reader.clean_up()
-        if reader_:
-            reader_.clean_up()
         exit(e)
 
 if __name__ == '__main__':
