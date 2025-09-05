@@ -14,7 +14,7 @@ class OutputWriter:
             with open(file_path, 'w', encoding="utf-8") as json_file:
                 json.dump(mapped_metadata, json_file, indent=4, ensure_ascii=False)
             logging.info("The output document has been created successfully!")
-        except MappingAbortionError as e:
+        except (FileNotFoundError, PermissionError, IsADirectoryError, OSError, TypeError, ValueError) as e:
             logging.error(f"Unable to save {file_path}: {e}")
             raise MappingAbortionError(f"Failed to save {file_path}.")
 
@@ -27,7 +27,7 @@ class OutputWriter:
                     try:
                         zf.write(file_path, os.path.basename(file_path))
                         logging.debug(f"Added {file_path} to zip.")
-                    except Exception as e:
+                    except (FileNotFoundError, PermissionError, IsADirectoryError, OSError, zipfile.BadZipFile) as e:
                         logging.error(f"Adding {file_path} to zip was not successful: {e}")
                         raise MappingAbortionError(f"Failed to add {file_path} to zip.")
             logging.info(f"Files have been zipped into {zip_file_path} sucessfully!")
