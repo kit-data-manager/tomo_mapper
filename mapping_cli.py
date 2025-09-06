@@ -160,9 +160,10 @@ def run_sem_mapper(args):
 
     except MappingAbortionError as e:
         #logging.error(f"MappingAbortionError: {e}")
+        exit(e)
+    finally:
         if reader:
             reader.clean_up()
-        exit(e)
 
 if __name__ == '__main__':
     run_cli()
