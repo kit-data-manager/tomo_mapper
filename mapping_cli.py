@@ -105,8 +105,10 @@ def run_sem_mapper(args):
     MAP_SOURCE = argdict.get('map')
     OUTPUT_PATH = argdict.get('output')
 
+    reader = None
+
     try:
-        reader = InputReader_SEM(MAP_SOURCE, INPUT_SOURCE)
+        reader = InputReader_SEM(MAP_SOURCE, INPUT_SOURCE, OUTPUT_PATH)
         tmpdir = reader.temp_dir_path
 
         if tmpdir:
@@ -125,14 +127,14 @@ def run_sem_mapper(args):
 
                 logging.info(f"Processing extracted file: {file_path.name}")
                 try:
-                    reader_ = InputReader_SEM(MAP_SOURCE, file_path)
+                    file_name = file_path.with_suffix('').name + ".json"
+                    reader_ = InputReader_SEM(MAP_SOURCE, file_path, file_name)
                     img_info = reader_.retrieve_image_info(file_path)
                     logging.debug(f"IMAGE_INFO: {img_info}")
 
                     if not img_info:
                         raise MappingAbortionError(f"Could not retrieve image information for {file_path.name}.")
 
-                    file_name = file_path.with_suffix('').name + ".json"
                     OutputWriter_SEM.save_the_file(img_info, file_name)
                     list_of_file_names.append(file_name)
                     success_count += 1
@@ -154,6 +156,10 @@ def run_sem_mapper(args):
             img_info = reader.retrieve_image_info(INPUT_SOURCE)
             if not img_info:
                 raise MappingAbortionError("Could not retrieve image information. Aborting.")
+            
+            #if not OUTPUT_PATH.lower().endswith('.json'):
+                #OUTPUT_PATH += '.json' # Ensure correct .json extension
+                #logging.warning(f"The output path has been updated to {OUTPUT_PATH} to match the correct extension.")
             
             OutputWriter_SEM.save_the_file(img_info, OUTPUT_PATH)
 

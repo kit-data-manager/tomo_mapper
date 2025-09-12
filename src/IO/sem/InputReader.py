@@ -15,7 +15,7 @@ class InputReader:
     parser_names = None
     temp_dir_path: str = None
 
-    def __init__(self, map_path, input_path):
+    def __init__(self, map_path, input_path, output_path):
         logging.info("Preparing parsers based on parsing map file and input.")
         self.mapping = load_json(map_path)
 
@@ -24,8 +24,16 @@ class InputReader:
             raise MappingAbortionError("Input file loading failed.")
         
         if is_zipfile(input_path):
+            # THIS PART CHECKS WHETHER THE USER DID NOT SPECIFIED THE CORRECT OUTPUT_PATH EXTENSION,
+            # PARTICULARLY PREVENTING MISUSE OF THE .JSON EXTENSION, WHICH CAN BE EASILY MISTAKEN.
+            # THIS CHECK CAN BE IMPROVE FOR A STANDALONE USE, BUT WE STICK ON THIS SIMPLE CHECK BECAUSE THE MAPPING SERVICE RENAMES THE IO FILES AND HANDLES CORRECTLY THE EXTENSIONS 
+            if output_path.lower().endswith('.json'):
+                logging.error("The output path {} is expecting the extension '.zip' since the input is a zip file".format(output_path))
+                raise MappingAbortionError("Input file parsing aborted.")
             self.temp_dir_path = extract_zip_file(input_path)
         else:
+            #if not output_path.lower().endswith('.json'):
+                #logging.warning("The output path {} is expecting the extension '.json'.".format(output_path))
             self.parser_names = self.get_applicable_parsers(input_path)
 
             if not self.parser_names:
