@@ -116,14 +116,14 @@ def run_sem_mapper(args):
             list_of_file_names = []
             success_count = 0
 
-            for file_path in Path(tmpdir).rglob('*'):
-                if not file_path.is_file():
+            for file_path in reader.filter_zipfile(tmpdir):
+                #if not file_path.is_file():
                     # No directory path is allowed. Only process files
-                    logging.debug(f"Skipping {file_path} as it is probably a directory.")
-                    continue
-                if '__MACOSX' in str(file_path):
-                    logging.debug(f"Skipping macOS metadata file: {file_path}")
-                    continue
+                    #logging.debug(f"Skipping {file_path} as it is probably a directory.")
+                    #continue
+                #if '__MACOSX' in str(file_path):
+                    #logging.debug(f"Skipping macOS metadata file: {file_path}")
+                    #continue
 
                 logging.info(f"Processing extracted file: {file_path.name}")
                 try:
