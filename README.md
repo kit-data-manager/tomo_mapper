@@ -45,10 +45,12 @@ python -m mapping_cli
 
 **1. SEM Mapping**
 
-Use the `sem` subcommand for SEM mapping. The mapper expects a map file, an image or image metadata file, and a JSON output path:
+Use the `sem` subcommand for SEM mapping. The mapper expects a map file, an image, an image metadata file or a ZIP archive containing multiple such files, and an output path with a format depending on the input type (for a single input, the mapper expects a JSON output path, while for a ZIP input, it expects a ZIP output path):
 ```
-python -m mapping_cli sem -m <map_file> -i <image or metadata file> -o <json_output_path>
+python -m mapping_cli sem -m <map_file> -i <image or metadata single file or zip_file> -o <json/zip_output_path>
 ```
+
+It is worth mentioning that the ZIP output file will only contain the successful mapping files in JSON format.
 
 For further information about the necessary map file, see [Mapping README](./src/resources/maps/mapping)
 
