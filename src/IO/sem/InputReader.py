@@ -5,10 +5,11 @@ import os
 from src.IO.MappingAbortionError import MappingAbortionError
 from src.parser.ImageParser import ParserMode
 from src.parser.ParserFactory import ParserFactory
-from src.util import load_json, get_filetype_with_magica, robust_textfile_read
+from src.IO.BaseInputReader import BaseInputReader 
+from src.util import is_zipfile, extract_zip_file, load_json, get_filetype_with_magica, robust_textfile_read
 
 
-class InputReader:
+class InputReader(BaseInputReader):
 
     mapping = None
     parser_names = None
@@ -16,11 +17,12 @@ class InputReader:
     def __init__(self, map_path, input_path):
         logging.info("Preparing parsers based on parsing map file and input.")
         self.mapping = load_json(map_path)
-
+        super().__init__(map_path, input_path)
+        
         if not os.path.exists(input_path):
             logging.error("Input file {} does not exist. Aborting".format(input_path))
             raise MappingAbortionError("Input file loading failed.")
-
+        
         self.parser_names = self.get_applicable_parsers(input_path)
 
         if not self.parser_names:
