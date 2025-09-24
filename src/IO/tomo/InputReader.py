@@ -3,6 +3,7 @@ import shutil
 from glob import glob
 from typing import List
 
+from src.IO.BaseInputReader import BaseInputReader
 from src.IO.MappingAbortionError import MappingAbortionError
 from src.IO.tomo.MapfileReader import MapFileReader
 from src.config import MappingConfig
@@ -17,7 +18,7 @@ from src.parser.ParserFactory import ParserFactory
 from src.util import is_zipfile, extract_zip_file, strip_workdir_from_path, robust_textfile_read
 
 
-class InputReader:
+class InputReader(BaseInputReader):
     """
     The input reader reads, checks/sanitizes and parses all parameters provided for the mapping.
 
@@ -32,12 +33,13 @@ class InputReader:
     imageParser: ImageParser = None
     imageSources: List[str] = []
     mapping_dict: dict = None
-    temp_dir_path: str = None
+    #temp_dir_path: str = None
     working_dir_path: str = None
 
     parserFactory = ParserFactory()
 
     def __init__(self, map_path, input_path):
+        super().__init__(map_path, input_path)
 
         ### reading and sanity checking map file
         self.mapping_dict = MapFileReader.read_mapfile(map_path)
@@ -49,17 +51,13 @@ class InputReader:
         im_sources, im_parser = MapFileReader.parse_mapinfo_for_images(self.mapping_dict)
         self.imageParser = im_parser
         self.imageSources = im_sources
-        
-        if not os.path.isfile(input_path) and not os.path.isdir(input_path):
-            logging.error("Input file or folder does not exist: {}. Aborting".format(input_path))
-            raise MappingAbortionError("Input file loading failed.")
 
         logging.info("Map file content successfully read and validated.")
         logging.info("The chosen parsers support the following instruments/vendors: {}".format(", ".join(self._get_supported_instruments())))
 
         ### reading input file
-        if is_zipfile(input_path):
-            self.temp_dir_path = extract_zip_file(input_path)
+        if is_zipfile(self.input_path):
+            self.temp_dir_path = extract_zip_file(self.input_path)
             # auto-detect root dir in zip. TODO: make more flexible and robust. Allow for non-zip input (no auto-detect then)
             root_dir = self._detect_project_root(self.temp_dir_path)
             if root_dir:
@@ -70,14 +68,14 @@ class InputReader:
                 logging.error("Could not determine common root path for all sources in map file. Aborting")
                 raise MappingAbortionError("Input file loading failed. Mapping info not applicable to input.")
         else:
-            if not os.path.isdir(input_path):
-                raise MappingAbortionError("Invalid input path. Not an existing directory: {}".format(input_path))
-            detected_root = self._detect_project_root(input_path)
-            if not input_path == detected_root:
-                if self._detect_project_root(input_path):
+            if not os.path.isdir(self.input_path):
+                raise MappingAbortionError("Invalid input path. Not an existing directory: {}".format(self.input_path))
+            detected_root = self._detect_project_root(self.input_path)
+            if not self.input_path == detected_root:
+                if self._detect_project_root(self.input_path):
                     raise MappingAbortionError("Invalid input path. Did you mean to use {} instead?".format(detected_root)) #most specific error
-                raise MappingAbortionError("Input path is not pointing to the root folder for all sources specified in input map: {}".format(input_path)) #error otherwise
-            self.working_dir_path = os.path.abspath(input_path)
+                raise MappingAbortionError("Input path is not pointing to the root folder for all sources specified in input map: {}".format(self.input_path)) #error otherwise
+            self.working_dir_path = os.path.abspath(self.input_path)
 
         MappingConfig.set_working_dir(self.working_dir_path)
 
@@ -121,13 +119,6 @@ class InputReader:
                         break
                 if valid_source_path:
                     return p
-
-    def clean_up(self):
-        if self.temp_dir_path:
-            shutil.rmtree(self.temp_dir_path)
-            logging.debug("Temp folder deletion: {} - {}".format(self.temp_dir_path, os.path.exists(self.temp_dir_path)))
-        else:
-            logging.debug("No temp folder used, nothing to clean up.")
 
     def retrieve_setup_info(self) -> List[SetupMD]:
 

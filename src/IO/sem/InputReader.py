@@ -7,24 +7,23 @@ from pathlib import Path
 from src.IO.MappingAbortionError import MappingAbortionError
 from src.parser.ImageParser import ParserMode
 from src.parser.ParserFactory import ParserFactory
+from src.IO.BaseInputReader import BaseInputReader 
 from src.util import is_zipfile, extract_zip_file, load_json, get_filetype_with_magica, robust_textfile_read
 
 
-class InputReader:
+class InputReader(BaseInputReader):
 
     mapping = None
     parser_names = None
-    temp_dir_path: str = None
+    #temp_dir_path: str = None
 
     def __init__(self, map_path, input_path, output_path):
         logging.info("Preparing parsers based on parsing map file and input.")
         self.mapping = load_json(map_path)
-
-        if not os.path.exists(input_path):
-            logging.error("Input file {} does not exist. Aborting".format(input_path))
-            raise MappingAbortionError("Input file loading failed.")
+        self.output_path = output_path
+        super().__init__(map_path, input_path)
         
-        if is_zipfile(input_path):
+        if is_zipfile(self.input_path):
             # THIS PART CHECKS WHETHER THE USER DID NOT SPECIFIED THE CORRECT OUTPUT_PATH EXTENSION,
             # PARTICULARLY PREVENTING MISUSE OF THE .JSON EXTENSION, WHICH CAN BE EASILY MISTAKEN.
             # THIS CHECK CAN BE IMPROVE FOR A STANDALONE USE, BUT WE STICK ON THIS SIMPLE CHECK BECAUSE THE MAPPING SERVICE RENAMES THE IO FILES AND HANDLES CORRECTLY THE EXTENSIONS 
@@ -32,7 +31,7 @@ class InputReader:
                 #logging.error("The output path {} is expecting the extension '.zip' since the input is a zip file".format(output_path))
                 #raise MappingAbortionError("Input file parsing aborted.")
             #self.temp_dir_path = extract_zip_file(input_path)
-            self._handle_zip_input(input_path, output_path)
+            self._handle_zip_input(self.input_path, self.output_path)
         else:
             #if not output_path.lower().endswith('.json'):
                 #logging.warning("The output path {} is expecting the extension '.json'.".format(output_path))
@@ -44,7 +43,7 @@ class InputReader:
                 #logging.info("Supported mimetypes: {}".format(mimetype_set))
                 #raise MappingAbortionError("Input file parsing aborted.")
             #logging.info("Applicable parsers: {}".format(", ".join(self.parser_names)))
-            self._handle_single_input(input_path)
+            self._handle_single_input(self.input_path)
 
 
     def _handle_zip_input(self, input_path: str, output_path: str):
@@ -158,10 +157,3 @@ class InputReader:
             if result and result.image_metadata:
                 output_dict = result.image_metadata.to_schema_dict()
                 return output_dict
-            
-    def clean_up(self):
-        if self.temp_dir_path:
-            shutil.rmtree(self.temp_dir_path)
-            logging.debug("Temp folder deletion: {} - {}".format(self.temp_dir_path, os.path.exists(self.temp_dir_path)))
-        else:
-            logging.debug("No temp folder used, nothing to clean up.")
