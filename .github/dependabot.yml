@@ -5,6 +5,8 @@ updates:
     directory: "/"  # Root directory
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 3      
     open-pull-requests-limit: 5
 
   #PLUGIN
@@ -13,4 +15,6 @@ updates:
     directory: "/mappingservice-plugin" # Location of package manifests
     schedule:
       interval: "weekly"
+    cooldown:
+      default-days: 3      
     open-pull-requests-limit: 5
