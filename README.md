@@ -97,7 +97,7 @@ To find out tested alignments between plugin versions and mapping-service versio
 |----------------|------------------------|
 | v1.0.0, v1.1.0 | v1.0.5*), v1.1.1*)     |
 
-*) Plugin needs to be built with version override to work with the specified version of the mapping-service
+*) Plugin needs to be built with version override to work with the specified version of the mapping-service (see [issue 33](https://github.com/kit-data-manager/tomo_mapper/issues/33))
 
 ## Testing
 Run tests using `pytest`:
