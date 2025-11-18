@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework:spring-core:6.2.12'
+    implementation 'org.springframework:spring-core:7.0.0'
     implementation 'org.slf4j:slf4j-api:2.0.17'
     implementation files("src/main/lib/mapping-service-plain.jar")
 }
