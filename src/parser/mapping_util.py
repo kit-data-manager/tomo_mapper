@@ -1,13 +1,14 @@
 # Function to get value from nested dictionary using dotted path
 import logging
 import re
-import typing
+from typing import Hashable
+
 from jsonpath_ng.ext.parser import ExtentedJsonPathParser
 from src.IO.MappingAbortionError import MappingAbortionError
 
 parser = ExtentedJsonPathParser()
 
-def escape_pathelements(dotted_path):
+def escape_pathelements(dotted_path) -> str:
     funct = re.search("(`.+`)", dotted_path)
     if funct:
         dotted_path = dotted_path.replace(funct.group(0), "FUNCTIONPLACEHOLDER")
@@ -22,14 +23,14 @@ def escape_pathelements(dotted_path):
             pe = escaped + "[" + to_keep
         else:
             pe = "'" + pe + "'"
-        if pe == "'FUNCTIONPLACEHOLDER'":
+        if pe == "'FUNCTIONPLACEHOLDER'" and funct:
             pe = funct.group(0)
         escaped_elements.append(pe)
     return ".".join(escaped_elements)
 
 
 # Function to create unified output dict based on the provided JSON mapping
-def create_unified_dict(mapping, input_dict):
+def create_unified_dict(mapping, input_dict) -> dict:
     output_dict = {}
 
     for k, v in mapping.items():
@@ -44,7 +45,7 @@ def create_unified_dict(mapping, input_dict):
 
         if not "*" in v: #as long as the output path in the map is not a list, we expect that we can map the input to one value
             try:
-                if not all([isinstance(x, typing.Hashable) for x in values]):
+                if not all([isinstance(x, Hashable) for x in values]):
                     logging.warning("Found multiple complex values in input dict, but output target is not a list. Only the first value will be used, no check for equivalence.")
                 else:
                     assert len(set(values)) == 1
@@ -68,5 +69,5 @@ def create_unified_dict(mapping, input_dict):
         raise MappingAbortionError("Mapping input to output format failed. Mapping not applicable.")
     return output_dict
 
-def map_a_dict(input_dict, mapping_dict):
+def map_a_dict(input_dict, mapping_dict) -> dict:
     return create_unified_dict(mapping_dict, input_dict)

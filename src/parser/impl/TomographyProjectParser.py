@@ -17,27 +17,25 @@ from src.util import normalize_path
 class TomographyProjectParser(SetupMD_Parser):
 
     @staticmethod
-    def supported_input_sources() -> List[str]:
+    def supported_input_sources():
         return ['Tescan Solaris']
 
     def __init__(self):
         self.internal_mapping = input_to_dict(setup_tescan.read_text())
 
-    def parse_setup(self, payload) -> tuple[SetupMD, dict]:
+    def parse_setup(self, payload):
         parsed = self._read_input(payload)
 
         mapping_dict = self.internal_mapping
         ac_md = map_a_dict(parsed, mapping_dict)
         acquisition = self._create_acquisition(ac_md)
         datasets = self._create_datasets(ac_md)
-        if not datasets:
-            return acquisition, parsed
 
         if len(datasets) == 1:
             acquisition.dataset_template = datasets[0]
-        else:
+        if len(datasets) > 1:
             acquisition.datasets = datasets
-        return SetupMD(acquisition_metadata=acquisition), parsed
+        return SetupMD(acquisition_metadata=acquisition)
 
     def _create_acquisition(self, ac_md) -> Acquisition:
 

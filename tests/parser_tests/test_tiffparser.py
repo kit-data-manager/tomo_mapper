@@ -22,8 +22,7 @@ class TestTiffparser:
             test_tiffpath = os.path.join(dir_to_testscript, "../sampleData/images/SEM_Image-SliceImage-001.tif")
 
             parser = TiffParser(ParserMode.TOMO, "34682")
-            img, raw = parser.parse(test_tiffpath, None)
-            pprint(raw)
+            img = parser.parse(test_tiffpath, None)
 
             pprint(img.acquisition_info.to_schema_dict())
             pprint(img.dataset_metadata.to_schema_dict())
@@ -41,8 +40,7 @@ class TestTiffparser:
 
             parser = TiffParser(ParserMode.SEM, "34682")
             SEM_map = input_to_dict(tiffparser_sem_34682.read_text())
-            img, raw = parser.parse(test_tiffpath, SEM_map)
-            #pprint(raw)
+            img = parser.parse(test_tiffpath, SEM_map)
 
             pprint(img.image_metadata.to_schema_dict())
         except FileNotFoundError:
@@ -57,8 +55,7 @@ class TestTiffparser:
             test_tiffpath = os.path.join(dir_to_testscript, "../sampleData/images/SESI_slice_00000_z=0.5100um.tif")
 
             parser = TiffParser(ParserMode.TOMO, "51023")
-            img, raw = parser.parse(test_tiffpath, None)
-            pprint(raw)
+            img = parser.parse(test_tiffpath, None)
 
             pprint(img.acquisition_info.to_schema_dict())
             pprint(img.dataset_metadata.to_schema_dict())
@@ -80,8 +77,7 @@ class TestTiffparser:
         mapping_dict = input_to_dict(tiffparser_sem_34118.read_text())
 
         for zg in zeiss_glob:
-            img, raw = parser.parse(zg, mapping_dict)
-            #pprint(raw)
+            img = parser.parse(zg, mapping_dict)
 
             pprint(img.image_metadata.to_schema_dict())
 
@@ -98,7 +94,6 @@ class TestTiffparser:
         mapping_dict = input_to_dict(tiffparser_sem_34682.read_text())
 
         for zg in tf_glob:
-            img, raw = parser.parse(zg, mapping_dict)
-            #pprint(raw)
+            img = parser.parse(zg, mapping_dict)
 
             pprint(img.image_metadata.to_schema_dict())

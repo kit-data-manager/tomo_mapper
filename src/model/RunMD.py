@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import List
+from typing import List, Optional
 
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
@@ -13,13 +13,13 @@ class RunMD:
     MAY contain some acquisition metadata
     """
 
-    acquisition_metadata: Acquisition = None
+    acquisition_metadata: Acquisition
     images_by_datasets = defaultdict(list,{ DatasetType(k):[] for k in [e.value for e in DatasetType] })
 
     def get_images_for_datasetType(self, datasetType: DatasetType) -> List[TOMO_Image]:
         return self.images_by_datasets[datasetType]
 
-    def get_datasetType_for_image(self, image: TOMO_Image) -> DatasetType:
+    def get_datasetType_for_image(self, image: TOMO_Image) -> Optional[DatasetType]:
         for k, v in self.images_by_datasets.items():
             for i in v:
                 if i.match_by_path(image): return k

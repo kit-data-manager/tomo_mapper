@@ -1,5 +1,5 @@
 import logging
-from typing import Dict, Type
+from typing import Type
 
 from src.parser.ImageParser import ImageParser
 from src.parser.RunMD_Parser import RunMD_Parser
@@ -15,14 +15,14 @@ from src.parser.impl.TxtParser import TxtParser
 
 class ParserFactory:
 
-    available_setupmd_parsers: Dict[str, Type[SetupMD_Parser]]  = {
+    available_setupmd_parsers: dict[str, Type[SetupMD_Parser]]  = {
         "EMProjectParser": EMProjectParser,
         "Atlas3DParser": Atlas3dParser,
         "TomographyProjectParser": TomographyProjectParser,
         "Dataset_infoParser": Dataset_infoParser
     }
 
-    available_runmd_parsers: Dict[str, Type[RunMD_Parser]] = {
+    available_runmd_parsers: dict[str, Type[RunMD_Parser]] = {
         "ProjectDataParser": ProjectDataParser,
         "Atlas3DParser": Atlas3dParser
     }

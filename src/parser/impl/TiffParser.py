@@ -7,6 +7,7 @@ from PIL import Image
 from src.IO.MappingAbortionError import MappingAbortionError
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
+from src.model.SchemaConcepts.SEM_Image import SEM_Image
 from src.parser.ImageParser import ImageParser, ParserMode
 from src.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import tiffparser_tomo_51023, tiffparser_tomo_34682, tiffparser_sem_34682, \
@@ -44,14 +45,14 @@ class TiffParser(ImageParser):
         super().__init__(mode)
 
     @staticmethod
-    def expected_input_format() -> str:
+    def expected_input_format():
         return TiffParser.expected_input
 
-    def parse(self, file_path, mapping) -> tuple[ImageMD, str]:
+    def parse(self, file_path, mapping):
         input_md = self._read_input_file(file_path, self.tagID)
         if not input_md:
             logging.warning("No metadata extractable from {}".format(file_path))
-            return None, None
+            return None
 
         if not mapping and not self.internal_mapping:
             logging.error("No mapping provided for image parsing. Aborting")
@@ -65,9 +66,9 @@ class TiffParser(ImageParser):
         if self.mode == ParserMode.TOMO:
             image_from_md = self._create_tomo_image(image_md, file_path)
         else:
-            image_from_md = ImageMD(image_metadata=image_md, filePath="")
+            image_from_md = ImageMD(image_metadata=SEM_Image(**image_md), filePath="")
 
-        return image_from_md, image_md
+        return image_from_md
 
     def _create_tomo_image(self, image_md, fp) -> ImageMD:
 
@@ -113,7 +114,8 @@ class TiffParser(ImageParser):
                 additional_input = input_to_dict(md)
                 if not additional_input:
                     logging.debug("Unable to extract metadata as dictionary for {}".format(md))
-                output_dict.update(input_to_dict(md))
+                else:
+                    output_dict.update(additional_input)
             except Exception as e:
                 logging.debug("Unable to extract metadata as dictionary for {}".format(md))
                 pass

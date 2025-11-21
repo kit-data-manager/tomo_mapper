@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel, computed_field
 
@@ -12,17 +12,17 @@ class Dataset(Schema_Concept, BaseModel):
     basically interchangable with codegenerated SEMFIBTomographyAcquisitionDatasetSchema,
     but replaced by a custom class for easier use
     """
-    entryID: IdentifierModel = None
+    entryID: Optional[IdentifierModel] = None
     definition: str = "acquisition_dataset"
-    user: UserDescription = None
-    program: Program = None
-    instrument: InstrumentDetails = None
-    datasetType: DatasetType = None
-    rows: int = None
-    columns: int = None
-    tileColumn: int = None
-    tileRow: int = None
-    images: List[TOMO_Image] = None
+    user: Optional[UserDescription] = None
+    program: Optional[Program] = None
+    instrument: Optional[InstrumentDetails] = None
+    datasetType: Optional[DatasetType] = None
+    rows: Optional[int] = None
+    columns: Optional[int] = None
+    tileColumn: Optional[int] = None
+    tileRow: Optional[int] = None
+    images: Optional[List[TOMO_Image]] = None
 
     @computed_field
     def numberOfItems(self) -> int:
