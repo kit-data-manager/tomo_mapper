@@ -190,3 +190,37 @@ If-Match: {{etag}}
 HTTP 204
 
 #---------------- END Test Mapping for JEOL --------------------------------------
+#---------------- BEGIN Test Mapping for ZIP FILE --------------------------------------
+
+# Execute mapping with sample ZIP file
+POST {{host}}/api/v1/mappingAdministration/
+Content-Type: multipart/form-data; boundary=boundary
+[Options] #set all variables you need for further use in this hurl script
+variable: id1=3
+```
+--boundary
+Content-Disposition: form-data; name="record"; filename="blob"
+Content-Type: application/zip
+
+{"mappingId":"{{id1}}","mappingType": "{{mappingType}}","title":"Zeiss from CI test","description":"","acl":[]}
+--boundary
+Content-Disposition: form-data; name="document"; filename="blob"
+Content-Type: application/json
+
+{"Sem":"entry.instrument.instrumentName"}
+--boundary--
+```
+HTTP 201
+
+[Captures]
+id: jsonpath "$.mappingId"
+
+# Execute mapping with sample ZIP file
+POST {{host}}/api/v1/mappingExecution/{{id1}}
+[MultipartFormData]
+document: file,./tests/sampleData/Archive.zip;
+HTTP 200
+[Asserts]
+header "Content-Type" contains "application/zip"
+
+#---------------- END Test Mapping for ZIP FILE --------------------------------------
