@@ -1,20 +1,19 @@
 {
   "extends": ["config:base"],
   "enabledManagers": ["pip_requirements", "gradle", "gradle-wrapper"],
+  "baseBranches": ["development"],
   "packageRules": [
     {
       "matchManagers": ["pip_requirements"],
       "matchPaths": ["/"],
-      "baseBranch": "development",
-      "schedule": ["every week"],
+      "schedule": ["every weekend"],
       "prConcurrentLimit": 5,
       "minimumReleaseAge": "3 days"
     },
     {
       "matchManagers": ["gradle"],
       "matchPaths": ["/mappingservice-plugin"],
-      "baseBranch": "development",
-      "schedule": ["every week"],
+      "schedule": ["every weekend"],
       "prConcurrentLimit": 5,
       "minimumReleaseAge": "3 days"
     }
