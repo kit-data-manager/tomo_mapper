@@ -1,0 +1,7 @@
+{
+  "ignore": [
+    "tests",
+    "mappingservice-plugin",
+    "src/model/SchemaConcepts/codegen"
+  ]
+}

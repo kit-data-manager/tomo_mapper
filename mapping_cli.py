@@ -73,7 +73,7 @@ def run_tomo_mapper(args):
     except MappingAbortionError as e:
         if reader:
             reader.clean_up()
-        exit(e)
+        exit(e)  # pyright: ignore[reportArgumentType]
 
     output = None
     try:
@@ -91,7 +91,7 @@ def run_tomo_mapper(args):
         OutputWriter.writeOutput(output, OUTPUT_PATH)
     except MappingAbortionError as e:
         reader.clean_up()
-        exit(e)
+        exit(e) # pyright: ignore[reportArgumentType]
 
     logging.info("Tomography mapping completed.")
     reader.clean_up()
@@ -113,7 +113,7 @@ def run_sem_mapper(args):
         with open(OUTPUT_PATH, 'w', encoding="utf-8") as f:
             json.dump(img_info, f, indent=4, ensure_ascii=False)
     except MappingAbortionError as e:
-        exit(e)
+        exit(e) # pyright: ignore[reportArgumentType]
 
 
 if __name__ == '__main__':
