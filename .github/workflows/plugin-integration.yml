@@ -11,7 +11,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         # Use both LTS releases and latest one for tests
-        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 21, mapping-service: latest } ]
+        versions: [ {  jdk: 17, mapping-service: v2.0.2 }, {  jdk: 21, mapping-service: latest } ]
 
     steps:
     - name: Checkout repository
@@ -35,7 +35,7 @@ jobs:
         ./mappingservice-plugin/gradlew clean jar -p ./mappingservice-plugin/
         ls -ll ./mappingservice-plugin/build/libs/
         echo "JAR_VERSION=${JAR_VERSION}"
-        mv -v ./mappingservice-plugin/build/libs/SEMImagePlugin-$JAR_VERSION-plain.jar ./mappingservice-plugin/build/libs/SEMplugin.jar
+        mv -v ./mappingservice-plugin/build/libs/SEMImagePlugin-$JAR_VERSION.jar ./mappingservice-plugin/build/libs/SEMplugin.jar
       env:
         VERSION_OVERRIDE_BY_BRANCH: ${{ steps.extract_branch.outputs.branch }}
 
@@ -52,7 +52,7 @@ jobs:
       matrix:
         operating-system: [ubuntu-latest]
         # Use both LTS releases and latest one for tests
-        versions: [ {  jdk: 17, mapping-service: v1.0.5 }, {  jdk: 21, mapping-service: latest } ]
+        versions: [ {  jdk: 17, mapping-service: v2.0.2 }, {  jdk: 21, mapping-service: latest } ]
     needs: build
     steps:
     - name: Checkout repository
@@ -69,7 +69,7 @@ jobs:
 
     - name: Run Docker Container # and wait for mapping service to be healthy before proceeding to tests
       run: |
-          docker run -d -p 8095:8095 -e PIP_BREAK_SYSTEM_PACKAGES=1 -v ./plugins/SEMplugin.jar:/spring/mapping-service/plugins/SEMplugin.jar --name mapping4docker ghcr.io/kit-data-manager/mapping-service:${{ matrix.versions.mapping-service }}
+          docker run -d -p 8095:8095 -e PIP_BREAK_SYSTEM_PACKAGES=1 -e SPRING_APPLICATION_JSON='{"mapping-service.executionTimeout":300}' -v ./plugins/SEMplugin.jar:/spring/mapping-service/plugins/SEMplugin.jar --name mapping4docker ghcr.io/kit-data-manager/mapping-service:${{ matrix.versions.mapping-service }}
           echo "Wait for mapping service to be healthy before proceeding to tests"
           while true; do
             if ! docker ps | grep -q mapping4docker; then
