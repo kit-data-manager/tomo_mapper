@@ -1,6 +1,6 @@
 import logging
 import os
-from typing import Union
+from typing import Union, Optional
 
 from pydantic import BaseModel
 
@@ -14,17 +14,17 @@ from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 class ImageMD(BaseModel):
 
     filePath: str
-    acquisition_info: Acquisition = None
-    dataset_metadata: Dataset = None
-    image_metadata: Union[TOMO_Image, SEM_Image] = None
+    acquisition_info: Optional[Acquisition] = None
+    dataset_metadata: Optional[Dataset] = None
+    image_metadata: Optional[Union[TOMO_Image, SEM_Image]] = None
 
-    def fileName(self):
+    def fileName(self) -> str:
         return os.path.basename(self.filePath)
 
-    def folderName(self):
+    def folderName(self) -> str:
         return os.path.basename(os.path.dirname(self.filePath))
 
-    def determine_dstype(self) -> DatasetType:
+    def determine_dstype(self) -> Optional[DatasetType]:
         if self.dataset_metadata is not None and self.dataset_metadata.datasetType is not None:
             return self.dataset_metadata.datasetType
 

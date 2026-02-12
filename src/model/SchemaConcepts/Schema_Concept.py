@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from dateutil.parser import parse, ParserError
 from typing import Any
 
-from pydantic import ConfigDict, field_serializer
+from pydantic import ConfigDict, field_serializer, BaseModel
 
 from pydantic_core.core_schema import SerializerFunctionWrapHandler, SerializationInfo
 
@@ -46,7 +46,7 @@ class Schema_Concept(ABC):
         return nxt(value)
 
     @abstractmethod
-    def as_schema_class(self):
+    def as_schema_class(self) -> BaseModel:
         """
         Convert the class to the corresponding schema class generated from the json schema
         :return: Schema class

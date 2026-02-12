@@ -26,10 +26,11 @@ class TestTXTparser:
         mapping_dict = input_to_dict(textparser_sem_tescan.read_text())
 
         for zg in tesc_glob:
-            img, raw = parser.parse(zg, mapping_dict)
+            img = parser.parse(zg, mapping_dict)
             #pprint(raw)
-
-            pprint(img.image_metadata.to_schema_dict())
+            
+            if img and img.image_metadata:
+                pprint(img.image_metadata.to_schema_dict())
 
     def test_sem_jeol(self):
         parser = TxtParser(ParserMode.SEM)
@@ -44,7 +45,8 @@ class TestTXTparser:
         mapping_dict = input_to_dict(textparser_sem_jeol.read_text())
 
         for zg in tesc_glob:
-            img, raw = parser.parse(zg, mapping_dict)
+            img = parser.parse(zg, mapping_dict)
             #pprint(raw)
 
-            pprint(img.image_metadata.to_schema_dict())
+            if img and img.image_metadata:
+                pprint(img.image_metadata.to_schema_dict())

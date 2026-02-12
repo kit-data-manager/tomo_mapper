@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from pydantic import BaseModel
 
@@ -14,9 +14,9 @@ class Acquisition(Schema_Concept, BaseModel):
     but replaced by a custom class for easier use
     """
 
-    genericMetadata: GenericMetadata = None
-    dataset_template: Dataset = None #use this if you create a dataset template for all datasets but cannot derive the individual datasets from metadata
-    datasets: List[Dataset] = None
+    genericMetadata: Optional[GenericMetadata] = None
+    dataset_template: Optional[Dataset] = None #use this if you create a dataset template for all datasets but cannot derive the individual datasets from metadata
+    datasets: Optional[List[Dataset]] = None
 
     def as_schema_class(self) -> AcquisitionMain:
         dataset_schemas = [x.as_schema_class() for x in self.datasets] if self.datasets else []

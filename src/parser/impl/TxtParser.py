@@ -5,10 +5,11 @@ from PIL import Image
 
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
+from src.model.SchemaConcepts.SEM_Image import SEM_Image
 from src.parser.ImageParser import ImageParser, ParserMode
 from src.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import textparser_tomo_tescan
-from src.util import input_to_dict
+from src.util import input_to_dict, configparser_keep_keystring
 import configparser
 
 
@@ -28,11 +29,11 @@ class TxtParser(ImageParser):
     def expected_input_format():
         return "text/plain"
 
-    def parse(self, file_path, mapping) -> tuple[ImageMD, str]:
+    def parse(self, file_path, mapping):
         input_md = self._read_input_file(file_path)
         if not input_md:
             logging.warning("No metadata extractable from {}".format(file_path))
-            return None, None
+            return None
 
         if not mapping and not self.internal_mapping:
             logging.error("No mapping provided for image parsing. Aborting")
@@ -47,12 +48,12 @@ class TxtParser(ImageParser):
         if self.mode == ParserMode.TOMO:
             image_from_md = self._create_tomo_image(image_md, file_path)
         else:
-            image_from_md = ImageMD(image_metadata=image_md, filePath="")
+            image_from_md = ImageMD(image_metadata=SEM_Image(**image_md), filePath="")
 
         #print("image_from_md: ", image_from_md)
-        return image_from_md, image_md
+        return image_from_md
 
-    def _create_tomo_image(self, image_md, fp) -> ImageMD:
+    def _create_tomo_image(self, image_md, fp):
 
         image_md_format = {
             "acquisition_info": image_md["acquisition"],
@@ -77,13 +78,10 @@ class TxtParser(ImageParser):
         #print(f"I am trying to read a {file_path}")
 
         config = configparser.ConfigParser(allow_no_value=True, delimiters=(" "))
-        config.optionxform = str
+        config.optionxform = configparser_keep_keystring
 
         # Read the .txt file either as UTF-8 or a different byte format using errors="replace"
         with open(file_path, "r", encoding="utf-8", errors="replace") as file:
             md = file.read()
 
-        output_dict = {}
-        output_dict.update(input_to_dict(md))
-
-        return output_dict
+        return input_to_dict(md)

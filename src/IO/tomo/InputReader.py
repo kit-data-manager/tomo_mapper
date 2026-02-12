@@ -1,7 +1,7 @@
 import os
 import shutil
 from glob import glob
-from typing import List
+from typing import List, Optional
 
 from src.IO.BaseInputReader import BaseInputReader
 from src.IO.MappingAbortionError import MappingAbortionError
@@ -28,13 +28,12 @@ class InputReader(BaseInputReader):
     - warn about unusual input
     """
 
-    setupParser: SetupMD_Parser = None
-    setupmdSources: List[str] = []
-    imageParser: ImageParser = None
-    imageSources: List[str] = []
-    mapping_dict: dict = None
-    #temp_dir_path: str = None
-    working_dir_path: str = None
+    setupParser: SetupMD_Parser
+    setupmdSources: List[str]
+    imageParser: ImageParser
+    imageSources: List[str]
+    mapping_dict: dict
+    working_dir_path: str
 
     parserFactory = ParserFactory()
 
@@ -90,7 +89,7 @@ class InputReader(BaseInputReader):
                 supports.update(p.supported_input_sources())
         return list(supports)
 
-    def _detect_project_root(self, root_dir_path) -> str:
+    def _detect_project_root(self, root_dir_path) -> Optional[str]:
         """
         function to allow for as many nested directories in a zip file iff all described pathes in the mapping file point to the same root directory anyway.
 
@@ -129,7 +128,7 @@ class InputReader(BaseInputReader):
                 try:
                     logging.info("Extracting setup info from: {}".format(s))
                     file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
-                    setupMD, _ = p.parse_setup(file_contents)
+                    setupMD = p.parse_setup(file_contents)
                     setup_infos.append(setupMD)
                 except FileNotFoundError:
                     logging.error("Setup md file does not exist: {}. Please make sure the configuration in the map file matches your input data".format(s))
@@ -144,7 +143,7 @@ class InputReader(BaseInputReader):
                 try:
                     logging.info("Extracting run info from: {}".format(s))
                     file_contents = robust_textfile_read(os.path.join(self.working_dir_path, s))
-                    runMD, _ = p.parse_run(file_contents)
+                    runMD = p.parse_run(file_contents)
                     run_infos.append(runMD)
                 except FileNotFoundError:
                     logging.error("Run md file does not exist: {}. Please make sure the configuration in the map file matches your input data".format(s))
@@ -158,7 +157,7 @@ class InputReader(BaseInputReader):
             curr_impath_list = glob(os.path.normpath(os.path.join(self.working_dir_path, s)))
             for ip in curr_impath_list:
                 logging.info("Extracting image info from: {}/{}".format(os.path.basename(os.path.dirname(ip)), os.path.basename(ip)))
-                img, _ = self.imageParser.parse(ip, mapping=None) #TODO: sanitize and prepare params before
+                img = self.imageParser.parse(ip, mapping=None) #TODO: sanitize and prepare params before
                 if img:
                     image_infos.append(img)
         return image_infos

@@ -11,6 +11,7 @@ from src.IO.MappingAbortionError import MappingAbortionError
 from src.model.ImageMD import ImageMD
 from src.model.RunMD import RunMD
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
+from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import AcquisitionMain
 from src.model.SetupMD import SetupMD
 from deepmerge import always_merger, conservative_merger
@@ -18,7 +19,7 @@ from deepmerge import always_merger, conservative_merger
 class OutputWriter:
 
     @staticmethod
-    def stitch_together(setupMDs: List[SetupMD], runMDs: List[RunMD], imageMD: List[ImageMD]):
+    def stitch_together(setupMDs: List[SetupMD], runMDs: List[RunMD], imageMD: List[ImageMD]) -> dict:
 
         acquisitionModel = dict()
         predefined_ds = dict()
@@ -34,7 +35,7 @@ class OutputWriter:
                 if setupMD.acquisition_metadata.datasets:
 
                     predefined_ds = dict([(x.datasetType, x) for x in setupMD.acquisition_metadata.datasets])
-                    setupMD.acquisition_metadata.datasets = None
+                    setupMD.acquisition_metadata.datasets = []
                 if setupMD.acquisition_metadata.dataset_template:
                     ds_template = setupMD.acquisition_metadata.dataset_template
                 always_merger.merge(acquisitionModel, setupMD.acquisition_metadata.to_schema_dict())
@@ -60,7 +61,8 @@ class OutputWriter:
 
             dt = None
             for runMD in runMDs:
-                dt = runMD.get_datasetType_for_image(img.image_metadata)
+                if isinstance(img.image_metadata, TOMO_Image): #the check is only here to make static type checking happy
+                    dt = runMD.get_datasetType_for_image(img.image_metadata)
                 if dt: break
             if not dt:
                 logging.warning("Dataset Type for image {} cannot be determined".format(img.fileName()))
@@ -96,7 +98,7 @@ class OutputWriter:
                 instrument = dsinfo_from_images["unknown"][k].instrument
                 detector = instrument.detector if instrument else None
                 detectorType = detector.detectorType if detector else None
-                detectorType = detector.name if not detectorType else detectorType
+                detectorType = detector.name if detector and not detectorType else detectorType
                 image_buckets[(folderpath, detectorType)].append(img)
                 md_buckets[(folderpath, detectorType)].append(dsinfo_from_images["unknown"][k])
             for k, v in image_buckets.items():
