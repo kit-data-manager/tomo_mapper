@@ -1,22 +1,29 @@
-import org.tomlj.Toml
+buildscript {
+    // Buildscript repositories
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("org.tomlj:tomlj:1.1.1")
+    }
+}
 
 plugins {
-    id 'io.spring.dependency-management' version "1.1.7"
-    id 'org.springframework.boot' version "4.0.0"
     id 'java'
 }
 
-group 'edu.kit.datamanager'
+import org.tomlj.Toml
 
+// Project repositories
 repositories {
     mavenLocal()
     mavenCentral()
 }
 
 dependencies {
-    implementation 'org.springframework:spring-core:7.0.1'
-    implementation 'org.slf4j:slf4j-api:2.0.17'
-    implementation files("src/main/lib/mapping-service-plain.jar")
+    implementation 'edu.kit.datamanager:mapping-plugin-core:2.0.0'
 }
 
 if (System.getenv('VERSION_OVERRIDE_BY_BRANCH')) {
@@ -32,22 +39,26 @@ tasks.register('printVersion') {
     println project.version
 }
 
+group 'edu.kit.datamanager'
+
 //Task for creating a resource file with the version info
 tasks.register("generateVersionProps", WriteProperties) { t ->
     def generatedResourcesDir = project.layout.buildDirectory.dir(["resources", "main"].join(File.separator))
-    def outputFile = generatedResourcesDir.map { it.file("sempluginversion.properties") }
+    def outputFile = generatedResourcesDir.map { it.file("genericsemtojson.properties") }
 
     t.destinationFile = outputFile.get().asFile
     t.property("version", project.version)
+    //add if required
+    //t.property("min.python", "3.0.0")
 }
 
-resolveMainClassName.dependsOn("generateVersionProps")
+//resolveMainClassName.dependsOn("generateVersionProps")
 
 jar {
     dependsOn(generateVersionProps)
     archiveFileName
 }
 
-bootJar {
+/*bootJar {
     enabled = false
-}
+}*/
