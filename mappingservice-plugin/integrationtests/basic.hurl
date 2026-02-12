@@ -2,10 +2,10 @@
 GET {{host}}
 HTTP 200
 
-GET {{host}}/api/v1/mappingAdministration/types
+GET {{host}}/api/v1/mappingAdministration/plugins
 HTTP 200
 [Captures]
-mappingType: jsonpath "$[0].id"
+mappingType: regex "(?s)\"id\"\\s*:\\s*\"([^\"]+)\"\\s*,\\s*[^}]*?\"name\"\\s*:\\s*\"GenericSEMtoJSON\""
 
 #---------------- BEGIN Test Mapping for Thermofisher ----------------------------------
 
