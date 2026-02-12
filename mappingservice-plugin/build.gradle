@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    implementation 'edu.kit.datamanager:mapping-plugin-core:2.0.0'
+    implementation 'edu.kit.datamanager:mapping-plugin-core:2.0.2'
 }
 
 if (System.getenv('VERSION_OVERRIDE_BY_BRANCH')) {
