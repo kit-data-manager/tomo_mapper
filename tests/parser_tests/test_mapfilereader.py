@@ -4,7 +4,7 @@ import os
 
 import pytest
 
-from src.IO.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
 from src.IO.tomo.MapfileReader import MapFileReader
 from src.parser.impl.Atlas3dParser import Atlas3dParser
 from src.parser.impl.EMProjectParser import EMProjectParser

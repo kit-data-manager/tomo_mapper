@@ -4,10 +4,11 @@ import logging
 import os
 from sys import exit
 
-from src.IO.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
 from src.IO.sem.InputReader import InputReader as InputReader_SEM
 from src.IO.tomo.InputReader import InputReader as InputReader_TOMO
 from src.IO.tomo.OutputWriter import OutputWriter
+from src.parser import ParserConfig
 from src.resources.maps.parsing import map_from_flag
 
 # make log level configurable from ENV, defaults to info level
@@ -61,6 +62,7 @@ def run_cli():
         main_parser.print_help()
 
 def run_tomo_mapper(args):
+    ParserConfig.register_parsers()
     argdict = vars(args)
     INPUT_SOURCE = argdict.get('input')
     MAP_SOURCE = argdict.get('map') or str(map_from_flag.get(argdict.get('default_map')))
@@ -98,6 +100,8 @@ def run_tomo_mapper(args):
     return output
 
 def run_sem_mapper(args):
+    ParserConfig.register_parsers()
+
     argdict = vars(args)
     INPUT_SOURCE = argdict.get('input')
     MAP_SOURCE = argdict.get('map')

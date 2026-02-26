@@ -2,7 +2,7 @@ from typing import List, Optional
 
 from pydantic import BaseModel, computed_field
 
-from src.model.SchemaConcepts.Schema_Concept import Schema_Concept
+from mappingservice_plugincore.mappingservice_plugincore.model.Schema_Concept import Schema_Concept
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType, IdentifierModel, \
     UserDescription, Program, InstrumentDetails, SEMFIBTomographyAcquisitionDatasetSchema

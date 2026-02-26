@@ -3,7 +3,7 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
-from src.model.SchemaConcepts.Schema_Concept import Schema_Concept
+from mappingservice_plugincore.mappingservice_plugincore.model.Schema_Concept import Schema_Concept
 from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import GenericMetadata, AcquisitionMain
 from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import Acquisition as Acquisition_gen
 

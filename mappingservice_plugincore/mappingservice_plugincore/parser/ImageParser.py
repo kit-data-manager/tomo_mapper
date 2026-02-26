@@ -4,10 +4,6 @@ from typing import Tuple, Optional
 
 from src.model.ImageMD import ImageMD
 
-class ParserMode(enum.Enum):
-    TOMO = "tomo",
-    SEM = "sem"
-
 class ImageParser(ABC):
 
     def __init__(self, mode):

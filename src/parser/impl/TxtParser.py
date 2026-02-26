@@ -1,12 +1,11 @@
 import logging
 from typing import Optional
 
-from PIL import Image
-
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.model.SchemaConcepts.SEM_Image import SEM_Image
-from src.parser.ImageParser import ImageParser, ParserMode
+from mappingservice_plugincore.mappingservice_plugincore.parser.ImageParser import ImageParser
+from src.parser.ParserMode import ParserMode
 from src.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import textparser_tomo_tescan
 from src.util import input_to_dict, configparser_keep_keystring

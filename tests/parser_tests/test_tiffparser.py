@@ -5,10 +5,10 @@ from pprint import pprint
 import pytest
 
 from src.config import MappingConfig
-from src.parser.ImageParser import ParserMode
+from src.parser.ParserMode import ParserMode
 from src.parser.impl.TiffParser import TiffParser
 from src.resources.maps.mapping import tiffparser_sem_34118, tiffparser_sem_34682
-from src.util import load_json, input_to_dict
+from src.util import input_to_dict
 
 
 class TestTiffparser:

@@ -1,39 +1,36 @@
 import logging
 from typing import Type
 
-from src.parser.ImageParser import ImageParser
-from src.parser.RunMD_Parser import RunMD_Parser
-from src.parser.SetupMD_Parser import SetupMD_Parser
-from src.parser.impl.Atlas3dParser import Atlas3dParser
-from src.parser.impl.EMProjectParser import EMProjectParser
-from src.parser.impl.ProjectDataParser import ProjectDataParser
-from src.parser.impl.TomographyProjectParser import TomographyProjectParser
-from src.parser.impl.Dataset_infoParser import Dataset_infoParser
-from src.parser.impl.TiffParser import TiffParser
-from src.parser.impl.TxtParser import TxtParser
+from mappingservice_plugincore.mappingservice_plugincore.parser.ImageParser import ImageParser
+from mappingservice_plugincore.mappingservice_plugincore.parser.RunMD_Parser import RunMD_Parser
+from mappingservice_plugincore.mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
 
 
 class ParserFactory:
 
     available_setupmd_parsers: dict[str, Type[SetupMD_Parser]]  = {
-        "EMProjectParser": EMProjectParser,
-        "Atlas3DParser": Atlas3dParser,
-        "TomographyProjectParser": TomographyProjectParser,
-        "Dataset_infoParser": Dataset_infoParser
     }
 
     available_runmd_parsers: dict[str, Type[RunMD_Parser]] = {
-        "ProjectDataParser": ProjectDataParser,
-        "Atlas3DParser": Atlas3dParser
     }
 
     available_img_parsers = {
-        "TiffParser": TiffParser,
-        "TxtParser": TxtParser
     }
 
-    @staticmethod
-    def create_setupmd_parser(parser_name) -> SetupMD_Parser:
+    @classmethod
+    def register_setupmdparser(cls, name, parser_cls: Type[SetupMD_Parser]):
+        cls.available_setupmd_parsers[name] = parser_cls
+
+    @classmethod
+    def register_runmdparser(cls, name, parser_cls):
+        cls.available_runmd_parsers[name] = parser_cls
+
+    @classmethod
+    def register_imgparser(cls, name, parser_cls):
+        cls.available_img_parsers[name] = parser_cls
+
+    @classmethod
+    def create_setupmd_parser(cls, parser_name) -> SetupMD_Parser:
         parser_class = ParserFactory.available_setupmd_parsers.get(parser_name)
         if parser_class:
             return parser_class()
@@ -41,8 +38,8 @@ class ParserFactory:
             logging.error("Parser not available: {}. Available parsers: {}".format(parser_name, list(ParserFactory.available_setupmd_parsers.keys())))
             raise ValueError(f"Parser {parser_name} not found")
 
-    @staticmethod
-    def create_runmd_parser(parser_name) -> RunMD_Parser:
+    @classmethod
+    def create_runmd_parser(cls, parser_name) -> RunMD_Parser:
         parser_class = ParserFactory.available_runmd_parsers.get(parser_name)
         if parser_class:
             return parser_class()
@@ -50,8 +47,8 @@ class ParserFactory:
             logging.error("Parser not available: {}. Available parsers: {}".format(parser_name, list(ParserFactory.available_runmd_parsers.keys())))
             raise ValueError(f"Parser {parser_name} not found")
 
-    @staticmethod
-    def create_img_parser(parser_name, **kwargs) -> ImageParser:
+    @classmethod
+    def create_img_parser(cls, parser_name, **kwargs) -> ImageParser:
         parser_class = ParserFactory.available_img_parsers.get(parser_name)
         if parser_class:
             return parser_class(**kwargs)

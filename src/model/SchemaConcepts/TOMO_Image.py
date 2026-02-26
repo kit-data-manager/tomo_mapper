@@ -1,12 +1,12 @@
 import os
 from datetime import datetime
-from typing import Optional, Self
+from typing import Optional
 
 from pydantic import BeforeValidator, BaseModel, computed_field, model_validator
 from typing_extensions import Annotated
 
 from src.config import MappingConfig
-from src.model.SchemaConcepts.Schema_Concept import Schema_Concept, parse_datetime
+from mappingservice_plugincore.mappingservice_plugincore.model.Schema_Concept import Schema_Concept, parse_datetime
 from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import Identifier, Stage, Vacuum, TemperatureDetails, \
     CurrentDetails, SEMFIBTomographyAcquisitionImageSchema
 

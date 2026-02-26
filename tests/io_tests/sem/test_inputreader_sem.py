@@ -3,6 +3,7 @@ import os
 import pytest
 
 from src.IO.sem.InputReader import InputReader
+from src.parser import ParserConfig
 from src.parser.impl.TiffParser import TiffParser
 
 
@@ -19,6 +20,7 @@ class TestInputReader:
 
     def test_get_applicable_tiffparser(self, mocker):
         tp = self.set_up_sample_data()
+        ParserConfig.register_parsers()
 
         tffile = os.path.join(tp, "./images/SEM_Image-SliceImage-001.tif")
 
@@ -32,6 +34,7 @@ class TestInputReader:
 
     def test_get_applicable_parsers_with_extension(self, mocker):
         tp = self.set_up_sample_data()
+        ParserConfig.register_parsers()
 
         ret = "text/plain"
         mocker.patch('src.parser.impl.TiffParser.TiffParser.expected_input', self.return_plaintext_format())
@@ -44,6 +47,7 @@ class TestInputReader:
 
     def test_get_applicable_parsers_wo_extension(self, mocker):
         tp = self.set_up_sample_data()
+        ParserConfig.register_parsers()
 
         ret = "text/plain"
         mocker.patch('src.parser.impl.TiffParser.TiffParser.expected_input', self.return_plaintext_format())

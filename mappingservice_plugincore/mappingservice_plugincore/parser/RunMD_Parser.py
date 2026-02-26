@@ -1,8 +1,7 @@
 from abc import abstractmethod
-from typing import Tuple
 
 from src.model.RunMD import RunMD
-from src.parser.MetadataParser import MetadataParser
+from mappingservice_plugincore.mappingservice_plugincore.parser.MetadataParser import MetadataParser
 
 
 class RunMD_Parser(MetadataParser):

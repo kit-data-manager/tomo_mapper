@@ -1,17 +1,10 @@
-from typing import List
-
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SetupMD import SetupMD
-from src.parser.RunMD_Parser import RunMD_Parser
-from src.parser.SetupMD_Parser import SetupMD_Parser
+from mappingservice_plugincore.mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import setup_tescan
 from src.util import input_to_dict
-from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
-from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
-from src.model.RunMD import RunMD
-from src.util import normalize_path
 
 
 class TomographyProjectParser(SetupMD_Parser):

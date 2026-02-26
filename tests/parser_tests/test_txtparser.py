@@ -5,10 +5,10 @@ from pprint import pprint
 import pytest
 
 from src.config import MappingConfig
-from src.parser.ImageParser import ParserMode
+from src.parser.ParserMode import ParserMode
 from src.parser.impl.TxtParser import TxtParser
 from src.resources.maps.mapping import textparser_sem_tescan, textparser_sem_jeol
-from src.util import load_json, input_to_dict
+from src.util import input_to_dict
 
 
 class TestTXTparser:
