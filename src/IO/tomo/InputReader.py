@@ -2,8 +2,8 @@ import os
 from glob import glob
 from typing import List, Optional
 
-from mappingservice_plugincore.mappingservice_plugincore.IO.BaseInputReader import BaseInputReader
-from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.IO.BaseInputReader import BaseInputReader
+from mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
 from src.IO.tomo.MapfileReader import MapFileReader
 from src.config import MappingConfig
 from src.model.ImageMD import ImageMD
@@ -11,9 +11,9 @@ from src.model.RunMD import RunMD
 import logging
 
 from src.model.SetupMD import SetupMD
-from mappingservice_plugincore.mappingservice_plugincore.parser.ImageParser import ImageParser
-from mappingservice_plugincore.mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
-from mappingservice_plugincore.mappingservice_plugincore.parser.ParserFactory import ParserFactory
+from mappingservice_plugincore.parser.ImageParser import ImageParser
+from mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
+from mappingservice_plugincore.parser.ParserFactory import ParserFactory
 from src.util import is_zipfile, extract_zip_file, strip_workdir_from_path, robust_textfile_read
 
 

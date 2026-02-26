@@ -4,9 +4,9 @@ from typing import List, Optional
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
+from mappingservice_plugincore.model.RunMD import RunMD as GenericRunMD
 
-
-class RunMD:
+class RunMD(GenericRunMD[DatasetType, TOMO_Image]):
     """
     contains metadata derived from file(s) describing the experiment run or results
     MUST contain lookup for datasetType - image
@@ -15,6 +15,11 @@ class RunMD:
 
     acquisition_metadata: Acquisition
     images_by_datasets = defaultdict(list,{ DatasetType(k):[] for k in [e.value for e in DatasetType] })
+
+    def __init__(self):
+        """Initialize with tomo_mapper's DatasetType"""
+        super().__init__(dataset_type_class=DatasetType)
+        self.acquisition_metadata: Acquisition = None
 
     def get_images_for_datasetType(self, datasetType: DatasetType) -> List[TOMO_Image]:
         return self.images_by_datasets[datasetType]

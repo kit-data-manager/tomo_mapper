@@ -5,7 +5,7 @@ from typing_extensions import Annotated
 
 from pydantic import BaseModel, BeforeValidator
 
-from mappingservice_plugincore.mappingservice_plugincore.model.Schema_Concept import Schema_Concept, parse_datetime
+from mappingservice_plugincore.model.Schema_Concept import Schema_Concept, parse_datetime
 from src.model.SchemaConcepts.codegen.SchemaClasses_SEM import Entry, Sem
 
 class CustomizedEntry(Schema_Concept, BaseModel):

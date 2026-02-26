@@ -1,9 +1,9 @@
 import enum
 from typing import Type
 
-from mappingservice_plugincore.mappingservice_plugincore.parser.ParserFactory import ParserFactory
-from mappingservice_plugincore.mappingservice_plugincore.parser.RunMD_Parser import RunMD_Parser
-from mappingservice_plugincore.mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
+from mappingservice_plugincore.parser.ParserFactory import ParserFactory
+from mappingservice_plugincore.parser.RunMD_Parser import RunMD_Parser
+from mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.impl.Atlas3dParser import Atlas3dParser
 from src.parser.impl.Dataset_infoParser import Dataset_infoParser
 from src.parser.impl.EMProjectParser import EMProjectParser

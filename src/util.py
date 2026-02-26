@@ -16,7 +16,7 @@ import zipfile
 import xmltodict
 from xml.parsers.expat import ExpatError
 
-from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
 import re
 
 def robust_textfile_read(filepath):

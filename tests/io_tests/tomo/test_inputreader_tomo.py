@@ -4,7 +4,7 @@ import tempfile
 
 import pytest
 
-from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
 from src.IO.tomo.InputReader import InputReader
 from src.model.RunMD import RunMD
 

@@ -3,9 +3,9 @@ import mimetypes
 import os
 from typing import List, Optional
 
-from mappingservice_plugincore.mappingservice_plugincore.IO.BaseInputReader import BaseInputReader
-from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
-from mappingservice_plugincore.mappingservice_plugincore.parser.ParserFactory import ParserFactory
+from mappingservice_plugincore.IO.BaseInputReader import BaseInputReader
+from mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.parser.ParserFactory import ParserFactory
 from src.parser.ParserMode import ParserMode
 from src.util import load_json, get_filetype_with_magica, robust_textfile_read
 

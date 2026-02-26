@@ -6,11 +6,11 @@ from urllib.parse import urlparse
 
 from requests import HTTPError
 
-from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
-from mappingservice_plugincore.mappingservice_plugincore.parser.ImageParser import ImageParser
-from mappingservice_plugincore.mappingservice_plugincore.parser.ParserFactory import ParserFactory
-from mappingservice_plugincore.mappingservice_plugincore.parser.RunMD_Parser import RunMD_Parser
-from mappingservice_plugincore.mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
+from mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.parser.ImageParser import ImageParser
+from mappingservice_plugincore.parser.ParserFactory import ParserFactory
+from mappingservice_plugincore.parser.RunMD_Parser import RunMD_Parser
+from mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.ParserMode import ParserMode
 from src.util import load_json
 

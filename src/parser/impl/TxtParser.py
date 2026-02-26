@@ -4,7 +4,7 @@ from typing import Optional
 from src.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.model.SchemaConcepts.SEM_Image import SEM_Image
-from mappingservice_plugincore.mappingservice_plugincore.parser.ImageParser import ImageParser
+from mappingservice_plugincore.parser.ImageParser import ImageParser
 from src.parser.ParserMode import ParserMode
 from src.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import textparser_tomo_tescan

@@ -2,8 +2,8 @@ from typing import List
 
 from src.model.RunMD import RunMD
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
-from mappingservice_plugincore.mappingservice_plugincore.parser.RunMD_Parser import RunMD_Parser
-from mappingservice_plugincore.mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
+from mappingservice_plugincore.parser.RunMD_Parser import RunMD_Parser
+from mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
 from src.model.SetupMD import SetupMD
 from src.Preprocessor import Preprocessor
 from src.model.SchemaConcepts.Dataset_simplified import Dataset

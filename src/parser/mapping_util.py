@@ -4,7 +4,7 @@ import re
 from typing import Hashable
 
 from jsonpath_ng.ext.parser import ExtentedJsonPathParser
-from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
 
 parser = ExtentedJsonPathParser()
 
