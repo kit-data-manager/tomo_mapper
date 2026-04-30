@@ -18,11 +18,6 @@ class RunMD(GenericRunMD[DatasetType, TOMO_Image]):
 
         self.acquisition_metadata: Acquisition | None = None
 
-        self.images_by_datasets = defaultdict(
-            list,
-            {dt: [] for dt in DatasetType}
-        )
-
     def get_datasetType_for_image(self, image: TOMO_Image) -> Optional[DatasetType]:
         for k, v in self.images_by_datasets.items():
             for i in v:
