@@ -12,7 +12,7 @@ from mappingservice_plugincore.mappingservice_plugincore.parser.ParserFactory im
 from mappingservice_plugincore.mappingservice_plugincore.parser.RunMD_Parser import RunMD_Parser
 from mappingservice_plugincore.mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
 from src.parser.ParserMode import ParserMode
-from mappingservice_plugincore.file_util import load_json
+from mappingservice_plugincore.mappingservice_plugincore.file_util import load_json
 
 
 class MapFileReader:

@@ -13,7 +13,7 @@ import logging
 from src.model.SetupMD import SetupMD
 from mappingservice_plugincore.mappingservice_plugincore.parser.ImageParser import ImageParser
 from mappingservice_plugincore.mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
-from mappingservice_plugincore.file_util import is_zipfile, extract_zip_file, strip_workdir_from_path, robust_textfile_read
+from mappingservice_plugincore.mappingservice_plugincore.file_util import is_zipfile, extract_zip_file, strip_workdir_from_path, robust_textfile_read
 
 
 class InputReader(BaseInputReader):

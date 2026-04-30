@@ -7,7 +7,7 @@ from mappingservice_plugincore.mappingservice_plugincore.IO.BaseInputReader impo
 from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
 from mappingservice_plugincore.mappingservice_plugincore.parser.ParserFactory import ParserFactory
 from src.parser.ParserMode import ParserMode
-from mappingservice_plugincore.file_util import load_json, get_filetype_with_magica, robust_textfile_read
+from mappingservice_plugincore.mappingservice_plugincore.file_util import load_json, get_filetype_with_magica, robust_textfile_read
 
 
 class InputReader(BaseInputReader):

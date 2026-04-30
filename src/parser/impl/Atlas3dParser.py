@@ -9,7 +9,7 @@ from src.model.SetupMD import SetupMD
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from mappingservice_plugincore.mappingservice_plugincore.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import setup_zeiss
-from mappingservice_plugincore.file_util import normalize_path
+from mappingservice_plugincore.mappingservice_plugincore.file_util import normalize_path
 from src.util import input_to_dict
 from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
