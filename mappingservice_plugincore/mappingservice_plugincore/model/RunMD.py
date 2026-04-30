@@ -1,4 +1,5 @@
 from abc import ABC
+from collections import defaultdict
 from typing import Generic, Dict, List
 
 from mappingservice_plugincore.mappingservice_plugincore.model.types import DatasetTypeT, ImageMetadataT, AcquisitionT
@@ -16,7 +17,7 @@ class RunMD(Generic[DatasetTypeT, ImageMetadataT], ABC):
         """
         self.dataset_type_class = dataset_type_class
         self.acquisition_metadata: AcquisitionT = None
-        self.images_by_datasets: Dict[DatasetTypeT, List[ImageMetadataT]] = {}
+        self.images_by_datasets: Dict[DatasetTypeT, List[ImageMetadataT]] = defaultdict(list)
 
     def add_image(self, img: ImageMetadataT, datasetType: DatasetTypeT):
         if datasetType not in self.images_by_datasets:
