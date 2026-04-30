@@ -2,7 +2,7 @@ from src.model.RunMD import RunMD
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 from mappingservice_plugincore.mappingservice_plugincore.parser.RunMD_Parser import RunMD_Parser
-from src.util import normalize_path
+from mappingservice_plugincore.file_util import normalize_path
 
 
 class ProjectDataParser(RunMD_Parser):

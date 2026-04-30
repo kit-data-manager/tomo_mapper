@@ -1,6 +1,6 @@
 import jsonpath_ng.ext
 
-from src.parser.mapping_util import escape_pathelements
+from mappingservice_plugincore.mappingservice_plugincore.parser.mapping_util import escape_pathelements
 
 
 class TestMappingUtil:

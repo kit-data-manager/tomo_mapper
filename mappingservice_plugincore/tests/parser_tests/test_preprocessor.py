@@ -1,7 +1,7 @@
 import importlib
 from enum import Enum
 
-from src.Preprocessor import Preprocessor
+from mappingservice_plugincore.mappingservice_plugincore.Preprocessor import Preprocessor
 from src.model.SchemaConcepts.codegen.SchemaClasses_SEM import Entry
 
 
