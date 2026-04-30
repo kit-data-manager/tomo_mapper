@@ -5,7 +5,7 @@ from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
 
-from mappingservice_plugincore.mappingservice_plugincore.model.RunMD import RunMD as GenericRunMD
+from mappingservice_plugincore.model.RunMD import RunMD as GenericRunMD
 
 class RunMD(GenericRunMD[DatasetType, TOMO_Image]):
     """

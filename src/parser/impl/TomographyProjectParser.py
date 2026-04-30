@@ -1,8 +1,8 @@
 from src.model.SchemaConcepts.Acquisition_simplified import Acquisition
 from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SetupMD import SetupMD
-from mappingservice_plugincore.mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
-from mappingservice_plugincore.mappingservice_plugincore.parser.mapping_util import map_a_dict
+from mappingservice_plugincore.parser.SetupMD_Parser import SetupMD_Parser
+from mappingservice_plugincore.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import setup_tescan
 from src.util import input_to_dict
 

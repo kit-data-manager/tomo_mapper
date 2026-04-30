@@ -4,7 +4,7 @@ import logging
 import os
 from sys import exit
 
-from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
 from src.IO.sem.InputReader import InputReader as InputReader_SEM
 from src.IO.tomo.InputReader import InputReader as InputReader_TOMO
 from src.IO.tomo.OutputWriter import OutputWriter

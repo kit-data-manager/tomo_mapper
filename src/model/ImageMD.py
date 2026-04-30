@@ -9,7 +9,7 @@ from src.model.SchemaConcepts.Dataset_simplified import Dataset
 from src.model.SchemaConcepts.SEM_Image import SEM_Image
 from src.model.SchemaConcepts.TOMO_Image import TOMO_Image
 from src.model.SchemaConcepts.codegen.SchemaClasses_TOMO import DatasetType
-from mappingservice_plugincore.mappingservice_plugincore.model.ImageMD import ImageMD as GenericImageMD
+from mappingservice_plugincore.model.ImageMD import ImageMD as GenericImageMD
 
 
 class ImageMD(GenericImageMD[TOMO_Image]):

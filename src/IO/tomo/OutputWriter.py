@@ -6,7 +6,7 @@ from typing import List
 
 from pydantic import ValidationError
 
-from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
 from src.model.ImageMD import ImageMD
 from src.model.RunMD import RunMD
 from src.model.SchemaConcepts.Dataset_simplified import Dataset

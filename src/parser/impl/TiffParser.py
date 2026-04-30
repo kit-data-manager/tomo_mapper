@@ -3,13 +3,13 @@ from typing import Optional
 
 from PIL import Image
 
-from mappingservice_plugincore.mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
-from mappingservice_plugincore.mappingservice_plugincore.Preprocessor import Preprocessor
+from mappingservice_plugincore.exceptions.MappingAbortionError import MappingAbortionError
+from mappingservice_plugincore.Preprocessor import Preprocessor
 from src.model.ImageMD import ImageMD
 from src.model.SchemaConcepts.SEM_Image import SEM_Image
-from mappingservice_plugincore.mappingservice_plugincore.parser.ImageParser import ImageParser
+from mappingservice_plugincore.parser.ImageParser import ImageParser
 from src.parser.ParserMode import ParserMode
-from mappingservice_plugincore.mappingservice_plugincore.parser.mapping_util import map_a_dict
+from mappingservice_plugincore.parser.mapping_util import map_a_dict
 from src.resources.maps.mapping import tiffparser_tomo_51023, tiffparser_tomo_34682, tiffparser_sem_34682, \
     tiffparser_sem_34118
 from src.util import input_to_dict

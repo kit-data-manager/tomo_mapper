@@ -10,3 +10,4 @@ pytest >= 7.4
 pytest-cov >= 6.0
 pytest-mock >= 3.14.0
 python-dateutil
+mappingservice-plugincore @ git+https://github.com/kit-data-manager/mappingservice_plugincore.git@development
