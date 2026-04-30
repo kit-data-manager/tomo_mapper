@@ -11,6 +11,12 @@ license-files = ["LICENSE"]
 authors = [
   { name = "Germaine Götzelmann", email = "germaine.goetzelmann@kit.edu" }
 ]
+dependencies = [
+  "pydantic"
+]
+optional-dependencies = [
+  "pytest"
+]
 
 [project.urls]
 Homepage = "https://github.com/GGoetzelmann/mappingservice_plugincore"
