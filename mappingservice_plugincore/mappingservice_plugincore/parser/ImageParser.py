@@ -22,7 +22,3 @@ class ImageParser(ABC):
     def parse(self, file_path, mapping) -> Optional[ImageMD]:
         pass
 
-    @abstractmethod
-    def _create_tomo_image(self, image_md, fp) -> ImageMD:
-        pass
-
