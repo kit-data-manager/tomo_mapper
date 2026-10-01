@@ -6,7 +6,7 @@ buildscript {
     }
 
     dependencies {
-        classpath("org.tomlj:tomlj:1.1.1")
+        classpath("org.tomlj:tomlj:1.3.1")
     }
 }
 
