@@ -8,7 +8,9 @@
     "gradle",
     "gradle-wrapper"
   ],
-  "baseBranches": ["development"],
+  "baseBranchPatterns": [
+    "development"
+  ],
   "schedule": ["every weekend"],
   "prConcurrentLimit": 5,
   "minimumReleaseAge": "3 days"
