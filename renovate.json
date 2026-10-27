@@ -1,21 +1,15 @@
 {
-  "extends": ["config:base"],
-  "enabledManagers": ["pip_requirements", "gradle", "gradle-wrapper"],
+  "extends": [
+    "config:best-practices",
+    ":enableVulnerabilityAlerts"
+  ],
+  "enabledManagers": [
+    "pip_requirements",
+    "gradle",
+    "gradle-wrapper"
+  ],
   "baseBranches": ["development"],
-  "packageRules": [
-    {
-      "matchManagers": ["pip_requirements"],
-      "matchPaths": ["/"],
-      "schedule": ["every weekend"],
-      "prConcurrentLimit": 5,
-      "minimumReleaseAge": "3 days"
-    },
-    {
-      "matchManagers": ["gradle"],
-      "matchPaths": ["/mappingservice-plugin"],
-      "schedule": ["every weekend"],
-      "prConcurrentLimit": 5,
-      "minimumReleaseAge": "3 days"
-    }
-  ]
+  "schedule": ["every weekend"],
+  "prConcurrentLimit": 5,
+  "minimumReleaseAge": "3 days"
 }
