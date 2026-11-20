@@ -6,7 +6,8 @@
   "enabledManagers": [
     "pip_requirements",
     "gradle",
-    "gradle-wrapper"
+    "gradle-wrapper",
+    "github-actions"
   ],
   "baseBranchPatterns": [
     "development"
