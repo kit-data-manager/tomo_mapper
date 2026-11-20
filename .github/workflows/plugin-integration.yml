@@ -87,6 +87,7 @@ jobs:
     - name: Run Tests with Hurl
       run: |
          sudo apt-add-repository -y ppa:lepapareil/hurl
+         sudo apt update
          sudo apt install hurl="8.1.0"
          sudo apt install -y dos2unix
          unix2dos -n ./mappingservice-plugin/integrationtests/basic.hurl ./mappingservice-plugin/integrationtests/basic_crlf.hurl
