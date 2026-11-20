@@ -86,8 +86,8 @@ jobs:
           done
     - name: Run Tests with Hurl
       run: |
-         curl --location --remote-name https://github.com/Orange-OpenSource/hurl/releases/download/8.1.0/hurl_8.1.0_amd64.deb
-         sudo dpkg -i hurl_8.1.0_amd64.deb
+         sudo apt-add-repository -y ppa:lepapareil/hurl
+         sudo apt install hurl="8.1.0"
          sudo apt install -y dos2unix
          unix2dos -n ./mappingservice-plugin/integrationtests/basic.hurl ./mappingservice-plugin/integrationtests/basic_crlf.hurl
          hurl --variable host=http://localhost:8095 --test ./mappingservice-plugin/integrationtests/basic_crlf.hurl --verbose --file-root .
