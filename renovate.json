@@ -1,0 +1,18 @@
+{
+  "extends": [
+    "config:best-practices",
+    ":enableVulnerabilityAlerts"
+  ],
+  "enabledManagers": [
+    "pip_requirements",
+    "gradle",
+    "gradle-wrapper",
+    "github-actions"
+  ],
+  "baseBranchPatterns": [
+    "development"
+  ],
+  "schedule": ["every weekend"],
+  "prConcurrentLimit": 5,
+  "minimumReleaseAge": "3 days"
+}
