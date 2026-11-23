@@ -22,7 +22,7 @@ jobs:
 
       # Setup Python
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
         with:
           python-version: '3.12' # Version range or exact version of a Python version to use, using SemVer's version range syntax
       # Install requirements for mapper
@@ -36,14 +36,14 @@ jobs:
           pyinstaller pyinstaller.spec
       #get version info for artifact
       - name: read project metadata toml
-        uses: SebRollen/toml-action@v1.2.0
+        uses: SebRollen/toml-action@b1b3628f55fc3a28208d4203ada8b737e9687876 # v1.2.0
         id: read_projectmd
         with:
           file: 'somesy.toml'
           field: 'project.version'
       # Uploads artifact
       - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: sem_tomo_mapper_${{ steps.read_projectmd.outputs.value }}_${{ matrix.operating-system }}
           path:  dist/sem_tomo_mapper*
