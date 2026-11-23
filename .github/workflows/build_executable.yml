@@ -24,7 +24,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.12' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          python-version: '3.15' # Version range or exact version of a Python version to use, using SemVer's version range syntax
       # Install requirements for mapper
       - name: Install Dependencies
         run: |
