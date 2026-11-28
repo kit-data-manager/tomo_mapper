@@ -40,7 +40,7 @@ jobs:
         VERSION_OVERRIDE_BY_BRANCH: ${{ steps.extract_branch.outputs.branch }}
 
     - name: Upload job artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
       with:
           name: jar-jdk${{ matrix.versions.jdk }}
           path: ./mappingservice-plugin/build/libs/SEMplugin.jar
@@ -62,7 +62,7 @@ jobs:
       run: echo "branch=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_OUTPUT
       id: extract_branch
     - name: Download built jar
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8
       with:
           name: jar-jdk${{ matrix.versions.jdk }}
           path: ./plugins
